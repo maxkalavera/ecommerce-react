@@ -1,0 +1,65 @@
+{
+  "id": "s_poaHT2l2So-eyh4lb7W",
+  "name": "Boots",
+  "price": "20.00",
+  "currency": "USD",
+  "description": "Description of the product",
+  "isFavorite": false,
+  "isOnCart": false,
+  "label": {
+    "content": "20%",
+    "color": "#dc2626"
+  },
+  "picture": {
+    "id": "p560KhS7mSHBXZu8dm5WL",
+    "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+    "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+  },
+  "gallery": [
+    {
+      "id": "Iej0gZHu-AWFFxpQtzWcu",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "VdaWR3XKnVu_2PFqEe2L9",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "Fx1U_T_p43lbss3NqOA6d",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "txK5LeaKwwW2kusk4mwpq",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "sN5vB2TqDwTGwC0zrJFtx",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "nuOFOTe6t_vmOJ6YtxVQk",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "p187127OH2rGoOU3pWMqi",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "-jHASkJuZ2Wjl4snRRabZ",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    },
+    {
+      "id": "JtMFiK2D-mHWs0MkMvHVD",
+      "image": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg",
+      "thumbnail": "/static/0cxu7Gl5WGgkIEydxpx1Q.jpg"
+    }
+  ]
+}
