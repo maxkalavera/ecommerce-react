@@ -1,31 +1,27 @@
 import Categories from "@/components/Categories";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Hero from "@/components/Hero";
-import { cn } from "@/lib/utils";
+import Document from "@/layouts/document";
 
 export default function Home() {
   return (
-    <div 
-      className="flex flex-col justify-start items-stretch gap-16"
-    >
-      <Hero />
-      <div
-        className={cn(
-          "w-full px-4",
-          "flex flex-col justify-start items-center gap-16"
-        )}
-      >
-        {
-          <Categories 
-            className="w-full max-w-screen-lg"
-          />
-        }
-
+    <>
+      <Document.Section>
+        <Hero />
+      </Document.Section>
+      <Document.Section>
+        <Document.SectionTitle>Categories</Document.SectionTitle>
+        <Categories 
+          className="w-full max-w-screen-lg"
+        />
+      </Document.Section>
+      <Document.Section>
+      <Document.SectionTitle>Featured Products</Document.SectionTitle>
         <FeaturedProducts 
           className="w-full max-w-screen-lg"
           title="Featured products"
         />
-      </div>
-    </div>
+      </Document.Section>
+    </>
   );
-}
+};

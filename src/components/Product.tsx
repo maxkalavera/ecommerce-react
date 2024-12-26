@@ -44,6 +44,7 @@ const Product = React.forwardRef<HTMLDivElement, Props>((
   return (
     <div
       className={cn(
+        "w-48",
         "flex flex-col justify-start items-start gap-0",
       )}
     >
@@ -148,7 +149,7 @@ const Product = React.forwardRef<HTMLDivElement, Props>((
           <FaCartShopping />
           Add Cart
         </Button>
-      ) }
+      )}
     </div>
   )
 });

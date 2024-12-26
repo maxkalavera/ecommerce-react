@@ -1,9 +1,7 @@
 import React from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-
-}
+interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Base = React.forwardRef<HTMLDivElement, Props>((

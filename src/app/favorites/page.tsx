@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Product as ProductType } from "@/types/types";
 import Product from "@/components/Product";
+import Document from "@/layouts/document";
 
 export default function Favorites() {
   const [products, setProducts] = useState<ProductType[]>([])
@@ -27,19 +28,9 @@ export default function Favorites() {
   }, []);
 
   return (
-    <div 
-      className={cn(
-        "w-full h-fit",
-        "flex flex-col justify-start items-center gap-16 p-8"
-      )}
-    >
-      <div
-        className={cn(
-          "w-full h-fit max-w-screen-lg",
-          "flex flex-col justify-start items-start gap-4"
-        )}
-      >
-        <h2 className="text-lg font-bold font-sans">Favorites</h2>
+    <>
+      <Document.Section>
+        <Document.SectionTitle>Favorites</Document.SectionTitle>
         <div
           className="grid grid-cols-4 gap-x-8 gap-y-8"
         >
@@ -53,7 +44,7 @@ export default function Favorites() {
             />
           ))}
         </div>
-      </div>
-    </div>
+      </Document.Section>
+    </>
   );
 }

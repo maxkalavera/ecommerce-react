@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import BreadcrumbNavigation from "@/components/BreadcrumbNavigation";
 import { cn } from "@/lib/utils";
+import Document from "@/layouts/document";
 
 
 export default function ProductInfo() {
@@ -26,22 +27,13 @@ export default function ProductInfo() {
   const product = productData as ProductType;
 
   return (
-    <div
-      className={cn(
-        "w-full p-4 md:p-8",
-        "flex flex-col justify-start items-center gap-8"
-      )}
-    >
-      <div
-        className={cn(
-          "w-full max-w-screen-lg",
-          "flex flex-row justify-start items-center gap-2"
-        )}
-      >
+    <>
+      <Document.Section>
         <BreadcrumbNavigation />
-      </div>
+        <Document.SectionTitle>{product.name}</Document.SectionTitle>
+      </Document.Section>
 
-      <div
+      <Document.Section
         className="w-full max-w-screen-lg flex flex-row justify-center items-start gap-2 md:gap-8"
       >
         <div 
@@ -121,8 +113,7 @@ export default function ProductInfo() {
             </p>
           <Separator />
         </div>
-      </div>
-
-    </div>
+      </Document.Section>
+    </>
   );
 }

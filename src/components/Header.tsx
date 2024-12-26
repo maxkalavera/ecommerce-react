@@ -22,6 +22,7 @@ interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Header = React.forwardRef<HTMLDivElement, Props>((
   {
+    className,
     ...props
   }, 
   forwardedRef
@@ -33,6 +34,7 @@ const Header = React.forwardRef<HTMLDivElement, Props>((
       className={cn(
         "w-full h-fit",
         "flex flex-col justify-start items-stretch gap-0",
+        className
       )}
     >
       <div

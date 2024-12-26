@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
 import React from "react";
+import document from "@/layouts/document";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
@@ -22,16 +23,21 @@ const MainLayout = React.forwardRef<HTMLDivElement, Props>((
       ref={forwardedRef}
       className={cn(
         "w-full h-fit",
-        "flex flex-col justify-start items-start"
+        "flex flex-col justify-start items-center"
       )}
     >
-      <Header />
-      <div
-        className="w-full h-fit"
+      <Header 
+        className="max-w-screen-lg"
+      />
+      <document.Frame
+        {...props}
       >
-        {children}
-      </div>
-
+        <div
+          className="w-full h-fit"
+        >
+          {children}
+        </div>
+      </document.Frame>
       <Footer />
     </div>
   )

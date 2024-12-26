@@ -39,7 +39,7 @@ const ProductGrid = React.forwardRef<HTMLDivElement, Props>((
       ref={forwardedRef}
       className={cn(
         "min-h-[148px]",
-        "flex flex-col justify-start items-center gap-2",
+        "flex flex-col justify-start items-start gap-2",
         className,
       )}
     >
@@ -55,8 +55,8 @@ const ProductGrid = React.forwardRef<HTMLDivElement, Props>((
       >
         <div
           className={cn(
-            "w-full",
-            "grid grid-cols-4 justify-center items-center gap-x-6 gap-y-6"
+            "w-fit",
+            "grid grid-cols-4 justify-start items-start gap-x-8 gap-y-8"
           )}
         >
           { products.map((product) => (

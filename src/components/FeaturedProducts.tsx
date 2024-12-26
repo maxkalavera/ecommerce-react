@@ -42,12 +42,14 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
         "flex flex-col justify-start items-stretch",
       )}
     >
+      {/*
       <div
         data-label="featured-products-header"
         className="w-full flex flex-row justify-start items-center gap-2"
       >
         <h3 className="w-full text-lg text-bold font-bold">{title}</h3>
       </div>
+      */}
       <div
         data-label="featured-products-header"
         className="w-full flex flex-row justify-start items-center gap-2"

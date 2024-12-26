@@ -61,28 +61,28 @@ const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
     >
       <TabsList className="w-full bg-transparent">
         <div
-          className="w-full flex flex-row justify-start items-start gap-0"
+          className="w-full flex flex-row justify-start items-start gap-2"
         >
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => tab === "women" ? setTab("") : setTab("women")}
           >
             Women <FaCaretDown />
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => tab === "men" ? setTab("") : setTab("men")}
           >
             Men <FaCaretDown />
           </Button>
         </div>
         <div
-          className="w-fit flex flex-row justify-start items-start gap-1"
+          className="w-fit flex flex-row justify-start items-start gap-2"
         >
           <Popover>
             <PopoverTrigger asChild>
               <Button 
-                variant="ghost"
+                variant="outline"
               >
                 Sort <FaSort />
               </Button>
@@ -109,7 +109,7 @@ const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
           <Popover>
             <PopoverTrigger asChild>
               <Button 
-                variant="ghost"
+                variant="outline"
               >
                 Filter <FaFilter />
               </Button>
