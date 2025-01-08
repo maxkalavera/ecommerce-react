@@ -7,8 +7,19 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarTrigger,
-} from "@/components/ui/menubar"
+} from "@/components/ui/menubar";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import { SelectArrow, SelectIcon } from "@radix-ui/react-select";
+import { cn } from "@/lib/utils";
 
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {}
 
@@ -21,32 +32,39 @@ const ThemeButton = React.forwardRef<any, Props>((props, forwardedRef) => {
     // This to allow the server and render have the same 
     // content in the first render
     setLoading(false)
-  }, [])
+  }, []);
 
   if (loading) {
     return (
-      <Menubar className="border-none w-8 h-7 p-0">
-        <MenubarMenu>
-          <MenubarTrigger
-            disabled={true}
-            className="text-sm"
-          >
-            <FaSpinner 
-              className='animate-spin'
-              rotate='true' 
-            />
-          </MenubarTrigger>
-        </MenubarMenu>
-      </Menubar>
-    )
+      <Select>
+        <SelectTrigger 
+          disabled={true}
+          className={cn(
+            "text-sm w-fit h-fit px-2 py-1",
+            "flex flex-row justify-center items-center gap-1",
+            "border-none focus:ring-transparent select-none"
+          )}
+        >
+          <FaSpinner 
+            className='animate-spin'
+            rotate='true' 
+          />
+        </SelectTrigger>
+      </Select>
+    );
   }
 
   return (
-    <Menubar className="border-none w-8 h-7 p-0">
-      <MenubarMenu>
-        <MenubarTrigger
-          className="text-sm w-fit h-fit px-2 py-1 border-none"
-        >
+    <Select
+      value={theme}
+      onValueChange={setTheme}
+    >
+      <SelectTrigger className={cn(
+        "text-sm w-fit h-fit px-2 py-1",
+        "flex flex-row justify-center items-center gap-1",
+        "border-none focus:ring-transparent select-none"
+      )}>
+        <SelectIcon>
           {((() => {
             if (theme === 'light') {
               return (
@@ -62,22 +80,15 @@ const ThemeButton = React.forwardRef<any, Props>((props, forwardedRef) => {
               )
             }
           })())}
-        </MenubarTrigger>
-
-        <MenubarContent>
-          <MenubarItem onClick={() => setTheme('system')}>
-            System
-          </MenubarItem>
-          <MenubarItem onClick={() => setTheme('light')}>
-            Light
-          </MenubarItem>
-          <MenubarItem onClick={() => setTheme('dark')}>
-            Dark
-          </MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
-    </Menubar>
-  )
+        </SelectIcon>
+      </SelectTrigger>
+      <SelectContent position="popper">
+        <SelectItem value="light">Light</SelectItem>
+        <SelectItem value="dark">Dark</SelectItem>
+        <SelectItem value="system">System</SelectItem>
+      </SelectContent>
+    </Select>
+  );
 })
 
 ThemeButton.displayName = 'ThemeButton';

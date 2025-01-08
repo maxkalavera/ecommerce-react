@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback } from "react";
+import React, { ReactNode, useCallback } from "react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -11,14 +11,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
+export interface NavbarItem { 
+  label: ReactNode, 
+  href: string
+};
 
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Navbar = React.forwardRef<HTMLDivElement, Props>((
+const Navbar = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    items: NavbarItem[],
+    onItemClick?: EventListener
+    orientation?: "horizontal" | "vertical"
+  }
+>((
   {
+    items,
+    onItemClick=undefined,
+    orientation="horizontal",
     ...props
   }, 
   forwardedRef
@@ -33,69 +42,63 @@ const Navbar = React.forwardRef<HTMLDivElement, Props>((
   }, [pathname]);
 
   return (
-    <div
+    <NavigationMenu
       {...props}
       ref={forwardedRef}
     >
-      <NavigationMenu>
-        <NavigationMenuList>
-
-          <NavigationMenuItem>
-            <Link href="/" legacyBehavior passHref>
+      <NavigationMenuList
+        className={cn(
+          orientation === "vertical" && "flex-col gap-2"
+        )}
+      >
+        {items.map((item: NavbarItem, index: number) => (
+          <NavigationMenuItem key={index} onClick={onItemClick}>
+            <Link href={item.href} legacyBehavior passHref>
               <NavigationMenuLink 
                 className={cn(
                   navigationMenuTriggerStyle(),
-                  isUnderPath("/", "font-bold")
+                  isUnderPath(item.href, "font-bold"),
+                  orientation === "vertical" && "min-w-36"
                 )}
               >
-                Home
+                {item.label}
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href="/shop" legacyBehavior passHref>
-              <NavigationMenuLink 
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  isUnderPath("/shop", "font-bold")
-                )}
-              >
-                Shop
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href="/#" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Blog
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href="/#" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                About
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <Link href="/#" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Contact
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
-  )
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
 });
 
 Navbar.displayName = "Navbar";
 
-export default Navbar;
+export default (props: any) => {
+  return (
+    <Navbar 
+      {...props}
+      items={[
+        {
+          label: "Home",
+          href: "/"
+        },
+        {
+          label: "Shop",
+          href: "/shop"
+        },
+        {
+          label: "Blog",
+          href: "/#"
+        },
+        {
+          label: "About",
+          href: "/#"
+        },
+        {
+          label: "Contact",
+          href: "/#"
+        }
+      ]}
+    />
+  )
+};

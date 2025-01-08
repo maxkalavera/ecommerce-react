@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import React, { ReactNode, useCallback, useState } from "react";
 import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import Product from "@/components/Product";
+import { ForLargeScreens, ForSmallScreens } from "@/layouts/screens";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType> {
@@ -42,14 +43,6 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
         "flex flex-col justify-start items-stretch",
       )}
     >
-      {/*
-      <div
-        data-label="featured-products-header"
-        className="w-full flex flex-row justify-start items-center gap-2"
-      >
-        <h3 className="w-full text-lg text-bold font-bold">{title}</h3>
-      </div>
-      */}
       <div
         data-label="featured-products-header"
         className="w-full flex flex-row justify-start items-center gap-2"
@@ -61,13 +54,26 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
           next={nextProducts} 
         >
           { products.map((product) => (
-            <Product 
-              key={product.id} 
-              product={product}
-              outlineOnHover={true}
-              enableFavoritesButton={true}
-              hideFavoritesButton={true}
-            />
+            <div key={product.id}>
+              <ForLargeScreens>
+                <Product 
+                  product={product}
+                  outlineOnHover={true}
+                  enableFavoritesButton={true}
+                  hideFavoritesButton={true}
+                  size="md"
+                />
+              </ForLargeScreens>
+              <ForSmallScreens>
+                <Product 
+                  product={product}
+                  outlineOnHover={true}
+                  enableFavoritesButton={true}
+                  hideFavoritesButton={true}
+                  size="sm"
+                />
+              </ForSmallScreens>
+            </div>
           ))}
           </HorizontalScrollArea>
       </div>

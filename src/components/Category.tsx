@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Category as CategoryType } from "@/types/types";
 import Image from "next/image";
 import React, { } from "react";
-import CategoryEmpty from "@/assets/category_empty.jpg"
+import CategoryEmpty from "@/assets/images/category_empty.jpg"
 
 // Sizes of component in REM size
 const sizesMap: {[key: string]: {width: number, height: number}} = {
@@ -14,24 +14,22 @@ const sizesMap: {[key: string]: {width: number, height: number}} = {
 
 type Size = "sm" | "md" | "lg";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-  category: CategoryType,
-  hoverable: boolean,
-  size: Size
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Category = React.forwardRef<HTMLDivElement, Props>((
+const Category = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    category: CategoryType,
+    hoverable: boolean,
+    size: Size
+  }
+>((
   {
     category,
     hoverable,
-    size="sm",
+    size="md",
     ...props
   }, 
   forwardedRef
 ) => {
-  
   const { width, height } = {
     width: (sizesMap[size as Size].width || 0) * 16,
     height: (sizesMap[size as Size].height || 0) * 16,

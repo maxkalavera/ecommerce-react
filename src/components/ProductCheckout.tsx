@@ -10,17 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import Image from "next/image";
-import ProductEmpty from "@/assets/product_empty.jpg";
 import { Button } from "./ui/button";
 import { FaTrash } from "react-icons/fa6";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-  product: ProductType,
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ProductCheckout = React.forwardRef<HTMLDivElement, Props>((
+const ProductCheckout = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    product: ProductType,
+  }
+>((
   {
     product,
     ...props
@@ -44,12 +42,14 @@ const ProductCheckout = React.forwardRef<HTMLDivElement, Props>((
           className="select-none"
           ratio={1.0 / 1.0}
         >
-          <Image 
-            src={product.picture || ProductEmpty} 
-            alt="Product's image" 
-            fill 
-            className="object-cover" 
-          />
+          {product.picture && (
+            <Image 
+              src={product.picture} 
+              alt="Product's image" 
+              fill 
+              className="object-cover" 
+            />
+          )}
         </AspectRatio>
         {!product.picture && (
           <div

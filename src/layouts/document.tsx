@@ -115,7 +115,7 @@ export default {
     <div
       {...props}
       className={cn(
-        "w-full h-fit max-w-screen-lg px-4 md:px-8 mb-16",
+        "w-full h-fit max-w-screen-lg px-6 md:px-8 mb-16",
         "flex flex-col justify-start items-start",
         className,
       )}

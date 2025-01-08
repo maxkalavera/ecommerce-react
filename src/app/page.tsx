@@ -1,7 +1,9 @@
 import Categories from "@/components/Categories";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Hero from "@/components/Hero";
+import { Button } from "@/components/ui/button";
 import Document from "@/layouts/document";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   return (

@@ -3,6 +3,7 @@ import Category from "@/components/Category";
 import { cn } from "@/lib/utils";
 import InfiniteScroll from "./ui/infinite-scroll";
 import HorizontalScrollArea from "./HorizontalScrollArea";
+import { ForLargeScreens, ForSmallScreens } from "@/layouts/screens";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
@@ -57,12 +58,24 @@ const CategoriesRow = React.forwardRef<HTMLDivElement, Props>((
         next={nextCategories} 
       >
         { categories.map((category) => (
-          <Category 
-            key={category.id} 
-            category={category}
-            hoverable={true}
-            size="sm"
-          />
+          <div key={category.id}>
+            <ForSmallScreens>
+              <Category 
+                key={category.id} 
+                category={category}
+                hoverable={true}
+                size="sm"
+              />
+            </ForSmallScreens>
+            <ForLargeScreens>
+              <Category 
+                key={category.id} 
+                category={category}
+                hoverable={true}
+                size="md"
+              />
+            </ForLargeScreens>
+          </div>
         ))}
       </HorizontalScrollArea>
     </div>

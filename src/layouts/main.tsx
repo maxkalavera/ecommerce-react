@@ -38,7 +38,7 @@ const MainLayout = React.forwardRef<HTMLDivElement, Props>((
           {children}
         </div>
       </document.Frame>
-      <Footer />
+      <Footer className="mt-8" />
     </div>
   )
 });

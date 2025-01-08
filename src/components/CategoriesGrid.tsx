@@ -49,7 +49,11 @@ const CategoriesGrid = React.forwardRef<HTMLDivElement, Props>((
       )}
     >
       <div
-        className="grid place-content-center grid-cols-1 min-[520px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 min-[520px]:gap-4 md:gap-8"      
+        className={cn(
+          "grid place-content-center",
+          "grid-cols-1 min-[580px]:grid-cols-2 min-[920px]:grid-cols-3",
+          "gap-6 md:gap-8"
+        )}
       >
         { categories.map((category) => (
           <Category 

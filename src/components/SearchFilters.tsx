@@ -59,25 +59,25 @@ const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
         className,
       )}
     >
-      <TabsList className="w-full bg-transparent">
+      <TabsList className="w-full h-fit flex-row justify-start items-end gap-2 bg-transparent">
         <div
           className="w-full flex flex-row justify-start items-start gap-2"
         >
           <Button
-            variant="outline"
+            variant={tab === "women" ? "default" : "outline" }
             onClick={() => tab === "women" ? setTab("") : setTab("women")}
           >
             Women <FaCaretDown />
           </Button>
           <Button
-            variant="outline"
+            variant={tab === "men" ? "default" : "outline" }
             onClick={() => tab === "men" ? setTab("") : setTab("men")}
           >
             Men <FaCaretDown />
           </Button>
         </div>
         <div
-          className="w-fit flex flex-row justify-start items-start gap-2"
+          className="w-full flex flex-col justify-start items-end md:flex-row md:justify-end md:items-start gap-2"
         >
           <Popover>
             <PopoverTrigger asChild>

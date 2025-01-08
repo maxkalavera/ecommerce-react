@@ -5,13 +5,12 @@ import Product from "@/components/Product";
 import SearchFilters from "@/components/SearchFilters";
 import InfiniteScroll from '@/components/ui/infinite-scroll';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
+const ProductGrid = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
 
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ProductGrid = React.forwardRef<HTMLDivElement, Props>((
+  }
+>((
   {
     className,
     ...props
@@ -55,8 +54,9 @@ const ProductGrid = React.forwardRef<HTMLDivElement, Props>((
       >
         <div
           className={cn(
-            "w-fit",
-            "grid grid-cols-4 justify-start items-start gap-x-8 gap-y-8"
+            "w-full",
+            "grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3",
+            "justify-start items-start gap-x-8 gap-y-8",
           )}
         >
           { products.map((product) => (
@@ -66,6 +66,7 @@ const ProductGrid = React.forwardRef<HTMLDivElement, Props>((
               outlineOnHover={true}
               enableFavoritesButton={true}
               hideFavoritesButton={true}
+              size="dynamic"
             />
           ))}
         </div>

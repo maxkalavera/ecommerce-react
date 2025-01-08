@@ -1,3 +1,4 @@
+import { DialogProps } from "@radix-ui/react-dialog";
 
 export type ID = number | string;
 
@@ -33,3 +34,5 @@ export interface Product extends Instance {
   picture?: ProductImage;
   gallery: ProductImage[];
 }
+
+export type DialogComponent = React.FC<DialogProps>;

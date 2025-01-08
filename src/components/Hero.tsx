@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import DisplayImage from "@/assets/home_hero.png"
+import DisplayImage from "@/assets/images/home_hero.png"
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
@@ -36,7 +36,7 @@ const Hero = React.forwardRef<HTMLDivElement, Props>((
         <h1 className="font-bold text-2xl text-neutral-950">
           Apparel Store
         </h1>
-        <h4 className="font-serif font-normal text-lg text-neutral-950">
+        <h4 className="font-serif font-normal text-lg text-neutral-950 text-center">
           Catchy phrase, possibly something emotional 
         </h4>
         <div

@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import MainLayout from "@/layouts/main";
+import { GlobalDialogProvider } from "@/providers/GlobalDialogProvider";
 
 const mainSans = MainSans({
   subsets: ["latin"],
@@ -46,10 +47,12 @@ export default function RootLayout({
         )}
       >
         <JotaiProvider>
-          <ThemeProvider attribute="class" >
-            <MainLayout>
-              {children}
-            </MainLayout>
+          <ThemeProvider attribute="class">
+            <GlobalDialogProvider>
+              <MainLayout>
+                {children}
+              </MainLayout>
+            </GlobalDialogProvider>
           </ThemeProvider>
         </JotaiProvider>
       </body>

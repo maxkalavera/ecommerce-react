@@ -1,24 +1,23 @@
 import { cn } from "@/lib/utils";
 import { Product as ProductType } from "@/types/types";
-import React from "react";
-import ProductEmpty from "@/assets/product_empty.jpg";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaCartShopping, FaHeart, FaRegHeart } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-import { AspectRatio } from "./ui/aspect-ratio";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-  product: ProductType,
-  outlineOnHover?: boolean,
-  enableFavoritesButton?: boolean,
-  enableAddCartButton?: boolean,
-  imageRatio?: number,
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Product = React.forwardRef<HTMLDivElement, Props>((
+const Product = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    product: ProductType,
+    outlineOnHover?: boolean,
+    enableFavoritesButton?: boolean,
+    enableAddCartButton?: boolean,
+    imageRatio?: number,
+    size?: "sm" | "md" | "dynamic"
+  }
+>((
   {
     product,
     outlineOnHover=false,
@@ -26,6 +25,7 @@ const Product = React.forwardRef<HTMLDivElement, Props>((
     hideFavoritesButton=false,
     enableAddCartButton=false,
     imageRatio=2/3,
+    size="md",
     ...props
   }, 
   forwardedRef
@@ -41,10 +41,18 @@ const Product = React.forwardRef<HTMLDivElement, Props>((
 
   }
 
+  const dinamicStyle = useMemo(() => cn(
+    ({
+      sm: "w-36",
+      md: "w-48",
+      dynamic: "w-full"
+    } as { [key: string]: string})[size],
+  ), [size]);
+
   return (
     <div
       className={cn(
-        "w-48",
+        dinamicStyle,
         "flex flex-col justify-start items-start gap-0",
       )}
     >
@@ -52,7 +60,8 @@ const Product = React.forwardRef<HTMLDivElement, Props>((
         {...props}
         ref={forwardedRef}
         className={cn(
-          "relative w-48 h-fit",
+          dinamicStyle,
+          "relative h-fit",
           "group/product rounded-md overflow-clip select-none cursor-pointer",
           "outline outline-1 outline-neutral-300",
           outlineOnHover && "hover:outline hover:outline-2 hover:outline-primary",
@@ -94,18 +103,23 @@ const Product = React.forwardRef<HTMLDivElement, Props>((
           </Button>
         )}
 
-        <div className="w-48 pointer-events-none">
+        <div className={cn(
+          dinamicStyle,
+          "pointer-events-none"
+        )}>
           <AspectRatio
-            className="select-none"
-            ratio={imageRatio}
-          >
-            <Image 
-              src={product.picture || ProductEmpty} 
-              alt="Product's image" 
-              fill 
-              className="object-cover" 
-            />
-          </AspectRatio>
+              className="select-none"
+              ratio={imageRatio}
+            >
+              {product.picture && (
+                <Image 
+                  src={product.picture} 
+                  alt="Product's image" 
+                  fill 
+                  className="object-cover" 
+                />
+              )}
+            </AspectRatio>
 
           {!product.picture && (
             <div

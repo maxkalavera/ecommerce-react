@@ -16,15 +16,15 @@ import SearchBar from "@/components/search/SearchBar";
 import Category from "@/components/Category";
 import HorizontalScrollArea from "./HorizontalScrollArea";
 import Product from "./Product";
-
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-
-}
+import { DialogPortal } from "@radix-ui/react-dialog";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Search = React.forwardRef<HTMLButtonElement, Props>((
+const Search = React.forwardRef<
+  HTMLButtonElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+
+  }
+>((
   {
     ...props
   }, 
@@ -74,74 +74,77 @@ const Search = React.forwardRef<HTMLButtonElement, Props>((
             <FaMagnifyingGlass />
         </Button>
       </DialogTrigger>
-      <DialogContent
-        className={cn(
-          "flex flex-col justify-start items-center gap-8"
-        )}
+      <DialogPortal
       >
-        <VisuallyHidden.Root>
-          <DialogHeader>
-            <DialogTitle>Search</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            Search for a product, a category or a search term using a searchbar.
-          </DialogDescription>
-        </VisuallyHidden.Root>
-
-        <SearchBar className="w-full mt-4" />
-        <div
-          data-label="Category's search's response"
+        <DialogContent
           className={cn(
-            "w-full h-fit",
-            "flex flex-col justify-start items-start gap-2",
+            "flex flex-col justify-start items-center gap-8"
           )}
         >
-          <h4 className="text-base font-bold">
-            Categories
-          </h4>
+          <VisuallyHidden.Root>
+            <DialogHeader>
+              <DialogTitle>Search</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              Search for a product, a category or a search term using a searchbar.
+            </DialogDescription>
+          </VisuallyHidden.Root>
 
-          <HorizontalScrollArea
-            className="w-full"
-            hasMore={true} 
-            isLoading={loadingCategories} 
-            next={nextCategories} 
+          <SearchBar className="w-full mt-4" />
+          <div
+            data-label="Category's search's response"
+            className={cn(
+              "w-full h-fit",
+              "flex flex-col justify-start items-start gap-2",
+            )}
           >
-            { categories.map((category) => (
-              <Category 
-                key={category.id} 
-                category={category}
-                hoverable={true}
-              />
-            ))}
-          </HorizontalScrollArea>
-        </div>
-        <div
-          data-label="Product's search's response"
-          className={cn(
-            "w-full",
-            "flex flex-col justify-start items-start gap-2",
-          )}
-        >
-          <h4 className="text-base font-bold">
-            Related to your search
-          </h4>
+            <h4 className="text-base font-bold">
+              Categories
+            </h4>
 
-          <HorizontalScrollArea
-            className="w-full"
-            hasMore={true} 
-            isLoading={loadingProducts} 
-            next={nextProducts} 
+            <HorizontalScrollArea
+              className="w-full"
+              hasMore={true} 
+              isLoading={loadingCategories} 
+              next={nextCategories} 
+            >
+              { categories.map((category) => (
+                <Category 
+                  key={category.id} 
+                  category={category}
+                  hoverable={true}
+                />
+              ))}
+            </HorizontalScrollArea>
+          </div>
+          <div
+            data-label="Product's search's response"
+            className={cn(
+              "w-full",
+              "flex flex-col justify-start items-start gap-2",
+            )}
           >
-            { products.map((product) => (
-              <Product 
-                key={product.id} 
-                product={product}
-                hoverable={true}
-              />
-            ))}
-          </HorizontalScrollArea>
-        </div>
-      </DialogContent>
+            <h4 className="text-base font-bold">
+              Related to your search
+            </h4>
+
+            <HorizontalScrollArea
+              className="w-full"
+              hasMore={true} 
+              isLoading={loadingProducts} 
+              next={nextProducts} 
+            >
+              { products.map((product) => (
+                <Product 
+                  key={product.id} 
+                  product={product}
+                  hoverable={true}
+                />
+              ))}
+            </HorizontalScrollArea>
+          </div>
+        </DialogContent>
+      </DialogPortal>
     </Dialog>
   )
 });

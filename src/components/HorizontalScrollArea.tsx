@@ -85,7 +85,6 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
         size="sm"
         variant="secondary"
         className={cn(
-          "hidden group-hover/horizontal-scroll-area:inline-flex",
           "absolute left-[2px] bottom-0 top-0 my-auto z-50 px-2 py-6",
           "shadow-lg",
         )}
@@ -98,7 +97,6 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
         size="sm"
         variant="secondary"
         className={cn(
-          "hidden group-hover/horizontal-scroll-area:inline-flex",
           "absolute right-[2px] bottom-0 top-0 my-auto z-50 px-2 py-6",
           "shadow-lg",
         )}

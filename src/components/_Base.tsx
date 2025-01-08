@@ -1,11 +1,14 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {}
+const Base = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Base = React.forwardRef<HTMLDivElement, Props>((
+  }
+>((
   {
+    className,
     ...props
   }, 
   forwardedRef
@@ -14,6 +17,9 @@ const Base = React.forwardRef<HTMLDivElement, Props>((
     <div
       {...props}
       ref={forwardedRef}
+      className={cn(
+        props.className
+      )}
     >
     </div>
   )

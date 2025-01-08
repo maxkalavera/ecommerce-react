@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const styles = {
   tabsTrigger: cn(
-    "px-2 py-1",
+    "px-0 py-1",
     "text-base",
     "data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:underline",
   )
@@ -34,11 +34,10 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
       ref={forwardedRef}
       className={cn(
         className,
-        
       )}
       defaultValue="women"
     >
-      <TabsList className="bg-transparent">
+      <TabsList className="bg-transparent gap-4">
         <TabsTrigger value="women" asChild>
           <Button
             variant="link"
@@ -67,7 +66,7 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
         </TabsTrigger>
       </TabsList>
       <TabsContent value="women">
-        <CategoriesGrid />
+        <CategoriesGrid className="w-full justify-center md:justify-start" />
       </TabsContent>
       <TabsContent value="men">
         <CategoriesGrid />

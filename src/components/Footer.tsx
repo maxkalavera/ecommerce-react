@@ -20,15 +20,16 @@ const Footer = React.forwardRef<HTMLDivElement, Props>((
       {...props}
       ref={forwardedRef}
       className={cn(
-        "w-full h-fit bg-background",
-        "flex flex-col justify-start items-start gap-2"
+        "w-full max-w-[100dvw] h-fit px-6 py-4 bg-background overflow-clip",
+        "flex flex-col justify-end items-center gap-2",
+        props.className,
       )}
     >
       <div
         data-label="footer-sitemap"
         className={cn(
-          "w-full h-fit",
-          "flex flex-row justify-center items-start gap-8 flex-wrap",
+          "w-fit h-fit",
+          "flex flex-row justify-start items-start gap-8 flex-wrap",
         )}
       >
         <div
@@ -62,17 +63,18 @@ const Footer = React.forwardRef<HTMLDivElement, Props>((
           <Button variant="link" size="sm">Desktop App</Button>
         </div>
       </div>
+
       <div
         className={cn(
           "w-full h-fit",
-          "flex justify-between items-center gap-4",
+          "flex justify-between items-center gap-4 flex-wrap",
         )}
       >
         <div
           data-label="footer-useful-links"
           className={cn(
-            "w-fit h-fit",
-            "flex flex-row justify-start items-start gap-0",
+            "w-fit h-fit mt-4",
+            "flex flex-row justify-start items-start gap-0 flex-wrap",
           )}
         >
           <Button variant="link" size="sm">
