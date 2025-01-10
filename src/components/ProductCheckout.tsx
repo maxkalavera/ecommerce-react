@@ -17,10 +17,12 @@ const ProductCheckout = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
     product: ProductType,
+    imageRatio?: number,
   }
 >((
   {
     product,
+    imageRatio=2/3,
     ...props
   }, 
   forwardedRef
@@ -31,16 +33,20 @@ const ProductCheckout = React.forwardRef<
       ref={forwardedRef}
       className={cn(
         "w-full max-w-screen-sm",
-        "flex flex-row justify-start items-start gap-4",
+        "flex flex-row justify-start items-start gap-8",
       )}
     >
       <div
         data-label="product-checkout-picture" 
-        className="w-36 min-w-36 relative rounded-md overflow-clip pointer-events-none"
+        className={cn(
+          "relative w-28 min-w-28",
+          "rounded-md overflow-clip pointer-events-none",
+          "outline outline-[1px] outline-primary/30"
+        )}
       >
         <AspectRatio
           className="select-none"
-          ratio={1.0 / 1.0}
+          ratio={imageRatio}
         >
           {product.picture && (
             <Image 
@@ -58,7 +64,7 @@ const ProductCheckout = React.forwardRef<
               "flex flex-col justify-center items-center"
             )}
           >
-            <h3 className="font-serif text-xl text-neutral-950/30 text-wrap text-center">
+            <h3 className="font-serif text-lg text-neutral-950/30 text-wrap text-center">
               No image
             </h3>
           </div>
@@ -67,7 +73,7 @@ const ProductCheckout = React.forwardRef<
       
       <div
         className={cn(
-          "w-full px-4 py-2",
+          "w-full",
           "flex flex-col justify-start items-start gap-2",
         )}
       >
@@ -85,11 +91,19 @@ const ProductCheckout = React.forwardRef<
               "flex flex-col justify-start items-start gap-0"
             )}
           >
-            <h4 className="font-bold text-base text-neutral-900">{product.name}</h4>
-            <h5 className="font-bold text-xs text-neutral-900">Black / XS</h5>
+            <h4 
+              className="font-bold text-base capitalize text-neutral-900"
+            >
+              {product.name}
+            </h4>
+            <h5 
+              className="font-bold text-xs text-neutral-900"
+            >
+              Black / XS
+            </h5>
           </div>
           <Button
-            className="text-red-600 hover:text-red-600"
+            className="text-red-300 hover:text-red-500"
             variant="ghost"
             size="sm"
           >

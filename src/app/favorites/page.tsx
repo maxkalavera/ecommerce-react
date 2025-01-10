@@ -32,15 +32,15 @@ export default function Favorites() {
       <Document.Section>
         <Document.SectionTitle>Favorites</Document.SectionTitle>
         <div
-          className="grid grid-cols-4 gap-x-8 gap-y-8"
+          className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-6"
         >
           {products.map((item) => (
             <Product 
               key={item.id}
               product={item}
-              imageRatio={1.0 / 1.0}
               enableFavoritesButton={true}
               enableAddCartButton={true}
+              size="dynamic"
             />
           ))}
         </div>

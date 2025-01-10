@@ -62,7 +62,7 @@ const Product = React.forwardRef<
         className={cn(
           dinamicStyle,
           "relative h-fit",
-          "group/product rounded-md overflow-clip select-none cursor-pointer",
+          "group/product rounded-none rounded-t-sm overflow-clip select-none cursor-pointer",
           "outline outline-1 outline-neutral-300",
           outlineOnHover && "hover:outline hover:outline-2 hover:outline-primary",
         )}
@@ -157,7 +157,8 @@ const Product = React.forwardRef<
           variant="default"
           className={cn(
             "w-full px-4",
-            "rounded-sm"
+            "outline outline-1 outline-neutral-300",
+            "rounded-none rounded-b-sm"
           )}
         >
           <FaCartShopping />

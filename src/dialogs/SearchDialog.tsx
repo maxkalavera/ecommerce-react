@@ -129,7 +129,7 @@ const SearchDialogContent = React.forwardRef<
         )}
       >
         <h4 className="text-base font-bold">
-          Related to your search
+          Related
         </h4>
 
         <HorizontalScrollArea

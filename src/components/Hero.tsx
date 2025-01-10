@@ -21,7 +21,8 @@ const Hero = React.forwardRef<HTMLDivElement, Props>((
       {...props}
       ref={forwardedRef}
       className={cn(
-        "w-full px-4 py-8 md:p-4 md:h-[520px]",
+        "w-full px-4 py-8 md:p-4 md:h-[520px] overflow-clip",
+        "border-t-[1px] border-b-[1px] border-neutral-300",
         "flex flex-col md:flex-row justify-center items-center gap-16 md:gap-4"
       )}
     >
