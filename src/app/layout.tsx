@@ -7,7 +7,6 @@ import {
 } from 'next/font/google';
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import MainLayout from "@/layouts/main";
 import { GlobalDialogProvider } from "@/providers/GlobalDialogProvider";
 
 const mainSans = MainSans({
@@ -49,9 +48,7 @@ export default function RootLayout({
         <JotaiProvider>
           <ThemeProvider attribute="class">
             <GlobalDialogProvider>
-              <MainLayout>
                 {children}
-              </MainLayout>
             </GlobalDialogProvider>
           </ThemeProvider>
         </JotaiProvider>

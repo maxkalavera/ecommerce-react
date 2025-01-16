@@ -50,8 +50,8 @@ const CategoriesGrid = React.forwardRef<HTMLDivElement, Props>((
     >
       <div
         className={cn(
-          "grid place-content-center",
-          "grid-cols-1 min-[580px]:grid-cols-2 min-[920px]:grid-cols-3",
+          "w-full",
+          "grid place-content-center grid-cols-1 xs:grid-cols-2 md:grid-cols-3",
           "gap-6 md:gap-8"
         )}
       >
@@ -60,7 +60,7 @@ const CategoriesGrid = React.forwardRef<HTMLDivElement, Props>((
             key={category.id} 
             category={category}
             hoverable={true}
-            size="lg"
+            size="dynamic"
           />
         ))}
       </div>

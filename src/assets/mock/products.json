@@ -1,0 +1,53 @@
+[
+  {
+    "id": "0",
+    "name": "Elegant Red Stilettos for Women",
+    "price": "100.0",
+    "currency": "USD",
+    "description": "Elevate your style with these stunning red stilettos, designed to make a statement. Crafted with high-quality materials and attention to detail, these shoes exude confidence and sophistication.",
+    "label": { 
+      "color": "red", 
+      "content": "25% OFF" 
+    },
+    "display": {
+      "id": "0",
+      "image": "/static/products/qMEY4Cae.jpg"
+    },
+    "gallery": [
+      {
+        "id": "1",
+        "image": "/static/products/qMEY4Cae.jpg"
+      },
+      {
+        "id": "2",
+        "image": "/static/products/UsGlyz47.jpg"
+      }
+    ]
+  },
+  {
+    "id": "1",
+    "name": "Classic Comfort Sneakers for Men",
+    "price": "50.0",
+    "currency": "USD",
+    "description": "Experience the perfect blend of style, comfort, and versatility with these classic sneakers. Designed for everyday wear, these shoes feature a timeless design that pairs well with casual outfits.",
+    "label": "",
+    "display": {
+      "id": "3",
+      "image": "/static/products/UY19Td1L.jpg"
+    },
+    "gallery": [
+      {
+        "id": "3",
+        "image": "/static/products/UY19Td1L.jpg"
+      },
+      {
+        "id": "4",
+        "image": "/static/products/LCWpJmAy.jpg"
+      },
+      {
+        "id": "5",
+        "image": "/static/products/RDkRX7M5.jpg"
+      }
+    ]
+  }
+]

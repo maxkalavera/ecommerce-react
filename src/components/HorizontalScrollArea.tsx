@@ -18,7 +18,6 @@ interface Props extends
 const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
   {
     children,
-    className,
     isLoading,
     hasMore,
     next,
@@ -46,6 +45,7 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
   }, []);
 
   const scrollStepRight = useCallback(() => {
+    console.log('scrollStepRight')
     if (scrollAreaRef.current) {
       const scrollable = scrollAreaRef.current.getElementsByTagName('div')[0];
       if (scrollable) {
@@ -76,38 +76,45 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
       {...props}
       ref={scrollAreaRef}
       className={cn(
-        className,
         "relative z-0 group/horizontal-scroll-area",
         "whitespace-nowrap rounded-md",
+        props.className
       )}
     >
-      <Button
-        size="sm"
-        variant="secondary"
-        className={cn(
-          "absolute left-[2px] bottom-0 top-0 my-auto z-50 px-2 py-6",
-          "shadow-lg",
-        )}
-        disabled={!state.hasScrollLeft}
-        onClick={scrollStepLeft}
-      >
-        <FaCaretLeft />
-      </Button>
-      <Button
-        size="sm"
-        variant="secondary"
-        className={cn(
-          "absolute right-[2px] bottom-0 top-0 my-auto z-50 px-2 py-6",
-          "shadow-lg",
-        )}
-        disabled={!state.hasScrollRight}
-        onClick={scrollStepRight}
-      >
-        <FaCaretRight />
-      </Button>
+      { state.hasScrollLeft && (
+        <Button
+          size="sm"
+          variant="secondary"
+          className={cn(
+            "absolute left-[2px] bottom-0 top-0 my-auto z-50 px-2 py-6",
+            "shadow-lg",
+          )}
+          disabled={!state.hasScrollLeft}
+          onClick={scrollStepLeft}
+        >
+          <FaCaretLeft />
+        </Button>
+      )}
+
+      { state.hasScrollLeft && (
+        <Button
+          size="sm"
+          variant="secondary"
+          className={cn(
+            "absolute right-[2px] bottom-0 top-0 my-auto z-50 px-2 py-6",
+            "shadow-lg",
+          )}
+          disabled={!hasMore || !state.hasScrollRight}
+          onClick={scrollStepRight}
+        >
+          <FaCaretRight />
+        </Button>
+      )}
 
       <div
-        className="flex flex-row justify-start items-center gap-2 w-max space-x-4 p-4"
+        className={cn(
+          "w-full flex flex-row justify-start items-center gap-2 space-x-4 p-4",
+        )}
       >
         {children}
         <InfiniteScroll 
@@ -117,7 +124,9 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
           threshold={0.5}
           {...props}
         >
-          <span>Loading</span>
+          {hasMore && (
+            <span>Loading</span>
+          )}
         </InfiniteScroll>
       </div>
       <ScrollBar orientation="horizontal" />

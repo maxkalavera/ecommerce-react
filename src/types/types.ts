@@ -11,8 +11,6 @@ export interface Category extends Instance {
   picture?: string;
 }
 
-
-
 export interface ProductLabel {
   content: string,
   color?: string,
@@ -20,7 +18,7 @@ export interface ProductLabel {
 
 export interface ProductImage extends Instance {
   image: string;
-  thumbnail: string;
+  thumbnail?: string;
 }
 
 export interface Product extends Instance {
@@ -31,7 +29,7 @@ export interface Product extends Instance {
   isFavorite: boolean;
   isOnCart: boolean;
   label?: ProductLabel;
-  picture?: ProductImage;
+  display?: ProductImage;
   gallery: ProductImage[];
 }
 

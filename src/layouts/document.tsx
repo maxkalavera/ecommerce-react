@@ -139,7 +139,7 @@ export default {
     <div 
       {...props} 
       className={cn(
-        "font-sans font-bold text-xl mb-2",
+        "font-sans font-bold text-2xl mb-2",
         className
       )}
     >

@@ -4,8 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import type { Product as ProductType } from "@/types/types";
 import ProductCheckout from "@/components/ProductCheckout";
 import { Button } from "@/components/ui/button";
+import MainLayout from "@/layouts/main";
 import Document from "@/layouts/document";
 import { Separator } from "@/components/ui/separator";
+import { cartProductsAtom } from "@/atoms/products";
+import { useAtomValue } from "jotai";
 
 const style = {
   detailsItem: cn(
@@ -18,29 +21,10 @@ const style = {
 }
 
 export default function Cart() {
-  const [products, setProducts] = useState<ProductType[]>([])
-  const [loadingProducts, setLoadingProducts] = useState(false);
-
-  const nextProducts = useCallback(() => {
-    setLoadingProducts(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tmp: any[] = [];
-    for(let i = 0; i < 5; i++) {
-      tmp.push({ name: `${products.length + i}`, id: products.length + i, isFavorite: true, })
-    }
-    setProducts((prev) => prev.concat(tmp));
-    setLoadingProducts(false);
-  }, [products]);
-
-  useEffect(() => {
-    nextProducts();
-    return () => {
-      setProducts([]);
-    };
-  }, []);
+  const data = useAtomValue(cartProductsAtom);
 
   return (
-    <>
+    <MainLayout>
       <Document.Section
         className="items-center"
       >
@@ -54,27 +38,20 @@ export default function Cart() {
           className={cn(
             "w-full h-fit max-w-lg p-6",
             "flex flex-col justify-start items-start gap-4",
-            "border-solid border-[1px] rounded-sm border-neutral-500"
+            "border-solid border-[1px] rounded-sm border-neutral-200"
           )}
         >
-          {/*products.map((item) => (
-            <ProductCheckout 
-              key={item.id}
-              product={item}
-            />
-          ))*/}
-            
-            <ProductCheckout 
-              product={{ name: `product 1`, id: 1, isFavorite: true, }}
-            />
-            <Separator />
-            <ProductCheckout 
-              product={{ name: `product 2`, id: 2, isFavorite: false, }}
-            />
-            <Separator />
-            <ProductCheckout 
-              product={{ name: `product 3`, id: 3, isFavorite: false, }}
-            />
+            {data.items.map((item, index) => ( 
+              <>
+                <ProductCheckout
+                  key={item.id} 
+                  product={item}
+                />
+                {index < data.items.length - 1 &&  (
+                  <Separator />
+                )}
+              </>
+            ))}
         </div>
 
         <div
@@ -103,6 +80,6 @@ export default function Cart() {
           </Button>
         </div>
       </Document.Section>
-    </>
+    </MainLayout>
   );
 }

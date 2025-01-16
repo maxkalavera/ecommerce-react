@@ -27,7 +27,6 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
   forwardedRef
 ) => {
 
-
   return (
     <Tabs
       {...props}

@@ -15,7 +15,7 @@ const Product = React.forwardRef<
     enableFavoritesButton?: boolean,
     enableAddCartButton?: boolean,
     imageRatio?: number,
-    size?: "sm" | "md" | "dynamic"
+    size?: "sm" | "md" | "lg" | "dynamic"
   }
 >((
   {
@@ -41,10 +41,11 @@ const Product = React.forwardRef<
 
   }
 
-  const dinamicStyle = useMemo(() => cn(
+  const dinamicStyle = React.useMemo(() => cn(
     ({
       sm: "w-36",
       md: "w-48",
+      lg: "w-64",
       dynamic: "w-full"
     } as { [key: string]: string})[size],
   ), [size]);
@@ -61,10 +62,11 @@ const Product = React.forwardRef<
         ref={forwardedRef}
         className={cn(
           dinamicStyle,
+          "group/product",
           "relative h-fit",
-          "group/product rounded-none rounded-t-sm overflow-clip select-none cursor-pointer",
-          "outline outline-1 outline-neutral-300",
+          "rounded-sm overflow-clip select-none cursor-pointer",
           outlineOnHover && "hover:outline hover:outline-2 hover:outline-primary",
+          props.className,
         )}
         onClick={() => router.push(`/p/${product.id}`)}
       >
@@ -105,26 +107,29 @@ const Product = React.forwardRef<
 
         <div className={cn(
           dinamicStyle,
-          "pointer-events-none"
+          "pointer-events-none overflow-clip"
         )}>
           <AspectRatio
-              className="select-none"
-              ratio={imageRatio}
-            >
-              {product.picture && (
-                <Image 
-                  src={product.picture} 
-                  alt="Product's image" 
-                  fill 
-                  className="object-cover" 
-                />
-              )}
-            </AspectRatio>
+            className="select-none"
+            ratio={imageRatio}
+          >
+            {product.display?.image && (
+              <Image 
+                src={product.display?.image} 
+                alt="Product's image" 
+                fill 
+                className={cn(
+                  "object-cover",
+                  "transition-transform duration-200 group-hover/product:scale-110"
+                )} 
+              />
+            )}
+          </AspectRatio>
 
-          {!product.picture && (
+          {!product.display?.image && (
             <div
               className={cn(
-                "absolute top-0 left-0 w-full h-full px-8",
+                "absolute top-0 left-0 w-full h-full px-8 z-0",
                 "flex flex-col justify-center items-center"
               )}
             >
@@ -137,18 +142,17 @@ const Product = React.forwardRef<
 
         <div
           className={cn(
-            "w-full h-fit px-2 py-4 z-10",
-            "absolute bottom-0 bg-neutral-50/45",
+            "w-full min-h-18 h-18 max-h-20 px-2 py-4 z-10 bg-white",
           )}    
         >
+          <h4 className="px-1 w-fit text-sm text-wrap">  
+            {product.name}
+          </h4>
           { product.price && (
-            <h4 className="text-sm font-bold">
+            <h4 className="px-1 w-fit text-sm font-bold">
             ${product.price}
             </h4>
           )}
-          <h4 className="text-sm">  
-            {product.name}
-          </h4>
         </div>
       </div>
 

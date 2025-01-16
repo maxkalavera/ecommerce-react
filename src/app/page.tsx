@@ -1,11 +1,12 @@
 import Categories from "@/components/Categories";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Hero from "@/components/Hero";
+import MainLayout from "@/layouts/main";
 import Document from "@/layouts/document";
 
 export default function Home() {
   return (
-    <>
+    <MainLayout>
       <Document.Section>
         <Hero />
       </Document.Section>
@@ -22,6 +23,6 @@ export default function Home() {
           title="Featured products"
         />
       </Document.Section>
-    </>
+    </MainLayout>
   );
 };

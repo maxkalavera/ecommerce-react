@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/carousel"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ProductImage } from "@/types/types";
-import Product from "./Product";
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

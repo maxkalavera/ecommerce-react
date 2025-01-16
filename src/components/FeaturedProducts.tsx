@@ -1,13 +1,17 @@
 'use client'
 import { cn } from "@/lib/utils";
-import React, { ReactNode, useCallback, useState } from "react";
+import React from "react";
 import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import Product from "@/components/Product";
 import { ForLargeScreens, ForSmallScreens } from "@/layouts/screens";
+import { Product as ProductType } from "@/types/types";
+import { useAtomValue } from "jotai";
+import { featuredProductsAtom } from "@/atoms/products";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType> {
-  title: ReactNode,
+  title: React.ReactNode,
+  items: ProductType[]
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,20 +23,11 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
   }, 
   forwardedRef
 ) => {
-  const [products, setProducts] = useState([
-    { name: "Shirt", id: 0, price: "300.00", label: { color: "red", content: "25% OFF" } }, { name: "Striped shirt", id: 1 }, { name: "Jeans", id: 2 }])
-  const [loadingProducts, setLoadingProducts] = useState(false);
+  const data = useAtomValue(featuredProductsAtom);
 
-  const nextProducts = useCallback(() => {
-    setLoadingProducts(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tmp: any[] = [];
-    for(let i = 0; i < 5; i++) {
-      tmp.push({ name: `${products.length + i}`, id: products.length + i })
-    }
-    setProducts((prev) => prev.concat(tmp));
-    setLoadingProducts(false);
-  }, [products]);
+  const nextProducts = React.useCallback(() => {
+
+  }, []);
 
   return (
     <div
@@ -49,11 +44,11 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
       >
         <HorizontalScrollArea
           className="w-full gap-4"
-          hasMore={true} 
-          isLoading={loadingProducts} 
+          hasMore={data.hasMore}
+          isLoading={data.loading}
           next={nextProducts} 
         >
-          { products.map((product) => (
+          { data.items.map((product) => (
             <div key={product.id}>
               <ForLargeScreens>
                 <Product 
@@ -61,7 +56,7 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
                   outlineOnHover={true}
                   enableFavoritesButton={true}
                   hideFavoritesButton={true}
-                  size="md"
+                  size="lg"
                 />
               </ForLargeScreens>
               <ForSmallScreens>
@@ -70,7 +65,7 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
                   outlineOnHover={true}
                   enableFavoritesButton={true}
                   hideFavoritesButton={true}
-                  size="sm"
+                  size="md"
                 />
               </ForSmallScreens>
             </div>

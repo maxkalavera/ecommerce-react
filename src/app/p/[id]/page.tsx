@@ -1,7 +1,8 @@
 "use client"
+import { cn } from "@/lib/utils";
+import MainLayout from "@/layouts/main";
+import Document from "@/layouts/document";
 import ProductGallery from "@/components/ProductGallery";
-//import { useParams } from "next/navigation";
-import productData from "@/assets/mock/product.json";
 import { Product as ProductType } from "@/types/types";
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button";
@@ -16,18 +17,20 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import BreadcrumbNavigation from "@/components/BreadcrumbNavigation";
-import { cn } from "@/lib/utils";
-import Document from "@/layouts/document";
-
+import productsData from "@/assets/mock/products.json";
+import { useParams, notFound } from "next/navigation";
 
 export default function ProductInfo() {
-  //const params = useParams();
-  //const productID = params.id;
+  const params = useParams();
+  const products = productsData as unknown as ProductType[];
+  const product = products.find((item) => item.id === params.id);
 
-  const product = productData as ProductType;
+  if (product === undefined) {
+    notFound();
+  }
 
   return (
-    <>
+    <MainLayout>
       <Document.Section>
         <BreadcrumbNavigation />
         <Document.SectionTitle>{product.name}</Document.SectionTitle>
@@ -57,6 +60,10 @@ export default function ProductInfo() {
           >
             ${product.price} USD
           </h3>
+          <Separator />
+          <p className="my-2">
+            {product.description}
+          </p>
           <Separator />
             <div
               data-label="linked-options"
@@ -108,12 +115,8 @@ export default function ProductInfo() {
               <FaCartShopping /> Add Cart
             </Button>
           <Separator />
-            <p className="my-2">
-              {product.description}
-            </p>
-          <Separator />
         </div>
       </Document.Section>
-    </>
+    </MainLayout>
   );
 }

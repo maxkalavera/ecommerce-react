@@ -1,9 +1,11 @@
 "use client"
 import { cn } from "@/lib/utils";
-import React, { useCallback, useState } from "react";
+import React from "react";
+import { useAtomValue } from "jotai";
 import Product from "@/components/Product";
 import SearchFilters from "@/components/SearchFilters";
 import InfiniteScroll from '@/components/ui/infinite-scroll';
+import { productsAtom } from "@/atoms/products";
 
 const ProductGrid = React.forwardRef<
   HTMLDivElement, 
@@ -17,20 +19,11 @@ const ProductGrid = React.forwardRef<
   }, 
   forwardedRef
 ) => {
-  const [products, setProducts] = useState([
-    { name: "Shirt", id: 0, price: "300.00", label: { color: "red", content: "25% OFF" } }, { name: "Striped shirt", id: 1 }, { name: "Jeans", id: 2 }])
-  const [loadingProducts, setLoadingProducts] = useState(false);
+  const data = useAtomValue(productsAtom);
 
-  const nextProducts = useCallback(() => {
-    setLoadingProducts(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tmp: any[] = [];
-    for(let i = 0; i < 15; i++) {
-      tmp.push({ name: `${products.length + i}`, id: products.length + i })
-    }
-    setProducts((prev) => prev.concat(tmp));
-    setLoadingProducts(false);
-  }, [products]);
+  const nextProducts = React.useCallback(() => {
+
+  }, []);
 
   return (
     <div
@@ -48,7 +41,7 @@ const ProductGrid = React.forwardRef<
 
       <InfiniteScroll 
         hasMore={true} 
-        isLoading={loadingProducts} 
+        isLoading={data.loading} 
         next={nextProducts} 
         threshold={0.5}
       >
@@ -59,7 +52,7 @@ const ProductGrid = React.forwardRef<
             "justify-start items-start gap-x-8 gap-y-8",
           )}
         >
-          { products.map((product) => (
+          { data.items.map((product) => (
             <Product 
               key={product.id}
               product={product}
@@ -70,7 +63,9 @@ const ProductGrid = React.forwardRef<
             />
           ))}
         </div>
-        <h1>Loading...</h1>
+        { data.hasMore && (
+          <h1>Loading...</h1>
+        )}
       </InfiniteScroll>
     </div>
   )

@@ -27,6 +27,7 @@ const ProductCheckout = React.forwardRef<
   }, 
   forwardedRef
 ) => {
+
   return (
     <div
       {...props}
@@ -39,7 +40,7 @@ const ProductCheckout = React.forwardRef<
       <div
         data-label="product-checkout-picture" 
         className={cn(
-          "relative w-28 min-w-28",
+          "relative w-24 min-w-24",
           "rounded-md overflow-clip pointer-events-none",
           "outline outline-[1px] outline-primary/30"
         )}
@@ -48,16 +49,16 @@ const ProductCheckout = React.forwardRef<
           className="select-none"
           ratio={imageRatio}
         >
-          {product.picture && (
+          {product.display?.image && (
             <Image 
-              src={product.picture} 
+              src={product.display?.image} 
               alt="Product's image" 
               fill 
               className="object-cover" 
             />
           )}
         </AspectRatio>
-        {!product.picture && (
+        {!product.display?.image && (
           <div
             className={cn(
               "absolute bottom-0 top-0 left-0 right-0 px-4",
@@ -110,7 +111,7 @@ const ProductCheckout = React.forwardRef<
             <FaTrash />
           </Button>
         </div>
-        <h4 className="font-bold text-base text-neutral-900">$ {product.price} USD</h4>
+        <h4 className="font-bold text-base text-neutral-900">$ {product.price}</h4>
         <Select
           defaultValue="1"
         >

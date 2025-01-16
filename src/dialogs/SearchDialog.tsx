@@ -14,6 +14,8 @@ import {
 import { cn } from "@/lib/utils";
 import { DialogComponent } from "@/types/types";
 import React from "react";
+import { productsAtom } from "@/atoms/products";
+import { useAtomValue } from "jotai";
 
 const SearchDialog: DialogComponent = (
   props
@@ -56,12 +58,15 @@ const SearchDialogContent = React.forwardRef<
   }, 
   forwardedRef
 ) => {
+  const productsData = useAtomValue(productsAtom);
+
+  const nextProducts = React.useCallback(() => {
+
+  }, []);
+
   const [categories, setCategories] = React.useState([
     { name: "Outwear", id: 0 }, { name: "Office outfits", id: 1 }, { name: "Workout", id: 2 }])
   const [loadingCategories, setLoadingCategories] = React.useState(false);
-  const [products, setProducts] = React.useState([
-    { name: "Shirt", id: 0, price: "300.00", label: { color: "red", content: "25% OFF" } }, { name: "Striped shirt", id: 1 }, { name: "Jeans", id: 2 }])
-  const [loadingProducts, setLoadingProducts] = React.useState(false);
 
   const nextCategories = React.useCallback(() => {
     setLoadingCategories(true);
@@ -73,17 +78,6 @@ const SearchDialogContent = React.forwardRef<
     setCategories((prev) => prev.concat(tmp));
     setLoadingCategories(false);
   }, [categories]);
-
-  const nextProducts = React.useCallback(() => {
-    setLoadingProducts(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tmp: any[] = [];
-    for(let i = 0; i < 5; i++) {
-      tmp.push({ name: `${products.length + i}`, id: products.length + i })
-    }
-    setProducts((prev) => prev.concat(tmp));
-    setLoadingProducts(false);
-  }, [products]);
 
   return (
     <div
@@ -134,11 +128,11 @@ const SearchDialogContent = React.forwardRef<
 
         <HorizontalScrollArea
           className="w-full"
-          hasMore={true} 
-          isLoading={loadingProducts} 
+          hasMore={productsData.hasMore} 
+          isLoading={productsData.loading} 
           next={nextProducts} 
         >
-          { products.map((product) => (
+          { productsData.items.map((product) => (
             <Product 
               key={product.id} 
               product={product}
