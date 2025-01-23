@@ -58,7 +58,7 @@ const CategoriesRow = React.forwardRef<HTMLDivElement, Props>((
         next={nextCategories} 
       >
         { categories.map((category) => (
-          <div key={category.id}>
+          <React.Fragment key={category.id}>
             <ForSmallScreens>
               <Category 
                 key={category.id} 
@@ -75,7 +75,7 @@ const CategoriesRow = React.forwardRef<HTMLDivElement, Props>((
                 size="md"
               />
             </ForLargeScreens>
-          </div>
+          </React.Fragment>
         ))}
       </HorizontalScrollArea>
     </div>

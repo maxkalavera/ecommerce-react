@@ -10,16 +10,16 @@ import {
   type CarouselApi
 } from "@/components/ui/carousel"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ProductImage } from "@/types/types";
+import { ResizableImage } from "@/types/types";
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-  images: ProductImage[],
+  images: ResizableImage[],
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ProductGallery = React.forwardRef<HTMLDivElement, Props>((
+const ProductImageGallery = React.forwardRef<HTMLDivElement, Props>((
   {
     images,
     ...props
@@ -71,7 +71,7 @@ const ProductGallery = React.forwardRef<HTMLDivElement, Props>((
         setApi={setApi}
       >
         <CarouselContent>
-          {images.map((item: ProductImage) => (
+          {images.map((item: ResizableImage) => (
             <CarouselItem 
               key={item.id}
             >
@@ -100,7 +100,7 @@ const ProductGallery = React.forwardRef<HTMLDivElement, Props>((
           "grid grid-cols-5 gap-4"
         )}
       >
-        {images.map((item: ProductImage, index: number) => (
+        {images.map((item: ResizableImage, index: number) => (
           <div
             key={item.id}
             className={cn(
@@ -129,6 +129,6 @@ const ProductGallery = React.forwardRef<HTMLDivElement, Props>((
   )
 });
 
-ProductGallery.displayName = "ProductGallery";
+ProductImageGallery.displayName = "ProductImageGallery";
 
-export default ProductGallery;
+export default ProductImageGallery;

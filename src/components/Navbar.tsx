@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 export interface NavbarItem { 
   label: ReactNode, 
   href: string
+  disabled?: boolean,
 };
 
 const Navbar = React.forwardRef<
@@ -52,13 +53,27 @@ const Navbar = React.forwardRef<
         )}
       >
         {items.map((item: NavbarItem, index: number) => (
-          <NavigationMenuItem key={index} onClick={onItemClick}>
-            <Link href={item.href} legacyBehavior passHref>
-              <NavigationMenuLink 
+          <NavigationMenuItem 
+            key={index}
+            onClick={onItemClick}
+            className={cn(
+              item.disabled && "hover:pointer-events-none"
+            )}
+          >
+            <Link 
+              href={item.href} 
+              legacyBehavior 
+              passHref
+            >
+              <NavigationMenuLink
                 className={cn(
                   navigationMenuTriggerStyle(),
                   isUnderPath(item.href, "font-bold"),
-                  orientation === "vertical" && "min-w-36"
+                  orientation === "vertical" && "min-w-36",
+                  item.disabled && cn(
+                    "text-neutral-300 dark:text-neutral-700",
+                    "pointer-events-none"
+                  )
                 )}
               >
                 {item.label}
@@ -88,15 +103,18 @@ export default (props: any) => {
         },
         {
           label: "Blog",
-          href: "/#"
+          href: "/#",
+          disabled: true,
         },
         {
           label: "About",
-          href: "/#"
+          href: "/#",
+          disabled: true,
         },
         {
           label: "Contact",
-          href: "/#"
+          href: "/#",
+          disabled: true,
         }
       ]}
     />

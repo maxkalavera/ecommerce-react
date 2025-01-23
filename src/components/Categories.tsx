@@ -1,9 +1,12 @@
 "use client"
-import React from "react";
+import React, { useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CategoriesGrid from "./CategoriesGrid";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { Category } from "@/types/types";
+import { useAtom, useAtomValue } from "jotai";
+import { activeTabAtom, tabsAtom, activeTabCategoriesAtom } from "@/atoms/categories";
 
 const styles = {
   tabsTrigger: cn(
@@ -26,6 +29,9 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
   }, 
   forwardedRef
 ) => {
+  const tabs = useAtomValue(tabsAtom);
+  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
+  const categories = useAtomValue(activeTabCategoriesAtom);
 
   return (
     <Tabs
@@ -34,45 +40,39 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
       className={cn(
         className,
       )}
-      defaultValue="women"
+      value={activeTab}
+      onValueChange={(value) => setActiveTab(value)}
     >
       <TabsList className="bg-transparent gap-4">
-        <TabsTrigger value="women" asChild>
-          <Button
-            variant="link"
-            className={cn(
-              styles.tabsTrigger,
-            )}
+        {tabs.map(item => (
+          <TabsTrigger 
+            key={item.referenceKey} 
+            value={item.referenceKey} 
+            asChild
           >
-            Women
-          </Button>
-        </TabsTrigger>
-        <TabsTrigger value="men" asChild>
-          <Button
-            variant="link"
-            className={styles.tabsTrigger}
-          >
-            Men
-          </Button>
-        </TabsTrigger>
-        <TabsTrigger value="sale" asChild>
-          <Button
-            variant="link"
-            className={styles.tabsTrigger}
-          >
-            Sale
-          </Button>
-        </TabsTrigger>
+            <Button
+              variant="link"
+              className={cn(
+                styles.tabsTrigger,
+              )}
+            >
+              {item.name}
+            </Button>
+          </TabsTrigger>
+        ))}
       </TabsList>
-      <TabsContent value="women">
-        <CategoriesGrid className="w-full justify-center md:justify-start" />
-      </TabsContent>
-      <TabsContent value="men">
-        <CategoriesGrid />
-      </TabsContent>
-      <TabsContent value="sale">
-        <CategoriesGrid />
-      </TabsContent>
+
+      {tabs.map(item => (
+        <TabsContent
+          key={item.referenceKey} 
+          value={item.referenceKey}
+        >
+          <CategoriesGrid
+            className="w-full justify-center md:justify-start"
+            categories={categories}
+          />
+        </TabsContent>
+      ))}
     </Tabs>
   )
 });

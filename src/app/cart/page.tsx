@@ -1,4 +1,5 @@
 "use client"
+import React from "react";
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import type { Product as ProductType } from "@/types/types";
@@ -42,15 +43,14 @@ export default function Cart() {
           )}
         >
             {data.items.map((item, index) => ( 
-              <>
+              <React.Fragment key={item.id}>
                 <ProductCheckout
-                  key={item.id} 
                   product={item}
                 />
                 {index < data.items.length - 1 &&  (
                   <Separator />
                 )}
-              </>
+              </React.Fragment>
             ))}
         </div>
 

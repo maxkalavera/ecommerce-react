@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import MainLayout from "@/layouts/main";
 import Document from "@/layouts/document";
-import ProductGallery from "@/components/ProductGallery";
+import ProductImageGallery from "@/components/ProductImageGallery";
 import { Product as ProductType } from "@/types/types";
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export default function ProductInfo() {
         <div 
           className="flex flex-col justify-start items-stretch gap-16"
         >
-          <ProductGallery 
+          <ProductImageGallery 
             images={product.gallery}
           />
         </div>

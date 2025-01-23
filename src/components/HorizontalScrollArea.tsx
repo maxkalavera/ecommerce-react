@@ -45,7 +45,6 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
   }, []);
 
   const scrollStepRight = useCallback(() => {
-    console.log('scrollStepRight')
     if (scrollAreaRef.current) {
       const scrollable = scrollAreaRef.current.getElementsByTagName('div')[0];
       if (scrollable) {
@@ -96,7 +95,7 @@ const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
         </Button>
       )}
 
-      { state.hasScrollLeft && (
+      { state.hasScrollRight && hasMore && (
         <Button
           size="sm"
           variant="secondary"

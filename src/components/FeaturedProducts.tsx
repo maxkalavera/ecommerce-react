@@ -49,7 +49,7 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
           next={nextProducts} 
         >
           { data.items.map((product) => (
-            <div key={product.id}>
+            <React.Fragment key={product.id}>
               <ForLargeScreens>
                 <Product 
                   product={product}
@@ -68,7 +68,7 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
                   size="md"
                 />
               </ForSmallScreens>
-            </div>
+            </React.Fragment>
           ))}
           </HorizontalScrollArea>
       </div>

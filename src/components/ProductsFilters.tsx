@@ -11,6 +11,8 @@ import {
 import { FaCaretDown, FaFilter, FaSort } from "react-icons/fa6";
 import CategoriesRow from "@/components/CategoriesRow";
 import ProductFilters from "./ProductFilters";
+import { useAtom, useAtomValue } from "jotai";
+import { activeTabShopAtom, tabsAtom, activeTabCategoriesShopAtom } from "@/atoms/categories";
 
 const styles = {
   tabsTrigger: cn(
@@ -30,14 +32,16 @@ interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
+const ProductsFilters = React.forwardRef<HTMLDivElement, Props>((
   {
     className,
     ...props
   }, 
   forwardedRef
 ) => {
-  const [tab, setTab] = useState("");
+  const tabs = useAtomValue(tabsAtom);
+  const [activeTab, setActiveTab] = useAtom(activeTabShopAtom);
+  const categories = useAtomValue(activeTabCategoriesShopAtom);
 
   const sortArray = [
     "Releveance",
@@ -51,8 +55,8 @@ const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
     <Tabs 
       {...props}
       ref={forwardedRef}
-      value={tab}
-      onValueChange={setTab}
+      value={activeTab}
+      onValueChange={setActiveTab}
       data-label="search-filters-tabs"
       className={cn(
         "relative",
@@ -63,18 +67,15 @@ const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
         <div
           className="w-full flex flex-row justify-start items-start gap-2"
         >
-          <Button
-            variant={tab === "women" ? "default" : "outline" }
-            onClick={() => tab === "women" ? setTab("") : setTab("women")}
-          >
-            Women <FaCaretDown />
-          </Button>
-          <Button
-            variant={tab === "men" ? "default" : "outline" }
-            onClick={() => tab === "men" ? setTab("") : setTab("men")}
-          >
-            Men <FaCaretDown />
-          </Button>
+          {tabs.map(item => (
+            <Button
+              key={item.referenceKey} 
+              variant={activeTab === item.referenceKey ? "default" : "outline" }
+              onClick={() => activeTab === item.referenceKey ? setActiveTab("") : setActiveTab(item.referenceKey)}
+            >
+              {item.name} <FaCaretDown />
+            </Button>
+          ))}
         </div>
         <div
           className="w-full flex flex-col justify-start items-end md:flex-row md:justify-end md:items-start gap-2"
@@ -125,20 +126,18 @@ const SearchFilters = React.forwardRef<HTMLDivElement, Props>((
 
       </TabsList>
 
-      <TabsContent 
-        value="women"
-      >
-        <CategoriesRow />
-      </TabsContent>
-      <TabsContent 
-        value="men"
-      >
-        <CategoriesRow />
-      </TabsContent>
+      {tabs.map(item => (
+        <TabsContent
+          key={item.referenceKey}
+          value={item.referenceKey}
+        >
+          <CategoriesRow />
+        </TabsContent>
+      ))}
     </Tabs>
   )
 });
 
-SearchFilters.displayName = "SearchFilters";
+ProductsFilters.displayName = "ProductsFilters";
 
-export default SearchFilters;
+export default ProductsFilters;

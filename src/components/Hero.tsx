@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import DisplayImage from "@/assets/images/home_hero.png"
+import DisplayImage from "@/assets/images/home_hero.jpg"
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
@@ -21,15 +21,17 @@ const Hero = React.forwardRef<HTMLDivElement, Props>((
       {...props}
       ref={forwardedRef}
       className={cn(
+        "relative",
         "w-full px-4 py-8 md:p-4 md:h-[520px] overflow-clip",
         "border-t-[1px] border-b-[1px] border-neutral-300",
-        "flex flex-col md:flex-row justify-center items-center gap-16 md:gap-4"
+        "flex flex-col md:flex-row justify-center items-center gap-16 md:gap-4",
+        props.className
       )}
     >
       <div
         data-label="hero-content"
         className={cn(
-          "w-full max-w-80 md:w-80 h-full",
+          "w-full max-w-80 md:w-80 h-full z-10",
           "flex flex-col justify-center items-center gap-2",
           "select-none"
         )}
@@ -54,23 +56,15 @@ const Hero = React.forwardRef<HTMLDivElement, Props>((
           </Button>
         </div>
       </div>
-      <div
-        className="relative w-fit md:h-[520px] overflow-visible select-none pointer-events-none"
-      >
-        <Image 
-          className="top-0 left-0 blur-md md:h-[520px]"
-          height={520}
-          alt="Hero section display's image"
-          src={DisplayImage}
-        />
-        <Image 
-          className="absolute top-0 left-0 md:h-[520px]"
-          height={520}
-          alt="Hero section display's image"
-          src={DisplayImage}
-        />
-      </div>
 
+      <Image 
+        className="absolute top-0 left-0 z-0 object-cover dark:opacity-90"
+        alt="Hero section display's image"
+        src={DisplayImage}
+        fill
+        sizes="100vw"
+        priority={true}
+      />
     </div>
   )
 });

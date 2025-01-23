@@ -111,11 +111,14 @@ const Header = React.forwardRef<
               </Link>
             </div>
             <Button
+              disabled={true}
               variant="outline"
               size="sm"
             >
               <FaUser />
-              <h4 className="text-sm">Sign in</h4>
+              <h4 className="text-sm">
+                Sign in
+              </h4>
             </Button>
           </div>
         </ForLargeScreens>
@@ -179,7 +182,10 @@ const Header = React.forwardRef<
 
                 <HamburguerMenuFooter>
                   <div className="flex flex-row justify-center items-center gap-2">
-                    <Select defaultValue="english">
+                    <Select
+                      disabled={true}
+                      defaultValue="english"
+                    >
                       <SelectTrigger 
                         className={cn(
                           "w-fit h-fit px-2 py-1",
@@ -194,7 +200,10 @@ const Header = React.forwardRef<
                       </SelectContent>
                     </Select>
 
-                    <Select defaultValue="USD">
+                    <Select 
+                      disabled={true}
+                      defaultValue="USD"
+                    >
                       <SelectTrigger 
                         className={cn(
                           "w-fit h-fit px-2 py-1",
@@ -231,7 +240,10 @@ const Header = React.forwardRef<
             data-label="options"
             className="px-4 flex flex-row justify-end items-center gap-2"
           >
-            <Select defaultValue="english">
+            <Select
+              disabled={true}
+              defaultValue="english"
+            >
               <SelectTrigger 
                 className={cn(
                   "w-fit h-fit px-2 py-1 border-none",
@@ -246,7 +258,10 @@ const Header = React.forwardRef<
               </SelectContent>
             </Select>
 
-            <Select defaultValue="USD">
+            <Select
+              disabled={true}
+              defaultValue="USD"
+            >
               <SelectTrigger 
                 className={cn(
                   "w-fit h-fit px-2 py-1 border-none",

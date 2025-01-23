@@ -36,31 +36,107 @@ const Footer = React.forwardRef<HTMLDivElement, Props>((
           data-label="column"
           className="flex flex-col justify-start items-start gap-0"
         >
-          <h3 className="font-bold text-base uppercase">WHO ARE WE?</h3>
-          <Button variant="link" size="sm">Company</Button>
-          <Button variant="link" size="sm">Community</Button>
-          <Button variant="link" size="sm">Values</Button>
+          <h3 className="font-bold text-base uppercase">
+            WHO ARE WE?
+          </h3>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Company
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Community
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Values
+          </Button>
         </div>
         <div
           data-label="column"
           className="flex flex-col justify-start items-start gap-0"
         >
           <h3 className="font-bold text-base uppercase">SUPPORT</h3>
-          <Button variant="link" size="sm">How to order</Button>
-          <Button variant="link" size="sm">Refund policy</Button>
-          <Button variant="link" size="sm">Order tracking</Button>
-          <Button variant="link" size="sm">Size guide</Button>
-          <Button variant="link" size="sm">Videos</Button>
-          <Button variant="link" size="sm">FAQ</Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            How to order
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Refund policy
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Order tracking
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Size guide
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Videos
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            FAQ
+          </Button>
         </div>
         <div
           data-label="column"
           className="flex flex-col justify-start items-start gap-0"
         >
-          <h3 className="font-bold text-base uppercase">PRODUCTS</h3>
-          <Button variant="link" size="sm">Android App</Button>
-          <Button variant="link" size="sm">IOS App</Button>
-          <Button variant="link" size="sm">Desktop App</Button>
+          <h3 className="font-bold text-base uppercase">
+            PRODUCTS
+          </h3>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Android App
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            IOS App
+          </Button>
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
+            Desktop App
+          </Button>
         </div>
       </div>
 
@@ -77,16 +153,32 @@ const Footer = React.forwardRef<HTMLDivElement, Props>((
             "flex flex-row justify-start items-start gap-0 flex-wrap",
           )}
         >
-          <Button variant="link" size="sm">
+          <Button 
+            variant="link" 
+            size="sm"
+            disabled={true}
+          >
             Privacy
           </Button>
-          <Button variant="link" size="sm">
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
             Terms and conditions
           </Button>
-          <Button variant="link" size="sm">
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
             Copyright
           </Button>
-          <Button variant="link" size="sm">
+          <Button 
+            variant="link" 
+            size="sm" 
+            disabled={true}
+          >
             Cookies Preferences
           </Button>
         </div>
@@ -97,16 +189,36 @@ const Footer = React.forwardRef<HTMLDivElement, Props>((
             "flex flex-row justify-start items-start gap-0",
           )}
         >
-          <Button variant="ghost" size="sm" className="p-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-2" 
+            disabled={true}
+          >
             <FaTiktok />
           </Button>
-          <Button variant="ghost" size="sm" className="p-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-2" 
+            disabled={true}
+          >
             <FaYoutube />
           </Button>
-          <Button variant="ghost" size="sm" className="p-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-2" 
+            disabled={true}
+          >
             <FaInstagram />
           </Button>
-          <Button variant="ghost" size="sm" className="p-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-2" 
+            disabled={true}
+          >
             <FaFacebook />
           </Button>
         </div>

@@ -89,32 +89,36 @@ const SearchDialogContent = React.forwardRef<
       )}
     >
       <SearchBar className="w-full mt-4" />
-      <div
-        data-label="Category's search's response"
-        className={cn(
-          "w-full h-fit",
-          "flex flex-col justify-start items-start gap-2",
-        )}
-      >
-        <h4 className="text-base font-bold">
-          Categories
-        </h4>
 
-        <HorizontalScrollArea
-          className="w-full"
-          hasMore={true} 
-          isLoading={loadingCategories} 
-          next={nextCategories} 
+      { false && (
+        <div
+          data-label="Category's search's response"
+          className={cn(
+            "w-full h-fit",
+            "flex flex-col justify-start items-start gap-2",
+          )}
         >
-          { categories.map((category) => (
-            <Category 
-              key={category.id} 
-              category={category}
-              hoverable={true}
-            />
-          ))}
-        </HorizontalScrollArea>
-      </div>
+          <h4 className="text-base font-bold">
+            Categories
+          </h4>
+
+          <HorizontalScrollArea
+            className="w-full"
+            hasMore={true} 
+            isLoading={loadingCategories} 
+            next={nextCategories} 
+          >
+            { categories.map((category) => (
+              <Category 
+                key={category.id} 
+                category={category}
+                hoverable={true}
+              />
+            ))}
+          </HorizontalScrollArea>
+        </div>
+      )}
+
       <div
         data-label="Product's search's response"
         className={cn(

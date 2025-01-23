@@ -1,7 +1,5 @@
 import { atom } from 'jotai';
-import { focusAtom } from 'jotai-optics';
 import productsData from "@/assets/mock/products.json";
-import { Product as ProductType } from '@/types/types';
 
 export const productsAtom = atom({
   items: productsData,

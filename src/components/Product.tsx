@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils";
 import { Product as ProductType } from "@/types/types";
 import React, { useMemo } from "react";
@@ -30,6 +31,7 @@ const Product = React.forwardRef<
   }, 
   forwardedRef
 ) => {
+  const [error, setError] = React.useState(false);
   const router = useRouter()
 
   const toggleIsFavorite = () => {
@@ -65,7 +67,7 @@ const Product = React.forwardRef<
           "group/product",
           "relative h-fit",
           "rounded-sm overflow-clip select-none cursor-pointer",
-          outlineOnHover && "hover:outline hover:outline-2 hover:outline-primary",
+          outlineOnHover && "hover:outline hover:outline-[1px] hover:outline-primary/35",
           props.className,
         )}
         onClick={() => router.push(`/p/${product.id}`)}
@@ -113,24 +115,27 @@ const Product = React.forwardRef<
             className="select-none"
             ratio={imageRatio}
           >
-            {product.display?.image && (
+            {product.display?.image && !error && (
               <Image 
                 src={product.display?.image} 
                 alt="Product's image" 
-                fill 
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className={cn(
                   "object-cover",
                   "transition-transform duration-200 group-hover/product:scale-110"
-                )} 
+                )}
+                onError={() => setError(true)}
               />
             )}
           </AspectRatio>
 
-          {!product.display?.image && (
+          {(!product.display?.image || error) && (
             <div
               className={cn(
                 "absolute top-0 left-0 w-full h-full px-8 z-0",
-                "flex flex-col justify-center items-center"
+                "flex flex-col justify-center items-center",
+                "border-[1px] border-neutral-200 dark:border-neutral-800"
               )}
             >
               <h3 className="font-serif text-xl text-neutral-950/30 text-wrap text-center">

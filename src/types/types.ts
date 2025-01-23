@@ -3,22 +3,27 @@ import { DialogProps } from "@radix-ui/react-dialog";
 export type ID = number | string;
 
 export interface Instance {
-  id: ID
+  id?: ID
+}
+
+export interface ResizableImage extends Instance {
+  image: string;
+  thumbnail?: string;
 }
 
 export interface Category extends Instance {
+  referenceKey: string;
   name: string;
-  picture?: string;
+  display?: ResizableImage;
+  hierarchy?: {
+    parents: Category[];
+    children?: Category[];
+  }
 }
 
 export interface ProductLabel {
-  content: string,
-  color?: string,
-}
-
-export interface ProductImage extends Instance {
-  image: string;
-  thumbnail?: string;
+  content: string;
+  color?: string;
 }
 
 export interface Product extends Instance {
@@ -29,8 +34,8 @@ export interface Product extends Instance {
   isFavorite: boolean;
   isOnCart: boolean;
   label?: ProductLabel;
-  display?: ProductImage;
-  gallery: ProductImage[];
+  display?: ResizableImage;
+  gallery: ResizableImage[];
 }
 
 export type DialogComponent = React.FC<DialogProps>;
