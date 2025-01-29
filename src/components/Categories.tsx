@@ -4,9 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CategoriesGrid from "./CategoriesGrid";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { Category } from "@/types/types";
-import { useAtom, useAtomValue } from "jotai";
-import { activeTabAtom, tabsAtom, activeTabCategoriesAtom } from "@/atoms/categories";
+
+import settings from "@/settings";
+import { useCategoriesQuery } from "@/hooks/queries/categories";
 
 const styles = {
   tabsTrigger: cn(
@@ -16,22 +16,21 @@ const styles = {
   )
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
+const Categories = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
 
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Categories = React.forwardRef<HTMLDivElement, Props>((
+  }
+>((
   {
     className,
     ...props
   }, 
   forwardedRef
 ) => {
-  const tabs = useAtomValue(tabsAtom);
-  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
-  const categories = useAtomValue(activeTabCategoriesAtom);
+  const [activeTab, setActiveTab] = React.useState<string>(
+    settings.categories.tabs.length > 0 ? settings.categories.tabs[0].key : "");
+  const categoriesQuery = useCategoriesQuery({ rootCategory: activeTab });
 
   return (
     <Tabs
@@ -44,10 +43,10 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
       onValueChange={(value) => setActiveTab(value)}
     >
       <TabsList className="bg-transparent gap-4">
-        {tabs.map(item => (
+        {settings.categories.tabs.map(item => (
           <TabsTrigger 
-            key={item.referenceKey} 
-            value={item.referenceKey} 
+            key={item.key} 
+            value={item.key} 
             asChild
           >
             <Button
@@ -62,14 +61,14 @@ const Categories = React.forwardRef<HTMLDivElement, Props>((
         ))}
       </TabsList>
 
-      {tabs.map(item => (
+      {settings.categories.tabs.map(item => (
         <TabsContent
-          key={item.referenceKey} 
-          value={item.referenceKey}
+          key={item.key} 
+          value={item.key}
         >
           <CategoriesGrid
             className="w-full justify-center md:justify-start"
-            categories={categories}
+            categories={categoriesQuery.data}
           />
         </TabsContent>
       ))}

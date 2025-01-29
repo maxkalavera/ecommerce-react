@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import InfiniteScroll from "./ui/infinite-scroll";
 import HorizontalScrollArea from "./HorizontalScrollArea";
 import { ForLargeScreens, ForSmallScreens } from "@/layouts/screens";
+import { Category as CategoryType } from "@/types/types";
+import { useCategoriesQuery } from "@/hooks/queries/categories";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
@@ -11,36 +13,19 @@ interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CategoriesRow = React.forwardRef<HTMLDivElement, Props>((
+const CategoriesRow = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    rootCategory: CategoryType
+  }
+>((
   {
-    className,
+    rootCategory,
     ...props
   }, 
   forwardedRef
 ) => {
-  const [categories, setCategories] = useState([
-    { name: "Outwear", id: 0 }, { name: "Office outfits", id: 1 }, { name: "Workout", id: 2 }])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loadingCategories, setLoadingCategories] = useState(false);
-
-  const nextCategories = useCallback(() => {
-    setLoadingCategories(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tmp: any[] = [];
-    for(let i = 0; i < 5; i++) {
-      tmp.push({ name: `${categories.length + i}`, id: categories.length + i })
-    }
-    setCategories((prev) => prev.concat(tmp));
-    setLoadingCategories(false);
-  }, [categories]);
-
-  useEffect(() => {
-    //nextCategories();
-    return () => {
-      setCategories([]);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const categoriesQuery = useCategoriesQuery({ rootCategory: rootCategory || "" });
 
   return (
     <div
@@ -48,16 +33,16 @@ const CategoriesRow = React.forwardRef<HTMLDivElement, Props>((
       ref={forwardedRef}
       className={cn(
         "flex flex-row justify-start items-start",
-        className,
+        props.className,
       )}
     >
       <HorizontalScrollArea
         className="w-full gap-4"
-        hasMore={true} 
-        isLoading={loadingCategories} 
-        next={nextCategories} 
+        hasMore={props.hasMore} 
+        isLoading={props.isLoading} 
+        next={props.next} 
       >
-        { categories.map((category) => (
+        { (categoriesQuery.data || []).map((category: CategoryType) => (
           <React.Fragment key={category.id}>
             <ForSmallScreens>
               <Category 

@@ -1,9 +1,11 @@
 [
   {
     "id": "0",
-    "referenceKey": "rdvc3N3wO",
+    "key": "rdvc3N3wO",
     "name": "Men",
-    "display": null,
+    "display": {
+      "image": "/static/categories/rdvc3N3wO.jpg"
+    },
     "hierarchy": {
       "parents": [],
       "children": []
@@ -11,9 +13,11 @@
   },
   {
     "id": "1",
-    "referenceKey": "YgMVlkiMSs",
+    "key": "YgMVlkiMSs",
     "name": "Women",
-    "display": null,
+    "display": {
+      "image": "/static/categories/YgMVlkiMSs.jpg"
+    },
     "hierarchy": {
       "parents": [],
       "children": []
@@ -22,7 +26,7 @@
 
   {
     "id": "2",
-    "referenceKey": "PWPtJ0t5If",
+    "key": "PWPtJ0t5If",
     "name": "Shirts",
     "display": {
       "image": "/static/categories/PWPtJ0t5If.jpg"
@@ -32,7 +36,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ],
@@ -41,7 +45,7 @@
   },
   {
     "id": "3",
-    "referenceKey": "HmofPSBVQt",
+    "key": "HmofPSBVQt",
     "name": "Pants",
     "display": {
       "image": "/static/categories/HmofPSBVQt.jpg"
@@ -51,7 +55,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -59,7 +63,7 @@
   },
   {
     "id": "4",
-    "referenceKey": "-bwKOMsacs",
+    "key": "-bwKOMsacs",
     "name": "Suits and Blazers",
     "display": {
       "image": "/static/categories/-bwKOMsacs.jpg"
@@ -69,7 +73,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -77,7 +81,7 @@
   },
   {
     "id": "5",
-    "referenceKey": "FvjOlGrCX3",
+    "key": "FvjOlGrCX3",
     "name": "Jackets and Coats",
     "display": {
       "image": "/static/categories/FvjOlGrCX3.jpg"
@@ -87,7 +91,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -95,7 +99,7 @@
   },
   {
     "id": "7",
-    "referenceKey": "FnFqee2w6B",
+    "key": "FnFqee2w6B",
     "name": "Shorts",
     "display": {
       "image": "/static/categories/FnFqee2w6B.jpg"
@@ -105,7 +109,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -113,7 +117,7 @@
   },
   {
     "id": "8",
-    "referenceKey": "55iOo8RkI9",
+    "key": "55iOo8RkI9",
     "name": "Activewear",
     "display": {
       "image": "/static/categories/55iOo8RkI9.jpg"
@@ -123,7 +127,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -131,7 +135,7 @@
   },
   {
     "id": "9",
-    "referenceKey": "JTW3ldebVW",
+    "key": "JTW3ldebVW",
     "name": "Innerwear and Undergarments",
     "display": {
       "image": "/static/categories/JTW3ldebVW.jpg"
@@ -141,7 +145,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -149,7 +153,7 @@
   },
   {
     "id": "10",
-    "referenceKey": "aJLU8bdY9E",
+    "key": "aJLU8bdY9E",
     "name": "Accessories",
     "display": {
       "image": "/static/categories/aJLU8bdY9E.jpg"
@@ -159,7 +163,7 @@
         {
           "id": "0",
           "name": "Men",
-          "referenceKey": "rdvc3N3wO",
+          "key": "rdvc3N3wO",
           "display": null
         }
       ]
@@ -169,7 +173,7 @@
 
   {
     "id": "11",
-    "referenceKey": "FhQlqrCJef",
+    "key": "FhQlqrCJef",
     "name": "Tops",
     "display": {
       "image": "/static/categories/FhQlqrCJef.jpg"
@@ -179,7 +183,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -187,7 +191,7 @@
   },
   {
     "id": "12",
-    "referenceKey": "8eJkCaB7mA",
+    "key": "8eJkCaB7mA",
     "name": "Dresses",
     "display": {
       "image": "/static/categories/8eJkCaB7mA.jpg"
@@ -197,7 +201,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -205,7 +209,7 @@
   },
   {
     "id": "13",
-    "referenceKey": "H9KOqEXleK",
+    "key": "H9KOqEXleK",
     "name": "Bottoms",
     "display": {
       "image": "/static/categories/H9KOqEXleK.jpg"
@@ -215,7 +219,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -223,7 +227,7 @@
   },
   {
     "id": "14",
-    "referenceKey": "PDPOmee7Nu",
+    "key": "PDPOmee7Nu",
     "name": "Activewear",
     "display": {
       "image": "/static/categories/PDPOmee7Nu.jpg"
@@ -233,7 +237,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -241,7 +245,7 @@
   },
   {
     "id": "15",
-    "referenceKey": "3H5FjaG3-D",
+    "key": "3H5FjaG3-D",
     "name": "Jackets and Coats",
     "display": {
       "image": "/static/categories/3H5FjaG3-D.jpg"
@@ -251,7 +255,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -259,7 +263,7 @@
   },
   {
     "id": "16",
-    "referenceKey": "gtaNr3ouOHU",
+    "key": "gtaNr3ouOHU",
     "name": "Innerwear and Lingerie",
     "display": {
       "image": "/static/categories/gtaNr3ouOHU.jpg"
@@ -269,7 +273,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -277,7 +281,7 @@
   },
   {
     "id": "17",
-    "referenceKey": "SERyAHvVi0p",
+    "key": "SERyAHvVi0p",
     "name": "Nightwear",
     "display": {
       "image": "/static/categories/SERyAHvVi0p.jpg"
@@ -287,7 +291,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -295,7 +299,7 @@
   },
   {
     "id": "18",
-    "referenceKey": "t89tjbfEvRn",
+    "key": "t89tjbfEvRn",
     "name": "Maternity Wear",
     "display": {
       "image": "/static/categories/t89tjbfEvRn.jpg"
@@ -305,7 +309,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]
@@ -313,7 +317,7 @@
   },
   {
     "id": "19",
-    "referenceKey": "rlWoDxn3A",
+    "key": "rlWoDxn3A",
     "name": "Accessories",
     "display": {
       "image": "/static/categories/rlWoDxn3A.jpg"
@@ -323,7 +327,7 @@
         {
           "id": "1",
           "name": "Women",
-          "referenceKey": "YgMVlkiMSs",
+          "key": "YgMVlkiMSs",
           "display": null
         }
       ]

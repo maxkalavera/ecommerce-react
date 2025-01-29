@@ -28,7 +28,7 @@ import {
   HamburguerMenuTitle, 
   HamburguerMenuTrigger
 } from "@/components/HamburguerMenu";
-import SearchBar from "./search/SearchBar";
+import SearchBar from "./SearchBar";
 import { useGlobalDialog } from "@/providers/GlobalDialogProvider";
 
 const Header = React.forwardRef<

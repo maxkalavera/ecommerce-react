@@ -1,6 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { Category as CategoryType } from "@/types/types";
+import { Category as CategoryType } from "@/types/categories";
 import Image from "next/image";
 import React, { useState } from "react";
 import { AspectRatio } from "./ui/aspect-ratio";
@@ -13,7 +13,8 @@ const Category = React.forwardRef<
     category: CategoryType,
     hoverable: boolean,
     imageRatio?: number,
-    size: Size
+    size: Size,
+    showParentLabel: boolean
   }
 >((
   {
@@ -21,6 +22,7 @@ const Category = React.forwardRef<
     hoverable,
     imageRatio=4/3,
     size="md",
+    showParentLabel=false,
     ...props
   }, 
   forwardedRef
@@ -87,6 +89,20 @@ const Category = React.forwardRef<
           </div>
         )}
       </div>
+
+      { showParentLabel && category.hierarchy.parents.length > 0 && (
+        <div
+          className="w-fit max-w-full absolute z-10 top-2 left-2 m-auto px-2 py-1 rounded-sm bg-white/55"      
+        >
+          <h4 className="text-xs text-center font-bold">  
+            {
+              category.hierarchy.parents
+              .map((item: CategoryType) => item.name)
+              .join(" > ")
+            }
+          </h4>
+        </div>
+      )}
 
       <div
         className="w-fit max-w-full absolute z-10 bottom-4 left-0 right-0 m-auto px-4 py-2 rounded-sm bg-white/55"      

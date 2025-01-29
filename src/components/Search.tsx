@@ -12,7 +12,7 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
-import SearchBar from "@/components/search/SearchBar";
+import SearchBar from "@/components/SearchBar";
 import Category from "@/components/Category";
 import HorizontalScrollArea from "./HorizontalScrollArea";
 import Product from "./Product";

@@ -2,7 +2,7 @@
 import Category from "@/components/Category";
 import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import Product from "@/components/Product";
-import SearchBar from "@/components/search/SearchBar";
+import SearchBar from "@/components/SearchBar";
 import {
   Sheet,
   SheetContent,
@@ -13,9 +13,14 @@ import {
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils";
 import { DialogComponent } from "@/types/types";
-import React from "react";
+import { Category as CategoryType } from "@/types/categories";
+import React, { useState } from "react";
 import { productsAtom } from "@/atoms/products";
 import { useAtomValue } from "jotai";
+import { useCategoriesQuery } from "@/hooks/queries/categories";
+import { useProductsQuery } from "@/hooks/queries/products";
+import { Product as ProductType } from "@/types/products";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const SearchDialog: DialogComponent = (
   props
@@ -25,14 +30,16 @@ const SearchDialog: DialogComponent = (
       {...props}
     >
       <SheetTrigger>Open</SheetTrigger>
-      <SheetContent side="top" className="h-fit max-h-[100dvh]">
-        <SheetHeader>
-          <SheetTitle>Search</SheetTitle>
-          <SheetDescription>
-          Search for a product, a category or a search term using a searchbar.
-          </SheetDescription>
-          <SearchDialogContent />
-        </SheetHeader>
+      <SheetContent side="top" className="h-fit max-h-[100dvh] overflow-hidden">
+        <ScrollArea className="h-full max-h-[100dvh] mt-4">
+          <SheetHeader>
+            <SheetTitle>Search</SheetTitle>
+            <SheetDescription>
+              Search for a product, a category or a search term using a searchbar.
+            </SheetDescription>
+            <SearchDialogContent />
+          </SheetHeader>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   )
@@ -58,39 +65,35 @@ const SearchDialogContent = React.forwardRef<
   }, 
   forwardedRef
 ) => {
-  const productsData = useAtomValue(productsAtom);
+  const [searchTerm, setSearchTerm] = useState("");
+  const categoriesQuery = useCategoriesQuery({ searchTerm });
+  const productsQuery = useProductsQuery({ searchTerm });
+  //const productsData = useAtomValue(productsAtom);
 
   const nextProducts = React.useCallback(() => {
 
   }, []);
 
-  const [categories, setCategories] = React.useState([
-    { name: "Outwear", id: 0 }, { name: "Office outfits", id: 1 }, { name: "Workout", id: 2 }])
-  const [loadingCategories, setLoadingCategories] = React.useState(false);
-
   const nextCategories = React.useCallback(() => {
-    setLoadingCategories(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tmp: any[] = [];
-    for(let i = 0; i < 5; i++) {
-      tmp.push({ name: `${categories.length + i}`, id: categories.length + i })
-    }
-    setCategories((prev) => prev.concat(tmp));
-    setLoadingCategories(false);
-  }, [categories]);
+
+  }, []);
 
   return (
     <div
       {...props}
       ref={forwardedRef}
       className={cn(
-        props.className,
-        "flex flex-col justify-start items-center gap-8"
+        "w-full max-w-[100dvw] flex flex-col justify-start items-center gap-8",
+        props.className
       )}
     >
-      <SearchBar className="w-full mt-4" />
+      <SearchBar 
+        className="w-full mt-8"
+        value={searchTerm}
+        onChange={(event) => setSearchTerm(event.target.value)}
+      />
 
-      { false && (
+      { categoriesQuery.isSuccess && categoriesQuery.data.length > 0 && (
         <div
           data-label="Category's search's response"
           className={cn(
@@ -104,15 +107,16 @@ const SearchDialogContent = React.forwardRef<
 
           <HorizontalScrollArea
             className="w-full"
-            hasMore={true} 
-            isLoading={loadingCategories} 
+            hasMore={false}
+            isLoading={categoriesQuery.isLoading} 
             next={nextCategories} 
           >
-            { categories.map((category) => (
+            { (categoriesQuery.data || []).map((category: CategoryType) => (
               <Category 
                 key={category.id} 
                 category={category}
                 hoverable={true}
+                showParentLabel={true}
               />
             ))}
           </HorizontalScrollArea>
@@ -132,17 +136,19 @@ const SearchDialogContent = React.forwardRef<
 
         <HorizontalScrollArea
           className="w-full"
-          hasMore={productsData.hasMore} 
-          isLoading={productsData.loading} 
+          hasMore={false} 
+          isLoading={productsQuery.isLoading} 
           next={nextProducts} 
         >
-          { productsData.items.map((product) => (
-            <Product 
-              key={product.id} 
-              product={product}
-              size="sm"
-            />
-          ))}
+          {productsQuery.data !== undefined && (
+            productsQuery.data.map((product: ProductType) => (
+              <Product 
+                key={product.id}
+                product={product}
+                size="sm"
+              />
+            ))
+          )}
         </HorizontalScrollArea>
       </div>
     </div>

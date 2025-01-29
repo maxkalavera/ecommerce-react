@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Provider as JotaiProvider } from 'jotai'
-import { ThemeProvider } from "next-themes";
 import { 
   Roboto as MainSans,
   Roboto_Serif as MainSerif,
@@ -8,6 +6,9 @@ import {
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { GlobalDialogProvider } from "@/providers/GlobalDialogProvider";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import React from "react";
+import Providers from "./providers";
 
 const mainSans = MainSans({
   subsets: ["latin"],
@@ -45,13 +46,9 @@ export default function RootLayout({
           mainSans.variable, mainSerif.variable
         )}
       >
-        <JotaiProvider>
-          <ThemeProvider attribute="class">
-            <GlobalDialogProvider>
-                {children}
-            </GlobalDialogProvider>
-          </ThemeProvider>
-        </JotaiProvider>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

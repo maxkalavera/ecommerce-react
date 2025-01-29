@@ -4,36 +4,45 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
 
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SearchBar = React.forwardRef<HTMLDivElement, Props>((
+const SearchBar = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof Input> & {
+    onSend?: React.MouseEventHandler<HTMLButtonElement>
+  }
+>((
   {
-    className,
+    onSend=undefined,
     ...props
   }, 
   forwardedRef
 ) => {
   return (
     <div
-      {...props}
       ref={forwardedRef}
       className={cn(
-        className,
         "max-w-80 md:max-w-lg",
-        "flex flex-row justify-start items-center gap-2"
+        "flex flex-row justify-start items-center gap-2",
+        props.className
       )}
     >
       <div className="relative w-full">
         <FaMagnifyingGlass 
           className="absolute top-0 bottom-0 w-4 h-4 my-auto text-gray-500 left-3"
         />
-        <Input type="text" placeholder="Search" className="pl-8 pr-4 w-full" />
+        <Input
+          {...props}
+          className="pl-8 pr-4 w-full"
+          type="text" 
+          placeholder="Search"
+        />
       </div>
-      <Button className="px-3 py-2">Search</Button>
+      <Button 
+        className="px-3 py-2"
+        onClick={onSend}
+      >
+        Search
+      </Button>
     </div>
   )
 });

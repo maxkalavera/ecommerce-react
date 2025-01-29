@@ -11,31 +11,4 @@ export interface ResizableImage extends Instance {
   thumbnail?: string;
 }
 
-export interface Category extends Instance {
-  referenceKey: string;
-  name: string;
-  display?: ResizableImage;
-  hierarchy?: {
-    parents: Category[];
-    children?: Category[];
-  }
-}
-
-export interface ProductLabel {
-  content: string;
-  color?: string;
-}
-
-export interface Product extends Instance {
-  name: string;
-  price: string;
-  currency: string;
-  description: string;
-  isFavorite: boolean;
-  isOnCart: boolean;
-  label?: ProductLabel;
-  display?: ResizableImage;
-  gallery: ResizableImage[];
-}
-
 export type DialogComponent = React.FC<DialogProps>;

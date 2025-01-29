@@ -4,18 +4,17 @@ import React from "react";
 import HorizontalScrollArea from "@/components/HorizontalScrollArea";
 import Product from "@/components/Product";
 import { ForLargeScreens, ForSmallScreens } from "@/layouts/screens";
-import { Product as ProductType } from "@/types/types";
-import { useAtomValue } from "jotai";
-import { featuredProductsAtom } from "@/atoms/products";
+import { Product as ProductType } from "@/types/products";
+import { useProductsQuery } from "@/hooks/queries/products";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType> {
-  title: React.ReactNode,
-  items: ProductType[]
-}
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
+const FeaturedProducts = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    title: React.ReactNode,
+    items: ProductType[]
+  }
+>((
   {
     title,
     className,
@@ -23,7 +22,7 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
   }, 
   forwardedRef
 ) => {
-  const data = useAtomValue(featuredProductsAtom);
+  const prodcutsQuery = useProductsQuery({ featured: true });
 
   const nextProducts = React.useCallback(() => {
 
@@ -44,32 +43,35 @@ const FeaturedProducts = React.forwardRef<HTMLDivElement, Props>((
       >
         <HorizontalScrollArea
           className="w-full gap-4"
-          hasMore={data.hasMore}
-          isLoading={data.loading}
+          hasMore={false}
+          isLoading={prodcutsQuery.isLoading}
           next={nextProducts} 
         >
-          { data.items.map((product) => (
-            <React.Fragment key={product.id}>
-              <ForLargeScreens>
-                <Product 
-                  product={product}
-                  outlineOnHover={true}
-                  enableFavoritesButton={true}
-                  hideFavoritesButton={true}
-                  size="lg"
-                />
-              </ForLargeScreens>
-              <ForSmallScreens>
-                <Product 
-                  product={product}
-                  outlineOnHover={true}
-                  enableFavoritesButton={true}
-                  hideFavoritesButton={true}
-                  size="md"
-                />
-              </ForSmallScreens>
-            </React.Fragment>
-          ))}
+          {prodcutsQuery.data !== undefined && (
+            prodcutsQuery.data.map((product: ProductType) => (
+              <React.Fragment key={product.id}>
+                <ForLargeScreens>
+                  <Product 
+                    product={product}
+                    outlineOnHover={true}
+                    enableFavoritesButton={true}
+                    hideFavoritesButton={true}
+                    size="lg"
+                  />
+                </ForLargeScreens>
+                <ForSmallScreens>
+                  <Product 
+                    product={product}
+                    outlineOnHover={true}
+                    enableFavoritesButton={true}
+                    hideFavoritesButton={true}
+                    size="md"
+                  />
+                </ForSmallScreens>
+              </React.Fragment>
+            ))
+          )}
+
           </HorizontalScrollArea>
       </div>
     </div>

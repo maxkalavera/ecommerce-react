@@ -12,36 +12,24 @@ import { FaCaretDown, FaFilter, FaSort } from "react-icons/fa6";
 import CategoriesRow from "@/components/CategoriesRow";
 import ProductFilters from "./ProductFilters";
 import { useAtom, useAtomValue } from "jotai";
-import { activeTabShopAtom, tabsAtom, activeTabCategoriesShopAtom } from "@/atoms/categories";
-
-const styles = {
-  tabsTrigger: cn(
-    "px-0 py-1",
-    "flex flex-row justify-start items-center gap-1",
-    "text-sm",
-    "data-[state=active]:shadow-none data-[state=active]:font-bold data-[state=active]:underline focus:outline-none",
-  ),
-  tabContent: cn(
-
-  ),
-};
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-
-}
+import { activeTabProductsFiltersAtom, activeTabCategoriesProductsFiltersAtom } from "@/atoms/categories";
+import settings from "@/settings";
+import { useCategoriesQuery } from "@/hooks/queries/categories";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ProductsFilters = React.forwardRef<HTMLDivElement, Props>((
+const ProductGridHeader = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+>((
   {
     className,
     ...props
   }, 
   forwardedRef
 ) => {
-  const tabs = useAtomValue(tabsAtom);
-  const [activeTab, setActiveTab] = useAtom(activeTabShopAtom);
-  const categories = useAtomValue(activeTabCategoriesShopAtom);
+  const [activeTab, setActiveTab] = React.useState<string>("");
+  const [categories] = React.useState([]);
+  const categoriesQuery = useCategoriesQuery({ rootCategory: activeTab });
 
   const sortArray = [
     "Releveance",
@@ -67,11 +55,11 @@ const ProductsFilters = React.forwardRef<HTMLDivElement, Props>((
         <div
           className="w-full flex flex-row justify-start items-start gap-2"
         >
-          {tabs.map(item => (
+          {settings.categories.tabs.map(item => (
             <Button
-              key={item.referenceKey} 
-              variant={activeTab === item.referenceKey ? "default" : "outline" }
-              onClick={() => activeTab === item.referenceKey ? setActiveTab("") : setActiveTab(item.referenceKey)}
+              key={item.key} 
+              variant={activeTab === item.key ? "default" : "outline" }
+              onClick={() => activeTab === item.key ? setActiveTab("") : setActiveTab(item.key)}
             >
               {item.name} <FaCaretDown />
             </Button>
@@ -126,18 +114,18 @@ const ProductsFilters = React.forwardRef<HTMLDivElement, Props>((
 
       </TabsList>
 
-      {tabs.map(item => (
+      {settings.categories.tabs.map(item => (
         <TabsContent
-          key={item.referenceKey}
-          value={item.referenceKey}
+          key={item.key}
+          value={item.key}
         >
-          <CategoriesRow />
+          <CategoriesRow rootCategory={item.key} />
         </TabsContent>
       ))}
     </Tabs>
   )
 });
 
-ProductsFilters.displayName = "ProductsFilters";
+ProductGridHeader.displayName = "ProductGridHeader";
 
-export default ProductsFilters;
+export default ProductGridHeader;

@@ -61,10 +61,12 @@ export function GlobalDialogProvider (
 
       {/* Place global Dialogs in here */}
       {state.open && (
-        <Current {...{
-          open: state.open,
-          onOpenChange: (open) => setState(prev => ({...prev, open}))
-        }} />
+        <Current
+          {...{
+            open: state.open,
+            onOpenChange: (open) => setState(prev => ({...prev, open}))
+          }}
+        />
       )}
     </>
   )

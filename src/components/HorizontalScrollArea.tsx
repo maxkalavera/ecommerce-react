@@ -6,16 +6,14 @@ import InfiniteScroll, { InfiniteScrollProps } from "@/components/ui/infinite-sc
 import { Button } from "./ui/button";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends 
-  React.ComponentPropsWithoutRef<React.ElementType>,
-  InfiniteScrollProps
-{
 
-}
+const HorizontalScrollArea = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<React.ElementType> &
+  InfiniteScrollProps & {
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const HorizontalScrollArea = React.forwardRef<HTMLDivElement, Props>((
+  }
+>((
   {
     children,
     isLoading,
