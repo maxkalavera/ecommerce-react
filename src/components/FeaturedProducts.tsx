@@ -22,7 +22,7 @@ const FeaturedProducts = React.forwardRef<
   }, 
   forwardedRef
 ) => {
-  const prodcutsQuery = useProductsQuery({ featured: true });
+  const productsQuery = useProductsQuery({ featured: true });
 
   const nextProducts = React.useCallback(() => {
 
@@ -43,34 +43,36 @@ const FeaturedProducts = React.forwardRef<
       >
         <HorizontalScrollArea
           className="w-full gap-4"
-          hasMore={false}
-          isLoading={prodcutsQuery.isLoading}
+          hasMore={productsQuery.hasNextPage}
+          isLoading={productsQuery.isLoading}
           next={nextProducts} 
         >
-          {prodcutsQuery.data !== undefined && (
-            prodcutsQuery.data.map((product: ProductType) => (
-              <React.Fragment key={product.id}>
-                <ForLargeScreens>
-                  <Product 
-                    product={product}
-                    outlineOnHover={true}
-                    enableFavoritesButton={true}
-                    hideFavoritesButton={true}
-                    size="lg"
-                  />
-                </ForLargeScreens>
-                <ForSmallScreens>
-                  <Product 
-                    product={product}
-                    outlineOnHover={true}
-                    enableFavoritesButton={true}
-                    hideFavoritesButton={true}
-                    size="md"
-                  />
-                </ForSmallScreens>
-              </React.Fragment>
-            ))
-          )}
+          { productsQuery.data && productsQuery.data.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              { page.items.map((product) => (
+                <React.Fragment key={product.id}>
+                  <ForLargeScreens>
+                    <Product 
+                      product={product}
+                      outlineOnHover={true}
+                      enableFavoritesButton={true}
+                      hideFavoritesButton={true}
+                      size="lg"
+                    />
+                  </ForLargeScreens>
+                  <ForSmallScreens>
+                    <Product 
+                      product={product}
+                      outlineOnHover={true}
+                      enableFavoritesButton={true}
+                      hideFavoritesButton={true}
+                      size="md"
+                    />
+                  </ForSmallScreens>
+                </React.Fragment>
+              ))}
+            </React.Fragment>
+          ))}
 
           </HorizontalScrollArea>
       </div>

@@ -68,7 +68,6 @@ const SearchDialogContent = React.forwardRef<
   const [searchTerm, setSearchTerm] = useState("");
   const categoriesQuery = useCategoriesQuery({ searchTerm });
   const productsQuery = useProductsQuery({ searchTerm });
-  //const productsData = useAtomValue(productsAtom);
 
   const nextProducts = React.useCallback(() => {
 
@@ -93,35 +92,33 @@ const SearchDialogContent = React.forwardRef<
         onChange={(event) => setSearchTerm(event.target.value)}
       />
 
-      { categoriesQuery.isSuccess && categoriesQuery.data.length > 0 && (
-        <div
-          data-label="Category's search's response"
-          className={cn(
-            "w-full h-fit",
-            "flex flex-col justify-start items-start gap-2",
-          )}
-        >
-          <h4 className="text-base font-bold">
-            Categories
-          </h4>
+      <div
+        data-label="Category's search's response"
+        className={cn(
+          "w-full h-fit",
+          "flex flex-col justify-start items-start gap-2",
+        )}
+      >
+        <h4 className="text-base font-bold">
+          Categories
+        </h4>
 
-          <HorizontalScrollArea
-            className="w-full"
-            hasMore={false}
-            isLoading={categoriesQuery.isLoading} 
-            next={nextCategories} 
-          >
-            { (categoriesQuery.data || []).map((category: CategoryType) => (
-              <Category 
-                key={category.id} 
-                category={category}
-                hoverable={true}
-                showParentLabel={true}
-              />
-            ))}
-          </HorizontalScrollArea>
-        </div>
-      )}
+        <HorizontalScrollArea
+          className="w-full min-h-44"
+          hasMore={false}
+          isLoading={categoriesQuery.isLoading} 
+          next={nextCategories} 
+        >
+          { categoriesQuery.data !== undefined && categoriesQuery.data.items.map((category) => (
+            <Category 
+              key={category.id} 
+              category={category}
+              hoverable={true}
+              showParentLabel={true}
+            />
+          ))}
+        </HorizontalScrollArea>
+      </div>
 
       <div
         data-label="Product's search's response"
@@ -135,20 +132,22 @@ const SearchDialogContent = React.forwardRef<
         </h4>
 
         <HorizontalScrollArea
-          className="w-full"
+          className="w-full min-h-80"
           hasMore={false} 
           isLoading={productsQuery.isLoading} 
           next={nextProducts} 
         >
-          {productsQuery.data !== undefined && (
-            productsQuery.data.map((product: ProductType) => (
-              <Product 
-                key={product.id}
-                product={product}
-                size="sm"
-              />
-            ))
-          )}
+          { productsQuery.data && productsQuery.data.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              { page.items.map((product) => (
+                <Product 
+                  key={product.id}
+                  product={product}
+                  size="sm"
+                />
+              ))}
+            </React.Fragment>
+          ))}
         </HorizontalScrollArea>
       </div>
     </div>

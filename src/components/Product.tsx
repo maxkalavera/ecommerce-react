@@ -1,6 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { Product as ProductType } from "@/types/types";
+import { Product as ProductType } from "@/types/products";
 import React, { useMemo } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";

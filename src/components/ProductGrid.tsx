@@ -6,6 +6,7 @@ import Product from "@/components/Product";
 import ProductGridHeader from "@/components/ProductGridHeader";
 import InfiniteScroll from '@/components/ui/infinite-scroll';
 import { productsAtom } from "@/atoms/products";
+import { useProductsQuery } from "@/hooks/queries/products";
 
 const ProductGrid = React.forwardRef<
   HTMLDivElement, 
@@ -19,7 +20,7 @@ const ProductGrid = React.forwardRef<
   }, 
   forwardedRef
 ) => {
-  const data = useAtomValue(productsAtom);
+  const productsQuery = useProductsQuery();
 
   const nextProducts = React.useCallback(() => {
 
@@ -40,8 +41,8 @@ const ProductGrid = React.forwardRef<
       />
 
       <InfiniteScroll 
-        hasMore={true} 
-        isLoading={data.loading} 
+        hasMore={false} 
+        isLoading={productsQuery.isLoading} 
         next={nextProducts} 
         threshold={0.5}
       >
@@ -52,18 +53,22 @@ const ProductGrid = React.forwardRef<
             "justify-start items-start gap-x-8 gap-y-8",
           )}
         >
-          { data.items.map((product) => (
-            <Product 
-              key={product.id}
-              product={product}
-              outlineOnHover={true}
-              enableFavoritesButton={true}
-              hideFavoritesButton={true}
-              size="dynamic"
-            />
+          { productsQuery.data && productsQuery.data.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              { page.items.map((product) => (
+                <Product 
+                  key={product.id}
+                  product={product}
+                  outlineOnHover={true}
+                  enableFavoritesButton={true}
+                  hideFavoritesButton={true}
+                  size="dynamic"
+                />
+              ))}
+            </React.Fragment>
           ))}
         </div>
-        { data.hasMore && (
+        { false && ( // Has more
           <h1>Loading...</h1>
         )}
       </InfiniteScroll>

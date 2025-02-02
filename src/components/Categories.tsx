@@ -68,7 +68,7 @@ const Categories = React.forwardRef<
         >
           <CategoriesGrid
             className="w-full justify-center md:justify-start"
-            categories={categoriesQuery.data}
+            categories={categoriesQuery.data.items}
           />
         </TabsContent>
       ))}

@@ -1,28 +1,38 @@
 import {
+  QueryFunction,
   QueryFunctionContext,
+  QueryKey,
+  useInfiniteQuery,
+  UseInfiniteQueryResult,
   useQuery,
   UseQueryResult,
 } from '@tanstack/react-query';
-import { defaults } from './defaults';
 import settings from '@/settings';
 import { Product as ProductType, ProductFilters } from '@/types/products';
 import demo from '@/lib/demo';
+import { CursorPaginatedQueryFunction } from '@/types/api';
 
-export const fetchProducts = async (params: QueryFunctionContext) => {
+export const fetchProducts = (async (params) => {
   const filters = params.queryKey[1];
   if (settings.environment === 'demo') {
-    return demo.filterProducts(filters as any);
+    return {
+      items: demo.filterProducts(filters as ProductFilters) as ProductType[],
+      nextCursor: null
+    };
   }
-  return [];
-}
+  return {
+    items: [],
+    nextCursor: null
+  };
+}) as CursorPaginatedQueryFunction<ProductType, [ProductFilters]>;
 
 export const useProductsQuery = (
   filters: ProductFilters = {}
 ) => {
-  return useQuery({
-    ...defaults,
-    initialData: [],
+  return useInfiniteQuery({
     queryKey: ["products", filters],
     queryFn: fetchProducts,
-  }) as UseQueryResult<ProductType[]>;
+    initialPageParam: null,
+    getNextPageParam: (lastPage,) => lastPage.nextCursor,
+  });
 };
