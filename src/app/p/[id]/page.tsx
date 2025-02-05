@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import MainLayout from "@/layouts/main";
 import Document from "@/layouts/document";
 import ProductImageGallery from "@/components/ProductImageGallery";
-import { Product as ProductType } from "@/types/types";
+import { Product as ProductType } from "@/types/products";
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button";
 import { FaCartShopping } from "react-icons/fa6";

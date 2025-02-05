@@ -22,7 +22,8 @@
         "id": "2",
         "image": "/static/products/UsGlyz47.jpg"
       }
-    ]
+    ],
+    "categories": []
   },
   {
     "id": "1",
@@ -48,6 +49,7 @@
         "id": "5",
         "image": "/static/products/RDkRX7M5.jpg"
       }
-    ]
+    ],
+    "categories": []
   }
 ]

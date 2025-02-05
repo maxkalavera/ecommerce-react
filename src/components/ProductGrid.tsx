@@ -1,11 +1,9 @@
 "use client"
 import { cn } from "@/lib/utils";
 import React from "react";
-import { useAtomValue } from "jotai";
 import Product from "@/components/Product";
 import ProductGridHeader from "@/components/ProductGridHeader";
 import InfiniteScroll from '@/components/ui/infinite-scroll';
-import { productsAtom } from "@/atoms/products";
 import { useProductsQuery } from "@/hooks/queries/products";
 
 const ProductGrid = React.forwardRef<

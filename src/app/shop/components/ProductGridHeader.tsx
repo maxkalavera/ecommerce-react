@@ -1,4 +1,5 @@
 "use client"
+
 import React from "react";
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils";
@@ -8,31 +9,35 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { FaCaretDown, FaFilter, FaSort } from "react-icons/fa6";
-import CategoriesRow from "@/components/CategoriesRow";
-import ProductFilters from "./ProductFilters";
 import settings from "@/settings";
+import { FaCaretDown, FaFilter, FaSort } from "react-icons/fa6";
+import { ShopFilters } from "@/types/shop";
+import CategoriesRow from "./CategoriesRow";
+import ProductFilters from "./ProductFilters";
 
 
-const ProductGridHeader = React.forwardRef<
+const ProductsGridHeader = React.forwardRef<
   HTMLDivElement, 
-  React.ComponentPropsWithoutRef<React.ElementType> & {}
+  React.ComponentPropsWithoutRef<React.ElementType> & 
+  Partial<ShopFilters> & 
+  {}
 >((
   {
-    className,
     ...props
   }, 
   forwardedRef
 ) => {
   const [activeTab, setActiveTab] = React.useState<string>("");
-
-  const sortArray = [
-    "Releveance",
-    "Trending",
-    "Latest arrival",
-    "Price: Low to high",
-    "Price: High to low",
-  ]
+  /*
+  const { category } = shopProps as ShopProps;
+  const rootCategory = category && settings.categories.tabs.find(
+      tab => 
+          category.hierarchy?.parents.some(parent => parent.key === tab.key) ||
+          category.key === tab.key
+  );
+  const sortBy = settings.shopSortByOptions.find(item => item.key === shopProps.sortBy);
+  */
+ const rootCategory = undefined;
 
   return (
     <Tabs 
@@ -43,7 +48,7 @@ const ProductGridHeader = React.forwardRef<
       data-label="search-filters-tabs"
       className={cn(
         "relative",
-        className,
+        props.className,
       )}
     >
       <TabsList className="w-full h-fit flex-row justify-start items-end gap-2 bg-transparent">
@@ -52,6 +57,10 @@ const ProductGridHeader = React.forwardRef<
         >
           {settings.categories.tabs.map(item => (
             <Button
+              //className={
+                //rootCategory && item.key === rootCategory.key ?
+                //"border-2 border-neutral-500" : undefined
+              //}
               key={item.key} 
               variant={activeTab === item.key ? "default" : "outline" }
               onClick={() => activeTab === item.key ? setActiveTab("") : setActiveTab(item.key)}
@@ -67,6 +76,9 @@ const ProductGridHeader = React.forwardRef<
             <PopoverTrigger asChild>
               <Button 
                 variant="outline"
+                className={cn(
+                  //sortBy && "border-2 border-neutral-500"
+                )}
               >
                 Sort <FaSort />
               </Button>
@@ -74,17 +86,20 @@ const ProductGridHeader = React.forwardRef<
             <PopoverContent
               className={cn(
                 "fit-fit fit-content",
-                "flex flex-col justify-start items-center gap-0"
+                "flex flex-col justify-start items-center gap-0",
               )}
             >
-              {sortArray.map((item, index) => (
+              {settings.shopSortByOptions.map((option) => (
                 <Button
-                  key={index} 
+                  key={option.key}
                   variant="link"
-                  className="font-semibold"
+                  className={cn(
+                    "font-semibold",
+                    //sortBy && sortBy.key === option.key && "underline"
+                  )}
                   size="default"
                 >
-                  {item}
+                  {option.label}
                 </Button>
               ))}
             </PopoverContent>
@@ -100,9 +115,7 @@ const ProductGridHeader = React.forwardRef<
             </PopoverTrigger>
             <PopoverContent
             >
-              <ProductFilters 
-              
-              />
+              <ProductFilters />
             </PopoverContent>
           </Popover>
         </div>
@@ -121,6 +134,6 @@ const ProductGridHeader = React.forwardRef<
   )
 });
 
-ProductGridHeader.displayName = "ProductGridHeader";
+ProductsGridHeader.displayName = "ProductsGridHeader";
 
-export default ProductGridHeader;
+export default ProductsGridHeader;

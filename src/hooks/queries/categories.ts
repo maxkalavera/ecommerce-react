@@ -6,7 +6,8 @@ import {
 import { Category as CategoryType, CategoryFilters } from '@/types/categories';
 import settings from '@/settings';
 import demo from '@/lib/demo';
-import { ManyQueryFunction } from '@/types/api';
+import { InstanceQueryFunction, ManyQueryFunction } from '@/types/api';
+import { APIError } from '@/lib/queries';
 
 export const fetchCategories: 
   ManyQueryFunction<CategoryType, [CategoryFilters]> = 
@@ -21,7 +22,7 @@ export const fetchCategories:
   return {
     items: []
   };
-}
+};
 
 export const useCategoriesQuery = (
   filters: CategoryFilters = {}
@@ -30,5 +31,28 @@ export const useCategoriesQuery = (
     initialData: { items: [] },
     queryKey: ["categories", filters],
     queryFn: fetchCategories,
+  });
+};
+
+
+export const fetchCategory:
+  InstanceQueryFunction<CategoryType, [CategoryType['key']]> = async (params) => 
+{
+  if (settings.environment === 'demo') {
+    const instance = demo.getCategory(params.queryKey[1]);
+    if (instance !== undefined) {
+      return { instance };
+    }
+  }
+
+  throw new APIError("Category could not been retrived", "category-not-retrived");
+};
+
+export const useCategoryQuery = (
+  categoryKey: CategoryType['key']
+) => {
+  return useQuery({
+    queryKey: ["category", categoryKey],
+    queryFn: fetchCategory,
   });
 };

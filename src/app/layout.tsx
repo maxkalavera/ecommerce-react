@@ -5,10 +5,17 @@ import {
 } from 'next/font/google';
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { GlobalDialogProvider } from "@/providers/GlobalDialogProvider";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import React from "react";
-import Providers from "./providers";
+import Providers from "@/app/providers";
+import '@tanstack/react-query';
+import { APIError } from "@/lib/queries";
+
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    defaultError: APIError
+  }
+}
 
 const mainSans = MainSans({
   subsets: ["latin"],

@@ -76,7 +76,7 @@ export const ForLargeScreens = React.forwardRef<
   const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {
-    const matchMedia = window.matchMedia("(min-width: 720px)");
+    const matchMedia = window.matchMedia("(min-width: 768px)");
     setShow(matchMedia.matches);
     const callback = function(matchMedia: MediaQueryListEvent) {
       setShow(matchMedia.matches);

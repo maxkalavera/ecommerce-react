@@ -1,3 +1,4 @@
+import { Category } from "./categories";
 import { Instance, ResizableImage } from "./types";
 
 export interface ProductLabel {
@@ -10,14 +11,16 @@ export interface Product extends Instance {
   price: string;
   currency: string;
   description: string;
-  isFavorite: boolean;
-  isOnCart: boolean;
+  isFavorite?: boolean;
+  isOnCart?: boolean;
   label?: ProductLabel;
   display?: ResizableImage;
   gallery: ResizableImage[];
+  categories: Category[];
 }
 
 export interface ProductFilters {
-  searchTerm?: string,
-  featured?: boolean,
+  searchTerm?: string;
+  featured?: boolean;
+  category?: Category;
 }

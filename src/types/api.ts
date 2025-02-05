@@ -4,6 +4,11 @@ import { QueryFunction } from "@tanstack/react-query";
  * Utilities 
  */
 
+export interface APIError {
+  message: string;
+  code: string;
+}
+
 export type APIQueryFunction<Response, Params extends any[]=[], PageParam=never> = 
   QueryFunction<Response, readonly [string, ...Params] | readonly (string | Params[number])[], PageParam>;
 

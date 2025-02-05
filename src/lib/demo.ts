@@ -12,6 +12,11 @@ export default {
   /****************************************************************************
    * Methods  
    */
+  getCategory: function (
+    key: CategoryType['key']
+  ) {
+    return categoriesData.find(category => category.key === key);
+  },
   filterCategories: function (
     {
       rootCategory=undefined,
@@ -37,7 +42,8 @@ export default {
   },
   filterProducts: function (
     {
-      searchTerm
+      searchTerm=undefined,
+      category=undefined,
     }: ProductFilters
   ) {
     let reduced = this.products;
@@ -47,6 +53,12 @@ export default {
       reduced = reduced.filter(
         (product) => regex.test(product.name)
       )
+    }
+
+    if (category !== undefined) {
+      // Filter by category
+      reduced.filter(product => 
+        product.categories.some(item => item.key === category.key));
     }
 
     return reduced;
