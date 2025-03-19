@@ -1,41 +1,38 @@
-'use client'
-import React, { ReactNode, useCallback } from "react";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+"use client"
+import { cn } from "@/lib/utils";
+import React from "react";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "./ui/navigation-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 
+
+/******************************************************************************
+ * Types
+ */
 export interface NavbarItem { 
-  label: ReactNode, 
+  label: React.ReactNode, 
   href: string
   disabled?: boolean,
 };
 
+/******************************************************************************
+ * Components
+ */
 const Navbar = React.forwardRef<
-  HTMLDivElement,
+  HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
     items: NavbarItem[],
-    onItemClick?: EventListener
-    orientation?: "horizontal" | "vertical"
   }
 >((
   {
     items,
-    onItemClick=undefined,
-    orientation="horizontal",
     ...props
   }, 
   forwardedRef
 ) => {
   const pathname = usePathname();
 
-  const isUnderPath = useCallback((startsWithPath: string, className: string) => {
+  const isUnderPath = React.useCallback((startsWithPath: string, className: string) => {
     // Checks if current path is a subpath of startsWithPath and returns given className
     const paths = pathname.toLowerCase().split("/").slice(1);
     const startsWithPaths = startsWithPath.toLowerCase().split("/").slice(1);
@@ -46,16 +43,16 @@ const Navbar = React.forwardRef<
     <NavigationMenu
       {...props}
       ref={forwardedRef}
+      className={cn(
+        props.className
+      )}
     >
       <NavigationMenuList
-        className={cn(
-          orientation === "vertical" && "flex-col gap-2"
-        )}
+        className="gap-2"
       >
         {items.map((item: NavbarItem, index: number) => (
           <NavigationMenuItem 
             key={index}
-            onClick={onItemClick}
             className={cn(
               item.disabled && "hover:pointer-events-none"
             )}
@@ -69,7 +66,6 @@ const Navbar = React.forwardRef<
                 className={cn(
                   navigationMenuTriggerStyle(),
                   isUnderPath(item.href, "font-bold"),
-                  orientation === "vertical" && "min-w-36",
                   item.disabled && cn(
                     "text-neutral-300 dark:text-neutral-700",
                     "pointer-events-none"
@@ -83,40 +79,41 @@ const Navbar = React.forwardRef<
         ))}
       </NavigationMenuList>
     </NavigationMenu>
-  );
+  )
 });
 
 Navbar.displayName = "Navbar";
 
-export default (props: any) => {
+
+/******************************************************************************
+ * Wrappers
+ */
+
+const NavbarWrapper = () => {
   return (
-    <Navbar 
-      {...props}
+    <Navbar
       items={[
         {
-          label: "Home",
-          href: "/"
+          label: "Women",
+          href: "/#"
         },
         {
-          label: "Shop",
-          href: "/shop"
+          label: "Men",
+          href: "/#"
         },
         {
-          label: "Blog",
+          label: "New Arrivas",
           href: "/#",
           disabled: true,
         },
         {
-          label: "About",
+          label: "Sale",
           href: "/#",
           disabled: true,
         },
-        {
-          label: "Contact",
-          href: "/#",
-          disabled: true,
-        }
       ]}
     />
   )
 };
+
+export default NavbarWrapper;

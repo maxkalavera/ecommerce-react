@@ -17,6 +17,11 @@ const config: Config = {
         serif: ["var(--main-serif)", ...fontFamily.serif],
       },
 			spacing: {
+				"xs": "0.5rem",
+				"sm": "1.0rem",
+				"md": "1.5rem",
+				"lg": "2.0rem",
+				"xl": "3.0rem",
       },
   		colors: {
   			background: 'hsl(var(--background))',

@@ -1,14 +1,29 @@
 "use client"
-import React from "react";
-import { DialogComponent } from "@/types/types";
+import React from "react";  
 import dialogs from "@/dialogs/dialogs";
 
+/**
+ * All dialogs must be placed in some part of the DOM in the document.
+ * This Provides ensures that this dialogs are placed in the top of the document,
+ * right inside of the "root" class element in a container. All the dialogs are 
+ * listed in the @/dialogs/dialogs.ts in an object inside this file, this way
+ * components that need to be SSR rendered are loaded in the server rendering.
+ */
+
+
+/**
+ * Interfaces
+ */
 export interface GLobalDialogContext {
   id: string;
   open: boolean;
   openDialog: (id: string) => void;
   closeDialog: () => void;
 }
+
+/**
+ * Global Variables
+ */
 
 const INITIAL_STATE: GLobalDialogContext = {
   id: "",
@@ -20,9 +35,17 @@ const INITIAL_STATE: GLobalDialogContext = {
 const GlobalDialogContext =
   React.createContext<GLobalDialogContext>(INITIAL_STATE);
 
+/**
+ * Hooks
+ */
+
 export function useGlobalDialog () {
   return React.useContext(GlobalDialogContext);
 }
+
+/**
+ * Components
+ */
 
 export function GlobalDialogProvider (
   {
@@ -47,6 +70,11 @@ export function GlobalDialogProvider (
   }, []);
 
   const Current = dialogs[state.id];
+
+  if (state.id && Current === undefined) {
+    console.error(`Dialog with ID: ${state.id} is not registered`);
+  }
+
   return (
     <>
       <GlobalDialogContext.Provider
@@ -59,8 +87,8 @@ export function GlobalDialogProvider (
         {children}
       </GlobalDialogContext.Provider>
 
-      {/* Place global Dialogs in here */}
-      {state.open && (
+      {/* Dialogs are placed here */}
+      {state.open && Current && (
         <Current
           {...{
             open: state.open,

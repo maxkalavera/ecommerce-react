@@ -1,32 +1,30 @@
 "use client"
 import { cn } from "@/lib/utils";
 import { Product as ProductType } from "@/types/products";
-import React, { useMemo } from "react";
+import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaCartShopping, FaHeart, FaRegHeart } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
+
 const Product = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
-    product: ProductType,
-    outlineOnHover?: boolean,
-    enableFavoritesButton?: boolean,
-    enableAddCartButton?: boolean,
-    imageRatio?: number,
-    size?: "sm" | "md" | "lg" | "dynamic"
+    product: ProductType;
+    outlineOnHover?: boolean;
+    enableFavoritesButton?: boolean;
+    enableAddCartButton?: boolean;
+    onHoverFavoritesButton?: boolean;
   }
 >((
   {
     product,
     outlineOnHover=false,
     enableFavoritesButton=false,
-    hideFavoritesButton=false,
+    onHoverFavoritesButton=false,
     enableAddCartButton=false,
-    imageRatio=2/3,
-    size="md",
     ...props
   }, 
   forwardedRef
@@ -43,32 +41,23 @@ const Product = React.forwardRef<
 
   }
 
-  const dinamicStyle = React.useMemo(() => cn(
-    ({
-      sm: "w-36",
-      md: "w-48",
-      lg: "w-64",
-      dynamic: "w-full"
-    } as { [key: string]: string})[size],
-  ), [size]);
-
   return (
     <div
       className={cn(
-        dinamicStyle,
+        "w-full",
         "flex flex-col justify-start items-start gap-0",
+        props.className,
       )}
     >
       <div
         {...props}
         ref={forwardedRef}
         className={cn(
-          dinamicStyle,
+          "w-full",
           "group/product",
           "relative h-fit",
-          "rounded-sm overflow-clip select-none cursor-pointer",
-          outlineOnHover && "hover:outline hover:outline-[1px] hover:outline-primary/35",
-          props.className,
+          "rounded-md overflow-clip select-none cursor-pointer",
+          outlineOnHover && "hover:outline hover:outline-[1px] hover:outline-primary/15",
         )}
         onClick={() => router.push(`/p/${product.id}`)}
       >
@@ -95,7 +84,7 @@ const Product = React.forwardRef<
             variant="ghost"
             className={cn(
               "absolute z-10 right-1 top-2 text-red-600",
-              hideFavoritesButton && "hidden group-hover/product:inline-flex",
+              onHoverFavoritesButton && "hidden group-hover/product:inline-flex",
             )}
             onClick={() => toggleIsFavorite()}
           >
@@ -108,12 +97,12 @@ const Product = React.forwardRef<
         )}
 
         <div className={cn(
-          dinamicStyle,
+          "w-full",
           "pointer-events-none overflow-clip"
         )}>
           <AspectRatio
             className="select-none"
-            ratio={imageRatio}
+            ratio={2/3}
           >
             {product.display?.image && !error && (
               <Image 

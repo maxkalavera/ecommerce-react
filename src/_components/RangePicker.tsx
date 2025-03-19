@@ -1,7 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils";
 import React, { useCallback, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { DualRangeSlider } from '@/components/ui/dual-range-slider';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

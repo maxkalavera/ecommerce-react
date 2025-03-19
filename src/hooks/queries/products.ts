@@ -10,7 +10,8 @@ import {
 import settings from '@/settings';
 import { Product as ProductType, ProductFilters } from '@/types/products';
 import demo from '@/lib/demo';
-import { CursorPaginatedQueryFunction } from '@/types/api';
+import { CursorPaginatedQueryFunction, InstanceQueryFunction } from '@/types/api';
+import { APIError } from '@/lib/queries';
 
 export const fetchProducts = (async (params) => {
   const filters = params.queryKey[1];
@@ -34,5 +35,27 @@ export const useProductsQuery = (
     queryFn: fetchProducts,
     initialPageParam: null,
     getNextPageParam: (lastPage,) => lastPage.nextCursor,
+  });
+};
+
+export const fetchProduct:
+  InstanceQueryFunction<ProductType, [ProductType['key']]> = async (params) => 
+{
+  if (settings.environment === 'demo') {
+    const instance = demo.getProduct(params.queryKey[1]);
+    if (instance !== undefined) {
+      return { instance };
+    }
+  }
+
+  throw new APIError("Product could not been retrived", "product-not-retrived");
+};
+
+export const useCategoryQuery = (
+  productKey: ProductType['key']
+) => {
+  return useQuery({
+    queryKey: ["product", productKey],
+    queryFn: fetchProduct,
   });
 };

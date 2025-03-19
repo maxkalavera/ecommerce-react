@@ -1,8 +1,8 @@
 "use client"
-import React, { useMemo } from "react";
+import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CategoriesGrid from "./CategoriesGrid";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import settings from "@/settings";
@@ -18,9 +18,7 @@ const styles = {
 
 const Categories = React.forwardRef<
   HTMLDivElement, 
-  React.ComponentPropsWithoutRef<React.ElementType> & {
-
-  }
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
 >((
   {
     className,

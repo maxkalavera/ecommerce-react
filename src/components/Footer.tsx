@@ -1,15 +1,12 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa6";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
-
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Footer = React.forwardRef<HTMLDivElement, Props>((
+const Footer = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+>((
   {
     ...props
   }, 

@@ -4,10 +4,17 @@ import { cn } from "@/lib/utils";
 interface BlockProps extends PropsWithChildren { 
   className?: string 
 }
-export default {
+
+const Document = {
   /* 
   _base: ({ children, className, ...props }: BlockProps) => (
-    <div {...props} className={cn(className)}>
+    <div 
+      {...props} 
+      className={cn(
+        "",
+        className
+      )}
+    >
       {children}
     </div>
   ),
@@ -111,11 +118,23 @@ export default {
       {children}
     </h6>
   ),
+  Root: ({ children, className, ...props }: BlockProps) => (
+    <div 
+      {...props} 
+      className={cn(
+        "w-full h-fit",
+        "flex flex-col justify-start items-center gap-16",
+        className
+      )}
+    >
+      {children}
+    </div>
+  ),
   Frame: ({ children, className, ...props }: BlockProps) => (
     <div
       {...props}
       className={cn(
-        "w-full h-fit max-w-screen-lg px-6 md:px-8 mb-16",
+        "w-full h-fit max-w-screen-lg px-6 sm:px-12 mb-16",
         "flex flex-col justify-start items-start",
         className,
       )}
@@ -127,8 +146,8 @@ export default {
     <div 
       {...props} 
       className={cn(
-        "mt-8",
-        "flex flex-col justify-start items-start gap-4",
+        "w-full mt-12",
+        "flex flex-col justify-start items-start gap-0",
         className
       )}
     >
@@ -140,6 +159,18 @@ export default {
       {...props} 
       className={cn(
         "font-sans font-bold text-2xl mb-2",
+        className
+      )}
+    >
+      {children}
+    </div>
+  ),
+  SectionFrame: ({ children, className, ...props }: BlockProps) => (
+    <div 
+      {...props} 
+      className={cn(
+        "w-full px-4 sm:px-8 md:px-12 py-4 rounded-sm",
+        "flex flex-col justify-start items-start gap-12",
         className
       )}
     >
@@ -169,4 +200,28 @@ export default {
       {children}
     </div>
   ),
+  List: ({ children, className, ...props }: BlockProps) => (
+    <div 
+      {...props} 
+      className={cn(
+        "flex flex-row justify-start items-center gap-sm",
+        className
+      )}
+    >
+      {children}
+    </div>
+  ),
+  Grid: ({ children, className, ...props }: BlockProps) => (
+    <div 
+      {...props} 
+      className={cn(
+        "grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-sm gap-y-sm",
+        className
+      )}
+    >
+      {children}
+    </div>
+  ),
 };
+
+export default Document;

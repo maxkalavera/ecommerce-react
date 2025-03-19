@@ -1,22 +1,25 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import type { Product as ProductType } from "@/types/types";
-import { useAtomValue } from "jotai";
-import Product from "@/components/Product";
-import MainLayout from "@/layouts/main";
-import Document from "@/layouts/document";
 import { favoriteProductsAtom } from "@/atoms/products";
+import Product from "@/components/Product";
+import document from "@/layouts/document";
+import MainLayout from "@/layouts/main";
+import { cn } from "@/lib/utils";
+import { useAtomValue } from "jotai";
+
 
 export default function Favorites() {
   const data = useAtomValue(favoriteProductsAtom);
 
   return (
     <MainLayout>
-      <Document.Section>
-        <Document.SectionTitle>Favorites</Document.SectionTitle>
-        <div
-          className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6"
+      <document.Section
+      >
+        <document.SectionTitle>Favorites</document.SectionTitle>
+        <document.SectionFrame
+          className={cn(
+            "w-full h-fit",
+            "grid gap-6 grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+          )}
         >
           {data.items.map((item) => (
             <Product 
@@ -25,11 +28,10 @@ export default function Favorites() {
               product={item}
               enableFavoritesButton={true}
               enableAddCartButton={true}
-              size="dynamic"
             />
           ))}
-        </div>
-      </Document.Section>
+        </document.SectionFrame>
+      </document.Section>
     </MainLayout>
   );
-}
+};

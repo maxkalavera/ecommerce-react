@@ -48,7 +48,10 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, Props>((
       <Button
         ref={buttonRef}
         variant="secondary"
-        className="fixed bottom-4 right-4 shadow-sm z-50"
+        className={cn(
+          "fixed bottom-4 right-4",
+          "bg-neutral-100 border-[1px] border-neutral-300 hover:bg-neutral-200 shadow-md z-50"
+        )}
         onClick={onScrollUp}
       >
         <FaArrowUp/>

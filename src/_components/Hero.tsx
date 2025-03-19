@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import DisplayImage from "@/assets/images/home_hero.jpg"
-import Image from "next/image";
+//import DisplayImage from "@/assets/images/home_hero.png"
+//import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -23,7 +23,6 @@ const Hero = React.forwardRef<HTMLDivElement, Props>((
       className={cn(
         "relative",
         "w-full px-4 py-8 md:p-4 md:h-[520px] overflow-clip",
-        "border-t-[1px] border-b-[1px] border-neutral-300",
         "flex flex-col md:flex-row justify-center items-center gap-16 md:gap-4",
         props.className
       )}
@@ -57,14 +56,17 @@ const Hero = React.forwardRef<HTMLDivElement, Props>((
         </div>
       </div>
 
-      <Image 
-        className="absolute top-0 left-0 z-0 object-cover dark:opacity-90"
-        alt="Hero section display's image"
-        src={DisplayImage}
-        fill
-        sizes="100vw"
-        priority={true}
-      />
+      {/*
+        <Image 
+          className="absolute top-0 left-0 z-0 object-cover dark:opacity-90"
+          alt="Hero section display's image"
+          src={DisplayImage}
+          fill
+          sizes="100vw"
+          priority={true}
+        />
+      */}
+
     </div>
   )
 });

@@ -2,26 +2,20 @@
 import { cn } from "@/lib/utils";
 import { Category as CategoryType } from "@/types/categories";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import { AspectRatio } from "./ui/aspect-ratio";
-
-type Size = "sm" | "md" | "lg";
 
 const Category = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<React.ElementType> & {
     category: CategoryType,
     hoverable: boolean,
-    imageRatio?: number,
-    size: Size,
     showParentLabel: boolean
   }
 >((
   {
     category,
     hoverable,
-    imageRatio=4/3,
-    size="md",
     showParentLabel=false,
     ...props
   }, 
@@ -29,36 +23,28 @@ const Category = React.forwardRef<
 ) => {
   const [error, setError] = React.useState(false);
 
-  const dinamicStyle = React.useMemo(() => cn(
-    ({
-      sm: "w-24",
-      md: "w-48",
-      lg: "w-64",
-      dynamic: "w-full"
-    } as { [key: string]: string})[size],
-  ), [size]);
-
   return (
     <div
       {...props}
       ref={forwardedRef}
       className={cn(
-        dinamicStyle,
+        "w-full",
         "group/category",
         "relative min-w-24 min-h-20",
         "rounded-md overflow-clip select-none cursor-pointer",
         hoverable && "hover:outline hover:outline-[1px] hover:outline-primary/35",
-        (!category.display?.image || error) && "outline outline-2 outline-neutral-200"
+        (!category.display?.image || error) && "outline outline-2 outline-neutral-200",
+        props.className,
       )}
     >
 
       <div className={cn(
-        dinamicStyle,
+        "w-full",
         "pointer-events-none"
       )}>
         <AspectRatio
           className="select-none"
-          ratio={imageRatio}
+          ratio={4/3}
         >
           {category.display?.image && !error && (
             <Image 
@@ -87,7 +73,7 @@ const Category = React.forwardRef<
               No image
             </h3>
           </div>
-        )}
+        )}  
       </div>
 
       { showParentLabel && category.hierarchy.parents.length > 0 && (

@@ -11,7 +11,6 @@ export const ForSmallScreens = React.forwardRef<
   {
     className,
     children,
-    breakpoint=undefined,
     ...props
   }, 
   forwardedRef
@@ -68,7 +67,6 @@ export const ForLargeScreens = React.forwardRef<
   {
     className,
     children,
-    breakpoint=undefined,
     ...props
   }, 
   forwardedRef
