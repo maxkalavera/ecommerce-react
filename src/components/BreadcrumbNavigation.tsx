@@ -3,19 +3,28 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import React from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends React.ComponentPropsWithoutRef<React.ElementType>  {
 
-}
+/******************************************************************************
+ * Types
+ */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const BreadcrumbNavigation = React.forwardRef<HTMLDivElement, Props>((
+export type BreadcrumbItems = ({ content: string, href: string })[];
+
+/******************************************************************************
+ * Main Component
+ */
+const BreadcrumbNavigation = React.forwardRef<
+  HTMLDivElement, 
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    items: BreadcrumbItems;
+  }
+>((
   {
+    items=[],
     ...props
   }, 
   forwardedRef
@@ -25,18 +34,23 @@ const BreadcrumbNavigation = React.forwardRef<HTMLDivElement, Props>((
       {...props}
       ref={forwardedRef}
     >
-      <BreadcrumbList>
+      <BreadcrumbList className="gap-1 sm:gap-1">
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href="/shop" className="text-sm">Shop</BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/docs/components">Women</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Shoes</BreadcrumbPage>
-        </BreadcrumbItem>
+        {items.length > 0 && <BreadcrumbSeparator />}
+
+        {items.map(({ content, href }: BreadcrumbItems[number], index: number) => (
+          <React.Fragment key={index}>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={href} className="text-sm">
+                {content}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+
+            {(items.length - 1) > index && <BreadcrumbSeparator />}
+          </React.Fragment>
+        ))}
       </BreadcrumbList>
     </Breadcrumb>
   )

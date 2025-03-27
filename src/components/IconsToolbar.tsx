@@ -1,12 +1,13 @@
 "use client"
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
 import { FaCartShopping, FaHeart, FaMagnifyingGlass } from "react-icons/fa6";
 import { useGlobalDialog } from "@/providers/GlobalDialogProvider";
 import { ForSmallScreens } from "@/layouts/screens";
 import Sidebar from "./Sidebar";
+import ButtonLink from "@/wrappers/ButtonLink";
+
 
 const IconsToolbar = React.forwardRef<
   HTMLDivElement, 
@@ -34,20 +35,15 @@ const IconsToolbar = React.forwardRef<
       >
           <FaMagnifyingGlass />
       </Button>
-      <Link href="/favorites" legacyBehavior passHref>
-        <Button
-          variant="ghost"
-        >
-          <FaHeart />
-        </Button>
-      </Link>
-      <Link href="/cart" legacyBehavior passHref>
-        <Button
-          variant="ghost"
-        >
-          <FaCartShopping />
-        </Button>
-      </Link>
+
+      <ButtonLink href="/favorites">
+        <FaHeart />
+      </ButtonLink>
+
+      <ButtonLink href="/cart">
+        <FaCartShopping />
+      </ButtonLink>
+
       <ForSmallScreens>
         <Sidebar />
       </ForSmallScreens>

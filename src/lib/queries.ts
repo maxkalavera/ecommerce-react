@@ -1,4 +1,8 @@
-import { FetchInfiniteQueryOptions, FetchQueryOptions, QueryClient, QueryKey } from "@tanstack/react-query";
+import { 
+  FetchQueryOptions, 
+  QueryClient, 
+  QueryKey 
+} from "@tanstack/react-query";
 
 
 export class APIError extends Error {
@@ -22,15 +26,19 @@ export async function fetchSSRQuery<
   options: FetchQueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>
 ): 
 Promise<{
-  data: TData | undefined,
-  isSuccess: boolean,
-  error: TError | undefined
+  data: TData,
+  isSuccess: true,
+  error: undefined
+} | {
+  data: undefined,
+  isSuccess: false,
+  error: TError
 }>
 {
   const queryClient = new QueryClient();
   try {
     return {
-      data: await queryClient.fetchQuery(options),
+      data: await queryClient.fetchQuery(options) as TData,
       isSuccess: true,
       error: undefined
     };

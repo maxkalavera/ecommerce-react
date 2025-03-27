@@ -19,7 +19,7 @@ const Hero = React.forwardRef<
       ref={forwardedRef}
       className={cn(
         "relative",
-        "max-w-screen-xl w-full h-[520px]",
+        "w-full h-[520px]",
         props.className
       )}
     >

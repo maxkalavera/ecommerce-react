@@ -1,7 +1,5 @@
 import {
-  QueryFunctionContext,
   useQuery,
-  UseQueryResult,
 } from '@tanstack/react-query';
 import { Category as CategoryType, CategoryFilters } from '@/types/categories';
 import settings from '@/settings';
@@ -40,7 +38,7 @@ export const fetchCategory:
 {
   if (settings.environment === 'demo') {
     const instance = demo.getCategory(params.queryKey[1]);
-    if (instance !== undefined) {
+    if (instance !== null) {
       return { instance };
     }
   }

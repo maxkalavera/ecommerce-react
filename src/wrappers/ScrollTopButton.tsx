@@ -34,7 +34,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, Props>((
       });
     }
 
-  }, [])
+  }, [anchor])
 
   return (
     <div

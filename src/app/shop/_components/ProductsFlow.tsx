@@ -4,6 +4,7 @@ import React from "react";
 import Product from "@/components/Product";
 import InfiniteScroll from '@/components/ui/infinite-scroll';
 import { useProductsQuery } from "@/hooks/queries/products";
+import Link from "@/wrappers/Link";
 
 
 const ProductsFlow = React.forwardRef<
@@ -35,13 +36,18 @@ const ProductsFlow = React.forwardRef<
         { productsQuery.data && productsQuery.data.pages.map((page, index) => (
           <React.Fragment key={index}>
             { page.items.map((product) => (
-              <Product 
-                key={product.id}
-                product={product}
-                outlineOnHover={true}
-                enableFavoritesButton={true}
-                onHoverFavoritesButton={true}
-              />
+              <Link
+                key={product.key}
+                href={`/p/${product.key}`}
+              >
+                <Product 
+                  product={product}
+                  outlineOnHover={true}
+                  enableFavoritesButton={true}
+                  onHoverFavoritesButton={true}
+                />
+              </Link>
+
             ))}
           </React.Fragment>
         ))}

@@ -16,7 +16,7 @@ export interface Product extends Instance {
   label?: ProductLabel;
   display?: ResizableImage;
   gallery: ResizableImage[];
-  categories: Category[];
+  category?: Category | null;
 }
 
 export interface ProductFilters {

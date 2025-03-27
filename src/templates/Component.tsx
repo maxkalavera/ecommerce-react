@@ -14,9 +14,8 @@ const Base: React.FC<
       )}
     >
     </div>
-  )
+  );
 };
-
 
 Base.displayName = "Base";
 

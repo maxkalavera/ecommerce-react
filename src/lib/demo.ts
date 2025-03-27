@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { Category as CategoryType, CategoryFilters } from "@/types/categories";
 import { Product as ProductType, ProductFilters } from "@/types/products";
 import categoriesData from "@/assets/mock/categories.json";
@@ -14,8 +15,8 @@ export default {
    */
   getCategory: function (
     key: CategoryType['key']
-  ) {
-    return categoriesData.find(category => category.key === key);
+  ): CategoryType | null {
+    return categoriesData.find(category => category.key === key) || null;
   },
   filterCategories: function (
     {
@@ -27,7 +28,9 @@ export default {
 
     if (rootCategory !== undefined) {
       reduced = reduced.filter(
-        (category) => category.hierarchy?.parents.some(parent => parent.key === rootCategory)
+        (category) => {
+          return category.hierarchy.parent?.key === rootCategory;
+        }
       )
     }
 
@@ -57,8 +60,7 @@ export default {
 
     if (category !== undefined) {
       // Filter by category
-      reduced.filter(product => 
-        product.categories.some(item => item.key === category.key));
+      reduced.filter(product => product.category?.key === category.key);
     }
 
     return reduced;

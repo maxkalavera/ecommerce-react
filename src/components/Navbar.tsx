@@ -95,11 +95,11 @@ const NavbarWrapper = () => {
       items={[
         {
           label: "Women",
-          href: "/#"
+          href: "/shop?category=YgMVlkiMSs"
         },
         {
           label: "Men",
-          href: "/#"
+          href: "/shop?category=rdvc3N3wO"
         },
         {
           label: "New Arrivas",

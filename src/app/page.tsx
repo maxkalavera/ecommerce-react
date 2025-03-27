@@ -9,8 +9,8 @@ import Header from "@/components/Header";
 export default function Home() {
   return (
     <Document.Root>
-      <Hero>
-        <Header />
+      <Hero >
+        <Header className="max-w-screen-lg" />
       </Hero>
 
       <Document.Frame>

@@ -5,7 +5,6 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaCartShopping, FaHeart, FaRegHeart } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 
@@ -30,7 +29,6 @@ const Product = React.forwardRef<
   forwardedRef
 ) => {
   const [error, setError] = React.useState(false);
-  const router = useRouter()
 
   const toggleIsFavorite = () => {
 
@@ -59,7 +57,6 @@ const Product = React.forwardRef<
           "rounded-md overflow-clip select-none cursor-pointer",
           outlineOnHover && "hover:outline hover:outline-[1px] hover:outline-primary/15",
         )}
-        onClick={() => router.push(`/p/${product.id}`)}
       >
         {product.label && (
           <div 
@@ -96,10 +93,12 @@ const Product = React.forwardRef<
           </Button>
         )}
 
-        <div className={cn(
-          "w-full",
-          "pointer-events-none overflow-clip"
-        )}>
+        <div 
+          className={cn(
+            "w-full",
+            "pointer-events-none overflow-clip"
+          )}
+        >
           <AspectRatio
             className="select-none"
             ratio={2/3}

@@ -14,6 +14,8 @@ import { useCategoriesQuery } from "@/hooks/queries/categories";
 import { Category as CategoryType } from "@/types/categories";
 import HorizontalScrollArea from "@/wrappers/HorizontalScrollArea";
 import Category from "@/components/Category";
+import Link from "@/wrappers/Link";
+
 
 /******************************************************************************
  * Constants
@@ -32,13 +34,10 @@ const sortingOptions = [
  */
 const ProductsFlowHeader = React.forwardRef<
   HTMLDivElement, 
-  React.ComponentPropsWithoutRef<React.ElementType> & {
-    extraContent?: React.ReactNode;
-  }
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
 >((
   {
     className,
-    extraContent=undefined,
     ...props
   }, 
   forwardedRef
@@ -163,12 +162,18 @@ const CategoriesFlow: React.FC<
         next={undefined}
       >
         { (categoriesQuery.data.items || []).map((category: CategoryType) => (
-          <Category
-            key={category.id} 
-            className="w-[150px] sm:w-[200px]"
-            category={category}
-            hoverable={true}
-          />
+          
+          <Link 
+            key={category.key} 
+            href={`/shop?category=${category.key}`}
+          >
+            <Category
+              key={category.id} 
+              className="w-[150px] sm:w-[200px]"
+              category={category}
+              hoverable={true}
+            />
+          </Link>
         ))}
       </HorizontalScrollArea>
     </div>
@@ -203,7 +208,9 @@ const FilterPopover: React.FC<
   ...props
 }) => {
   return (
-    <Popover>
+    <Popover
+      {...props}
+    >
       <PopoverTrigger asChild>
         <Button 
           variant="outline"

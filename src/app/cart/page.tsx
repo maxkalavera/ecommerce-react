@@ -25,13 +25,14 @@ export default function Cart() {
           <div
             className={cn(
               "w-full h-fit",
-              "flex flex-col justify-start items-center gap-8"
+              "flex flex-col justify-start items-start gap-8"
             )}
           >
             {data.items.map((item, index) => ( 
               <Item 
                 key={index}
                 product={item}
+                className="w-fit"
               />
             ))}
             

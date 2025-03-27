@@ -4,10 +4,11 @@ import MainLayout from "@/layouts/main";
 import { fetchSSRQuery } from "@/lib/queries";
 import { ShopURLParams } from "@/types/shop";
 import { shopURLSchema } from "./parsers";
-import BreadcrumbNavigation from "@/components/BreadcrumbNavigation";
+import BreadcrumbNavigation, { BreadcrumbItems } from "@/components/BreadcrumbNavigation";
 import ScrollTopButton from "@/wrappers/ScrollTopButton";
 import ProductsFlow from "./_components/ProductsFlow";
 import ProductsFlowHeader from "./_components/ProductsFlowHeader";
+import { toPartialUpperCase, itemizeCategories } from "@/lib/utils";
 
 /******************************************************************************
  * Types
@@ -31,6 +32,9 @@ export default async function Shop(
   });
   const shopProps = await shopURLSchema.safeParseAsync(shopURLParams);
   
+  const breadcrumbs: BreadcrumbItems = categoryData.isSuccess ? 
+    itemizeCategories((categoryData.data?.instance)) : 
+    [];
   const title = (
     (shopProps.success ? shopProps.data.search : undefined) || 
     (categoryData.isSuccess ? categoryData.data?.instance.name : undefined)
@@ -41,14 +45,14 @@ export default async function Shop(
        * Header section
        */}
       <Document.Section
-        className="flex flex-row justify-between items-center gap-8"
+        className="flex flex-col justify-start items-start gap-2"
       >
-        <BreadcrumbNavigation />
         { title && (
-          <Document.SectionTitle>
-            {title.charAt(0).toLocaleUpperCase() + title.slice(1)}
+          <Document.SectionTitle className="mb-0">
+            {toPartialUpperCase(title)}
           </Document.SectionTitle>
         )}
+        <BreadcrumbNavigation items={breadcrumbs} />
       </Document.Section>
       {/*********************************************************************** 
        * Content section: Shows a grid or list of products and filters and 

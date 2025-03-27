@@ -2,6 +2,7 @@ import React from "react";
 import Category from "@/components/Category";
 import { cn } from "@/lib/utils";
 import { Category as CategoryType } from "@/types/categories";
+import Link from "@/wrappers/Link";
 
 
 const CategoriesGrid = React.forwardRef<
@@ -34,12 +35,16 @@ const CategoriesGrid = React.forwardRef<
         )}
       >
         { categories.map((category: CategoryType) => (
-          <Category 
-            key={category.id} 
-            category={category}
-            hoverable={true}
-            size="dynamic"
-          />
+          <Link
+            key={category.key} 
+            href={`/shop?category=${category.key}`}
+          >
+            <Category 
+              category={category}
+              hoverable={true}
+              size="dynamic"
+            />
+          </Link>
         ))}
       </div>
     </div>

@@ -1,66 +1,84 @@
-import { cn } from "@/lib/utils";
-import React, { useCallback, useState } from "react";
+import React from "react";
+import { ResponsiveImageBox, ResponsiveImage } from "@/components/ResponsiveImage";
+import { cn, toPartialUpperCase } from "@/lib/utils";
 
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props<V=string | number, T={ color: string, value: V }> extends React.ComponentPropsWithoutRef<React.ElementType>  {
-  items: T[],
-  initial?: V | null,
-  onSelectChange?: (selected: V) => void,
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ColorSelector = React.forwardRef<HTMLDivElement, Props>((
-  {
-    items=[
-      { color: "#dc2626", value: "#dc2626"},
-      { color: "#ea580c", value: "#ea580c"},
-      { color: "#65a30d", value: "#65a30d"},
-      { color: "#0891b2", value: "#0891b2"},
-    ],
-    initial=0,
-    onSelectChange=() => null,
-    ...props
-  }, 
-  forwardedRef
-) => {
-  const [selected, setSelected] = useState<((typeof items)[number]['value']) | null>(
-    items.find((item: (typeof items)[number]) => item.value === initial) || 
-    (items[0] || {})['value'] || 
-    null
+const ColorSelector: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    items?: { 
+      key: string; 
+      label: string;
+      image: string; 
+      href: string; 
+    }[];
+    initial?: string;
+  }
+> = ({
+  items=[ 
+    {
+      key: "XvHjg9jxD",
+      label: "White",
+      image: "/static/products/XvHjg9jxD.jpg",
+      href: "#"
+    },
+    {
+      key: "9vGCaCo0Afi4z7P0FGGhB",
+      label: "Black",
+      image: "/static/products/9vGCaCo0Afi4z7P0FGGhB.jpg",
+      href: "#"
+    }
+  ],
+  initial="",
+  ...props
+}) => {
+  const [selected, setSelected] = React.useState(
+    items.some(item => item.key === initial) ? 
+      initial : (items.length > 0 ? items.at(0)?.key : "")
   );
-
-  const select = useCallback((value: string | number) => {
-    setSelected(value);
-    onSelectChange(items.find((item: (typeof items)[number]) => item.value === value));
-  }, []);
 
   return (
     <div
       {...props}
-      ref={forwardedRef}
       className={cn(
-        "w-fit h-fit",
-        "flex flex-row justify-start items-center gap-2 flex-wrap",
+        "flex flex-row justify-start items-start gap-sm",
+        props.className
       )}
     >
-      {items.map((item: (typeof items)[number], index: number) => (
-        <span
-          key={index}
+      {items.map(item => (
+        <div
+          key={item.key}
           className={cn(
-            "w-5 h-5",
-            "rounded-full cursor-pointer",
-            selected === item['value'] && "outline outline-3 outline-neutral-500",
+            "w-[100px] h-fit",
+            "flex flex-col justify-start items-start gap-xs",
+            "rounded-md pb-1 select-none",
+            item.key === selected ? 
+              "border-2 border-neutral-600" :
+              "hover:border-[1px] hover:border-neutral-400 hover:cursor-pointer",
           )}
-          style={{
-            backgroundColor: item['color'],
-          }}
-          onClick={() => select(item['value'])}
-        />
+          onClick={() => setSelected(item.key)}
+        >
+          <ResponsiveImageBox
+            ratio={2/3}
+            className="w-full"
+          >
+            <ResponsiveImage 
+              className="rounded-sm"
+              sizes="100px"
+              src={item.image}
+              alt="Alternative color for the product"
+            />
+          </ResponsiveImageBox>
+
+          <h4
+            className="w-full text-sm font-semibold text-neutral-900 text-center"
+          >
+            {toPartialUpperCase(item.label)}
+          </h4>
+        </div>
       ))}
     </div>
-  )
-});
+  );
+};
 
 ColorSelector.displayName = "ColorSelector";
 

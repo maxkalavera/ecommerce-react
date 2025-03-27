@@ -158,7 +158,7 @@ const Document = {
     <div 
       {...props} 
       className={cn(
-        "font-sans font-bold text-2xl mb-2",
+        "font-sans font-bold text-xl mb-2",
         className
       )}
     >
@@ -169,7 +169,7 @@ const Document = {
     <div 
       {...props} 
       className={cn(
-        "w-full px-4 sm:px-8 md:px-12 py-4 rounded-sm",
+        "w-full py-4 rounded-sm",
         "flex flex-col justify-start items-start gap-12",
         className
       )}

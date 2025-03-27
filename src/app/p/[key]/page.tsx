@@ -1,25 +1,27 @@
 "use client"
 import React from "react";
-import document from "@/layouts/document";
 import MainLayout from "@/layouts/main";
 import { useParams, notFound } from "next/navigation";
-import BreadcrumbNavigation from "@/components/BreadcrumbNavigation";
+import { Product as ProductType } from "@/types/products";
+import productsData from "@/assets/mock/products.json";
+import Document from "@/layouts/document";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import BreadcrumbNavigation, { BreadcrumbItems } from "@/components/BreadcrumbNavigation";
+import { toPartialUpperCase, itemizeCategories } from "@/lib/utils";
+import ImageGallery from "../_components/ImageGallery";
+import ColorSelector from "../_components/ColorSelector";
+import SizeSelector from "../_components/SizeSelector";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Product as ProductType } from "@/types/products";
-import productsData from "@/assets/mock/products.json";
-import { cn } from "@/lib/utils";
-import ImageGallery from "../_components/ImageGallery";
-import { Separator } from "@/components/ui/separator";
-import ColorSelector from "../_components/ColorSelector";
-import ItemSelector from "../_components/ItemSelector";
+} from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaCartPlus, FaHeart } from "react-icons/fa6";
+import MarkdownIt from 'markdown-it';
 
 
 /******************************************************************************
@@ -36,20 +38,24 @@ export default function ProductInfo() {
   }
   return (
     <MainLayout>
-      <document.Section className="gap-md">
-        <BreadcrumbNavigation />
-        <document.SectionTitle>{product.name}</document.SectionTitle>
-      </document.Section>
+      <Document.Section>
+        <div
+          className={cn(
+            "w-full h-fit",
+            "flex flex-row justify-start items-start gap-xl"
+          )}
+        >
+          <ImageGallery 
+            images={product.gallery} 
+            className="w-[420px]" 
+          />
+          <InfoWidget
+            product={product}
+            className="w-full"
+          />
+        </div>
 
-      <document.Section className="flex flex-row justify-start items-start gap-xl">
-        <Panel>
-          <ImageGallery images={product.gallery} />
-        </Panel>
-
-        <Panel className="w-full">
-          <Info product={product} />
-        </Panel>
-      </document.Section>
+      </Document.Section>
     </MainLayout>
   );
 };
@@ -59,26 +65,7 @@ export default function ProductInfo() {
  * Secondary Components
  */
 
-const Panel: React.FC<
-  React.ComponentPropsWithoutRef<React.ElementType> & {}
-> = ({
-  ...props
-}) => {
-  return (
-    <div
-      {...props}
-      className={cn(
-        "flex flex-col justify-center items-start gap-sm sm:gap-md",
-        props.className
-      )}
-    >
-      {props.children}
-    </div>
-  )
-};
-
-
-const Info: React.FC<
+const InfoWidget: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {
     product: ProductType;
   }
@@ -90,70 +77,189 @@ const Info: React.FC<
     <div
       {...props}
       className={cn(
-        "flex flex-col justify-center items-start gap-xs",
+        "flex flex-col justify-start items-start gap-0",
         props.className
       )}
     >
-      <h3 className="text-lg font-bold">
-        {product.name}
-      </h3>
-      <h3 className="text-lg">
-        {`$${product.price} USD`} 
-      </h3>
       <Separator />
-      <p>
-        {product.description}
-      </p>
+      
+      <InfoPanel>
+        <BreadcrumbNavigation 
+          items={[{ content: "Women", href: "#" }, { content: "Shirts", href: "#" }]}
+        />
+        <InfoPanelTitle>{product.name}</InfoPanelTitle>
+        <h4 className="text-base font-bold text-neutral-600">
+          {`$${product.price}`}
+        </h4>
+      </InfoPanel>
+      
       <Separator />
-      <div
-        data-label="linked-options"
-        className="flex flex-col justify-start items-start gap-4"
-      >
-        <div
-          className="flex flex-col justify-start items-start gap-2"
-        >
-          <h3 className="text-base font-bold">Color</h3>
+      
+      <InfoPanel>
+        <InfoPanelTitle>{"Color"}</InfoPanelTitle>
         <ColorSelector />
-        </div>
+      </InfoPanel>
 
-        <div
-          className="flex flex-col justify-start items-start gap-2"
-        >
-          <h3 className="text-base font-bold">Size</h3>
-          <ItemSelector 
-            items={[
-              { label: "XS", value: "xs" },
-              { label: "S", value: "s" },
-              { label: "M", value: "m" },
-              { label: "L", value: "l" },
-              { label: "XL", value: "xl" },
-            ]}
-          />
-        </div>
+      <InfoPanel>
+      <InfoPanelTitle>{"Size"}</InfoPanelTitle>
+      <SizeSelector />
+      </InfoPanel>
 
-        <div
-          className="flex flex-col justify-start items-start gap-2"
-        >
-          <h3 className="text-base font-bold">Quantity</h3>
-          <Select
-            defaultValue="1"
-          >
-            <SelectTrigger className="w-fit">
-              <SelectValue placeholder="1" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">1</SelectItem>
-              <SelectItem value="2">2</SelectItem>
-              <SelectItem value="3">3</SelectItem>
-              <SelectItem value="4">4</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <Button className="mt-8">
-            <FaCartShopping /> Add Cart
-        </Button>
-        <Separator />
+      <InfoPanel>
+        <Options className="w-full" />
+      </InfoPanel>
+
+      <Separator />
+
+      <InfoPanel>
+        <ProductDescription />
+      </InfoPanel>
     </div>
-  )
+  );
 };
+
+InfoWidget.displayName = "InfoWidget";
+
+
+const InfoPanel: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+> = ({
+  ...props
+}) => {
+  return (
+    <div
+      {...props}
+      className={cn(
+        "w-full h-fit",
+        "px-md py-md",
+        "flex flex-col justify-start items-stretch gap-xs",
+        props.className
+      )}
+    >
+      {props.children}
+    </div>
+  );
+};
+
+InfoPanel.displayName = "InfoPanel";
+
+
+const InfoPanelTitle: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    children: string;
+  }
+> = ({
+  ...props
+}) => {
+  return (
+    <h2
+      {...props}
+      className={cn(
+        "text-xl font-bold text-neutral-900",
+        props.className
+      )}
+    >
+      {toPartialUpperCase(props.children)}
+    </h2>
+  );
+};
+
+InfoPanelTitle.displayName = "InfoPanelTitle";
+
+
+const Options: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+> = ({
+  ...props
+}) => {
+  const availableItems = 3;
+
+  return (
+    <div
+      {...props}
+      className={cn(
+        "flex flex-row justify-start items-start gap-xs",
+        props.className
+      )}
+    >
+      <Select
+        defaultValue={availableItems < 1 ? "0" : "1"}
+        disabled={availableItems < 1}
+      >
+        <SelectTrigger className="w-fit">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {Array(availableItems).fill("").map((_, index) => (
+            <SelectItem 
+              key={`${index + 1}`}
+              value={`${index + 1}`}
+            >
+              {`${index + 1}`}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Button
+        className="w-full"
+      >
+        <FaCartPlus />
+        Add Cart
+      </Button>
+
+      <Button
+        className="w-fit"
+        variant="outline"
+      >
+        <FaHeart />
+        Favorites
+      </Button>
+    </div>
+  );
+};
+
+Options.displayName = "Options";
+
+
+const ProductDescription: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+> = ({
+  ...props
+}) => {
+  const markdown = React.useMemo(() => {
+    return new MarkdownIt()
+  }, []);
+
+  const content = `
+Elevate your wardrobe with this Elegant Turtleneck Top , a timeless and versatile piece designed to add sophistication to any outfit. Whether you're dressing up for a chic evening look or keeping it casual for a relaxed day, this top effortlessly combines style and comfort.
+
+Specifications
+- Color : Pure White
+- Sizes Available : XS, S, M, L, XL  
+(Refer to our size chart for the perfect fit)
+- Fabric Composition :
+	- 70% Cotton, 25% Polyester, 5% Elastane
+	- Soft, breathable, and stretchable fabric for all-day comfort.
+- Care Instructions :
+	- Machine wash cold with like colors.
+	- Do not bleach.
+	- Tumble dry low or hang to dry.
+	- Iron on low heat if needed.  
+`
+
+
+  return (
+    <div
+      {...props}
+      className={cn(
+        "markdown-body",
+        props.className
+      )}
+      dangerouslySetInnerHTML={{ __html: markdown.render(content) }}
+    >
+    </div>
+  );
+};
+
+InfoPanelTitle.displayName = "InfoPanelTitle";

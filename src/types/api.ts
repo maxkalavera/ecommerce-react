@@ -9,7 +9,7 @@ export interface APIError {
   code: string;
 }
 
-export type APIQueryFunction<Response, Params extends any[]=[], PageParam=never> = 
+export type APIQueryFunction<Response, Params extends unknown[]=[], PageParam=never> = 
   QueryFunction<Response, readonly [string, ...Params] | readonly (string | Params[number])[], PageParam>;
 
 /******************************************************************************
@@ -20,7 +20,7 @@ export type InstanceResponse<Model> = {
   instance: Model;
 };
 
-export type InstanceQueryFunction<Model, Params extends any[]=[]> = 
+export type InstanceQueryFunction<Model, Params extends unknown[]=[]> = 
   APIQueryFunction<InstanceResponse<Model>, Params>;
 
 /******************************************************************************
@@ -31,7 +31,7 @@ export type ManyResponse<Model> = {
   items: Model[];
 };
 
-export type ManyQueryFunction<Model, Params extends any[]=[]> = 
+export type ManyQueryFunction<Model, Params extends unknown[]=[]> = 
   APIQueryFunction<ManyResponse<Model>, Params>;
 
 /******************************************************************************
@@ -46,7 +46,7 @@ export interface PaginatedResponse<Model> extends ManyResponse<Model> {
   limit: number;
 };
 
-export type PaginatedQueryFunction<Model, Params extends any[]=[]> = 
+export type PaginatedQueryFunction<Model, Params extends unknown[]=[]> = 
   APIQueryFunction<PaginatedResponse<Model>, Params, PageParam>;
 
 /******************************************************************************
@@ -59,5 +59,5 @@ export interface CursorPaginatedResponse<Model> extends ManyResponse<Model> {
   nextCursor: PageParam;
 };
 
-export type CursorPaginatedQueryFunction<Model, Params extends any[]=[]> = 
+export type CursorPaginatedQueryFunction<Model, Params extends unknown[]=[]> = 
   APIQueryFunction<CursorPaginatedResponse<Model>, Params, CursorParam>;

@@ -9,6 +9,7 @@ import React from "react";
 import Providers from "@/app/providers";
 import '@tanstack/react-query';
 import { APIError } from "@/lib/queries";
+import "github-markdown-css/github-markdown-light.css";
 
 
 declare module '@tanstack/react-query' {
