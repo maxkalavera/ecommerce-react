@@ -42,12 +42,13 @@ export default function ProductInfo() {
         <div
           className={cn(
             "w-full h-fit",
-            "flex flex-row justify-start items-start gap-xl"
+            "flex flex-col justify-start items-center gap-xl",
+            "md:flex md:flex-row md:justify-start md:items-start md:gap-xl"
           )}
         >
           <ImageGallery 
             images={product.gallery} 
-            className="w-[420px]" 
+            className="max-w-[420px] md:min-w-[350px] md:w-[350px]" 
           />
           <InfoWidget
             product={product}
@@ -178,38 +179,46 @@ const Options: React.FC<
     <div
       {...props}
       className={cn(
-        "flex flex-row justify-start items-start gap-xs",
+        "w-full",
+        "flex flex-row justify-end items-start gap-xs flex-wrap sm:flex-nowrap",
         props.className
       )}
     >
-      <Select
-        defaultValue={availableItems < 1 ? "0" : "1"}
-        disabled={availableItems < 1}
+      <div
+        className={cn(
+          "w-full",
+          "flex flex-row justify-start items-start gap-xs"
+        )}
       >
-        <SelectTrigger className="w-fit">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {Array(availableItems).fill("").map((_, index) => (
-            <SelectItem 
-              key={`${index + 1}`}
-              value={`${index + 1}`}
-            >
-              {`${index + 1}`}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <Select
+          defaultValue={availableItems < 1 ? "0" : "1"}
+          disabled={availableItems < 1}
+        >
+          <SelectTrigger className="w-fit">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {Array(availableItems).fill("").map((_, index) => (
+              <SelectItem 
+                key={`${index + 1}`}
+                value={`${index + 1}`}
+              >
+                {`${index + 1}`}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Button
+          className="w-full"
+        >
+          <FaCartPlus />
+          Add Cart
+        </Button>
+      </div>
 
       <Button
-        className="w-full"
-      >
-        <FaCartPlus />
-        Add Cart
-      </Button>
-
-      <Button
-        className="w-fit"
+        className="w-full sm:w-fit"
         variant="outline"
       >
         <FaHeart />
