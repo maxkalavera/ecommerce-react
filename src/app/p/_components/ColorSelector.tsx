@@ -52,7 +52,7 @@ const ColorSelector: React.FC<
             "flex flex-col justify-start items-start gap-xs",
             "rounded-md pb-1 select-none",
             item.key === selected ? 
-              "border-2 border-neutral-600" :
+              "border-[1px] border-neutral-600 shadow-md" :
               "hover:border-[1px] hover:border-neutral-400 hover:cursor-pointer",
           )}
           onClick={() => setSelected(item.key)}
