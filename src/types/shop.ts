@@ -1,5 +1,5 @@
+import { OptionItem } from '@/types/navigation';
 
-export type ShopSortByOption = { label: string, key: string };
 
 export interface ShopFilters {
   search: string;
@@ -26,5 +26,5 @@ export type ShopParams = {
   color?: string;
   size?: string;
   priceRange?: [number, number];
-  sortBy?: ShopSortByOption;
+  sortBy?: OptionItem;
 };

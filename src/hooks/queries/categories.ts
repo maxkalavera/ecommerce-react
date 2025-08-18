@@ -1,56 +1,55 @@
-import {
-  useQuery,
-} from '@tanstack/react-query';
+
+"use client"
+import axios from 'axios';
 import { Category as CategoryType, CategoryFilters } from '@/types/categories';
-import settings from '@/settings';
-import demo from '@/lib/demo';
-import { InstanceQueryFunction, ManyQueryFunction } from '@/types/api';
-import { APIError } from '@/lib/queries';
+import { useRequest, usePaginatedQuery, type PayloadMany, type PayloadSingle } from '@/lib/queries';
 
-export const fetchCategories: 
-  ManyQueryFunction<CategoryType, [CategoryFilters]> = 
-  async (params) => 
+
+export function useCategoriesQuery (
+  filters: CategoryFilters
+)
 {
-  const filters = params.queryKey[1];
-  if (settings.environment === 'demo') {
-    return {
-      items: demo.filterCategories(filters as CategoryFilters)
-    };
-  }
-  return {
-    items: []
-  };
-};
-
-export const useCategoriesQuery = (
-  filters: CategoryFilters = {}
-) => {
-  return useQuery({
-    initialData: { items: [] },
-    queryKey: ["categories", filters],
-    queryFn: fetchCategories,
-  });
-};
-
-
-export const fetchCategory:
-  InstanceQueryFunction<CategoryType, [CategoryType['key']]> = async (params) => 
-{
-  if (settings.environment === 'demo') {
-    const instance = demo.getCategory(params.queryKey[1]);
-    if (instance !== null) {
-      return { instance };
-    }
-  }
-
-  throw new APIError("Category could not been retrived", "category-not-retrived");
-};
+  return useRequest<PayloadMany<CategoryType>>(
+    'useCategoriesQuery',
+    [filters.childrenOf],
+    async ([childrenOf], { resolveURL }) => {
+      const response = await axios.get(resolveURL('/categories'), {
+        headers: {
+          'accept': 'application/json',
+        },
+        params: {
+          childrenOf: childrenOf,
+        },
+      });
+      return response;
+    },
+    {
+      items: [],
+      cursor: null,
+      hasMore: false,
+    }, 
+  );
+}
 
 export const useCategoryQuery = (
   categoryKey: CategoryType['key']
 ) => {
-  return useQuery({
-    queryKey: ["category", categoryKey],
-    queryFn: fetchCategory,
-  });
+  return useRequest<PayloadSingle<any>>(
+    'useCategoryQuery',
+    [categoryKey],
+    async ([categoryKey], { resolveURL }) => {
+      const response = await axios.get(resolveURL(`categories/${categoryKey}`), {
+        headers: {
+          'accept': 'application/json',
+        },
+        params: {
+          key: categoryKey,
+        },
+      });
+      return response;
+    },
+    {
+      data: null,
+    }, 
+  );
 };

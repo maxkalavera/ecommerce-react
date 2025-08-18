@@ -12,7 +12,7 @@ import React from "react";
  * Types
  */
 
-export type BreadcrumbItems = ({ content: string, href: string })[];
+export type BreadcrumbItems = ({ key: string, name: string })[];
 
 /******************************************************************************
  * Main Component
@@ -40,11 +40,11 @@ const BreadcrumbNavigation = React.forwardRef<
         </BreadcrumbItem>
         {items.length > 0 && <BreadcrumbSeparator />}
 
-        {items.map(({ content, href }: BreadcrumbItems[number], index: number) => (
-          <React.Fragment key={index}>
+        {items.map(({ key, name }: BreadcrumbItems[number], index: number) => (
+          <React.Fragment key={key}>
             <BreadcrumbItem>
-              <BreadcrumbLink href={href} className="text-sm">
-                {content}
+              <BreadcrumbLink href={`/shop?category=${key}`} className="text-sm">
+                {name}
               </BreadcrumbLink>
             </BreadcrumbItem>
 

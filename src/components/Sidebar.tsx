@@ -1,5 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import * as icons from "react-icons/fa6";
 import {
   HamburguerMenu, 
   HamburguerMenuContent, 
@@ -11,7 +13,8 @@ import {
   HamburguerMenuTitle, 
   HamburguerMenuTrigger
 } from "@/components/cui/hamburguer-menu";
-import { FaHashtag, FaShirt, FaTag } from "react-icons/fa6";
+import settings from "@/settings";
+
 
 const Sidebar: React.FC<
   React.ComponentPropsWithoutRef<typeof HamburguerMenu> & {}
@@ -28,10 +31,17 @@ const Sidebar: React.FC<
         </HamburguerMenuHeader>
 
         <HamburguerMenuList className="mt-8 mb-4">
-          <HamburguerMenuItem><FaHashtag /> <h4>Women</h4></HamburguerMenuItem>
-          <HamburguerMenuItem><FaHashtag /> <h4>Men</h4></HamburguerMenuItem>
-          <HamburguerMenuItem><FaShirt /> <h4>New Arrivals</h4></HamburguerMenuItem>
-          <HamburguerMenuItem><FaTag /> <h4>Sale</h4></HamburguerMenuItem>
+          {settings.content.navigation.map(item => (
+            <Link href={item.href} key={item.key} className="w-full">
+              <HamburguerMenuItem className="w-full">
+                {icons[item.icon as keyof typeof icons] 
+                  ? React.createElement(icons[item.icon as keyof typeof icons]) 
+                  : null
+                }
+                <span>{item.label}</span>
+              </HamburguerMenuItem>
+            </Link>
+          ))}
         </HamburguerMenuList>
 
         <HamburguerMenuFooter></HamburguerMenuFooter>

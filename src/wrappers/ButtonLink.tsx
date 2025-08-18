@@ -15,8 +15,8 @@ const ButtonLink: React.FC<
 }) => {
 
   return (
-    <Link href={href} legacyBehavior passHref>
-      <a
+    <Link href={href} passHref>
+      <span
         {...props}
         className={cn(
           buttonVariants({ variant: "ghost", size: "default" }),
@@ -24,7 +24,7 @@ const ButtonLink: React.FC<
         )}
       >
         {children}
-      </a>
+      </span>
     </Link>
   );
 };

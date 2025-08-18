@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
  * Main component
  */
 
-const Summary = React.forwardRef<
+const CartSummary = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & { }
 >((
@@ -49,9 +49,9 @@ const Summary = React.forwardRef<
   )
 });
 
-Summary.displayName = "Summary";
+CartSummary.displayName = "CartSummary";
 
-export default Summary;
+export default CartSummary;
 
 
 /************************************************************

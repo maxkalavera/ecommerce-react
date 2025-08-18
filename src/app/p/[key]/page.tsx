@@ -8,10 +8,10 @@ import Document from "@/layouts/document";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import BreadcrumbNavigation, { BreadcrumbItems } from "@/components/BreadcrumbNavigation";
-import { toPartialUpperCase, itemizeCategories } from "@/lib/utils";
-import ImageGallery from "../_components/ImageGallery";
-import ColorSelector from "../_components/ColorSelector";
-import SizeSelector from "../_components/SizeSelector";
+import { toPartialUpperCase } from "@/lib/utils";
+import ImageGallery from "@/components/ImageGallery";
+import ColorSelector from "@/components/ColorSelector";
+import SizeSelector from "@/components/SizeSelector";
 import {
   Select,
   SelectContent,
@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FaCartPlus, FaHeart } from "react-icons/fa6";
 import MarkdownIt from 'markdown-it';
+import { useProductQuery } from '@/hooks/queries/products';
 
 
 /******************************************************************************
@@ -30,12 +31,24 @@ import MarkdownIt from 'markdown-it';
 
 export default function ProductInfo() {
   const params = useParams();
-  const products = productsData as unknown as ProductType[];
-  const product = products.find((item) => item.key === params.key);
 
-  if (product === undefined) {
-    notFound();
+  const handleAddToCart = React.useCallback((productKey: string, quantity: number) => {
+  }, []);
+
+  if (typeof params.key !== 'string') {
+    return notFound();
   }
+  const productQuery = useProductQuery(params.key);
+  console.log("productQuery", productQuery);
+  if (productQuery.status === 'loading') {
+    return (
+      <></>
+    )
+  } else if ((['error', 'timeout', 'canceled'] as typeof productQuery.status[]).includes(productQuery.status)) {
+    return notFound();
+  }
+
+  const product = productQuery.payload!.data;
   return (
     <MainLayout>
       <Document.Section>
@@ -47,12 +60,13 @@ export default function ProductInfo() {
           )}
         >
           <ImageGallery 
-            images={product.gallery} 
+            images={product.images} 
             className="max-w-[420px] md:min-w-[350px] md:w-[350px]" 
           />
           <InfoWidget
-            product={product}
             className="w-full"
+            product={product}
+            handleAddToCart={handleAddToCart}
           />
         </div>
 
@@ -69,11 +83,66 @@ export default function ProductInfo() {
 const InfoWidget: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {
     product: ProductType;
+    handleAddToCart: (productKey: string, quantity: number) => void;
   }
 > = ({
   product,
+  handleAddToCart,
   ...props
 }) => {
+  const initials = {
+    color: product.color.name,
+    size: null,
+  };
+  const filterInventory = React.useCallback((
+    color: string | null = null,
+    size: string | null = null,
+  ) => {
+    return product.inventory.map(item => ({
+      ...item,
+      quantity: (
+        (item.color === color || color === null) 
+        && (item.size === size || size === null)
+      ) ? item.quantity 
+        : 0,
+    }));
+  }, [product.inventory]);
+  const [inventory, setInventory] = React.useState<typeof product.inventory>(
+    filterInventory(initials.color, initials.size)
+  );
+  const [selectedColor, setSelectedColor] = React.useState<string | null>(initials.color);
+  const [selectedSize, setSelectedSize] = React.useState<string | null>(initials.size);
+  let selectedProductKey = (
+    inventory.find(
+      item => item.color === selectedColor 
+      && item.size === selectedSize 
+      && item.quantity > 0
+    ) || { productKey: null }
+  ).productKey;
+
+  const handleSelectColor = React.useCallback((value: string | null) => {
+    const _inventory = filterInventory(value, null);
+    setInventory(_inventory);
+    setSelectedColor(value);
+    if (!_inventory.find(item => item.size === selectedSize && item.quantity > 0)) {
+      setSelectedSize("");
+    }
+  }, [selectedSize, filterInventory]);
+
+  const handleSelectSize = React.useCallback((value: string | null) => {
+    const _inventory = filterInventory(null, value);
+    setInventory(_inventory);
+    setSelectedSize(value);
+    if (!_inventory.find(item => item.color === selectedColor && item.quantity > 0)) {
+      setSelectedColor("");
+    }
+  }, [selectedColor, filterInventory]);
+
+  const maxAvailability = product.maxAvailability || 10;
+  const availability: number = Math.min(
+    maxAvailability, 
+    inventory.reduce((max, item) => Math.max(max, item.quantity), 0)
+  );
   return (
     <div
       {...props}
@@ -85,9 +154,12 @@ const InfoWidget: React.FC<
       <Separator />
       
       <InfoPanel>
-        <BreadcrumbNavigation 
-          items={[{ content: "Women", href: "#" }, { content: "Shirts", href: "#" }]}
-        />
+        { product.categoryBreadcrumbs && (  // If breadcrumbs is not null
+          <BreadcrumbNavigation 
+            items={product.categoryBreadcrumbs}
+          />
+        )}
+
         <InfoPanelTitle>{product.name}</InfoPanelTitle>
         <h4 className="text-base font-bold text-neutral-600">
           {`$${product.price}`}
@@ -98,22 +170,46 @@ const InfoWidget: React.FC<
       
       <InfoPanel>
         <InfoPanelTitle>{"Color"}</InfoPanelTitle>
-        <ColorSelector />
+        <ColorSelector 
+          items={inventory.map(item => ({ 
+            value: item.color, 
+            label: item.color,
+            color: item.colorHex,
+            quiet: item.quantity === 0,
+          }))}
+          value={selectedColor}
+          handleSelect={handleSelectColor}
+        />
       </InfoPanel>
 
       <InfoPanel>
-      <InfoPanelTitle>{"Size"}</InfoPanelTitle>
-      <SizeSelector />
+        <InfoPanelTitle>{"Size"}</InfoPanelTitle>
+        <SizeSelector 
+          items={inventory.map(item => ({
+            value: item.size,
+            label: item.size,
+            quiet: item.quantity === 0,
+          }))}
+          value={selectedSize}
+          handleSelect={handleSelectSize}
+        />
       </InfoPanel>
 
       <InfoPanel>
-        <Options className="w-full" />
+        <Options 
+          className="w-full" 
+          availability={availability}
+          productKey={selectedProductKey}
+          handleAddToCart={handleAddToCart}
+        />
       </InfoPanel>
 
       <Separator />
 
       <InfoPanel>
-        <ProductDescription />
+        <ProductDescription 
+          content={product.description} 
+        />
       </InfoPanel>
     </div>
   );
@@ -169,11 +265,25 @@ InfoPanelTitle.displayName = "InfoPanelTitle";
 
 
 const Options: React.FC<
-  React.ComponentPropsWithoutRef<React.ElementType> & {}
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    availability: number;
+    productKey: string | null;
+    handleAddToCart: (productKey: string, quantity: number) => void;
+  }
 > = ({
+  availability,
+  productKey,
+  handleAddToCart,
   ...props
 }) => {
-  const availableItems = 3;
+
+  const [quantity, setQuantity] = React.useState<number>(1);
+
+  const _handleAddToCart = React.useCallback(() => {
+    if (productKey) {
+      handleAddToCart(productKey, quantity);
+    }
+  }, [productKey, quantity, handleAddToCart]);
 
   return (
     <div
@@ -191,14 +301,16 @@ const Options: React.FC<
         )}
       >
         <Select
-          defaultValue={availableItems < 1 ? "0" : "1"}
-          disabled={availableItems < 1}
+          defaultValue={availability < 1 ? "0" : "1"}
+          disabled={availability < 1 || !productKey}
+          value={quantity.toString()}
+          onValueChange={(value) => setQuantity(Number(value))}
         >
           <SelectTrigger className="w-fit">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {Array(availableItems).fill("").map((_, index) => (
+            {Array(availability).fill("").map((_, index) => (
               <SelectItem 
                 key={`${index + 1}`}
                 value={`${index + 1}`}
@@ -211,6 +323,8 @@ const Options: React.FC<
 
         <Button
           className="w-full"
+          disabled={!productKey}
+          onClick={_handleAddToCart}
         >
           <FaCartPlus />
           Add Cart
@@ -232,14 +346,18 @@ Options.displayName = "Options";
 
 
 const ProductDescription: React.FC<
-  React.ComponentPropsWithoutRef<React.ElementType> & {}
+  React.ComponentPropsWithoutRef<React.ElementType> & {
+    content: string;
+  }
 > = ({
+  content,
   ...props
 }) => {
   const markdown = React.useMemo(() => {
     return new MarkdownIt()
   }, []);
 
+  /*
   const content = `
 Elevate your wardrobe with this Elegant Turtleneck Top , a timeless and versatile piece designed to add sophistication to any outfit. Whether you're dressing up for a chic evening look or keeping it casual for a relaxed day, this top effortlessly combines style and comfort.
 
@@ -256,6 +374,7 @@ Specifications
 	- Tumble dry low or hang to dry.
 	- Iron on low heat if needed.  
 `
+*/
 
 
   return (

@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils";
-import { DialogComponent } from "@/types/types";
+import { DialogComponent } from "@/types/commons";
 import React, { useState } from "react";
 import { useProductsQuery } from "@/hooks/queries/products";
 import { ScrollArea } from "@/components/ui/scroll-area";

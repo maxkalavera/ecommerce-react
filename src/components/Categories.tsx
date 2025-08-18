@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import CategoriesGrid from "./CategoriesGrid";
+import CategoriesGrid from "@/components/CategoriesGrid";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -26,9 +26,13 @@ const Categories = React.forwardRef<
   }, 
   forwardedRef
 ) => {
+  const items = settings.content.home.tabs;
   const [activeTab, setActiveTab] = React.useState<string>(
-    settings.categories.tabs.length > 0 ? settings.categories.tabs[0].key : "");
-  const categoriesQuery = useCategoriesQuery({ rootCategory: activeTab });
+    items.length > 0 
+      ? items[0].key
+      : ""
+  );
+  const categoriesQuery = useCategoriesQuery({ childrenOf: activeTab });
 
   return (
     <Tabs
@@ -41,7 +45,7 @@ const Categories = React.forwardRef<
       onValueChange={(value) => setActiveTab(value)}
     >
       <TabsList className="bg-transparent gap-4">
-        {settings.categories.tabs.map(item => (
+        {items.map(item => (
           <TabsTrigger 
             key={item.key} 
             value={item.key} 
@@ -53,20 +57,20 @@ const Categories = React.forwardRef<
                 styles.tabsTrigger,
               )}
             >
-              {item.name}
+              {item.label}
             </Button>
           </TabsTrigger>
         ))}
       </TabsList>
 
-      {settings.categories.tabs.map(item => (
+      {items.map(item => (
         <TabsContent
           key={item.key} 
           value={item.key}
         >
           <CategoriesGrid
             className="w-full justify-center md:justify-start"
-            categories={categoriesQuery.data.items}
+            categories={categoriesQuery.payload?.items}
           />
         </TabsContent>
       ))}

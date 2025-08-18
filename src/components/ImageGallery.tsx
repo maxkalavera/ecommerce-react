@@ -10,13 +10,13 @@ import {
   type CarouselApi
 } from "@/components/ui/carousel"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ResizableImage } from "@/types/types";
+import { type Image as ImageType } from "@/types/commons";
 
 
 const ImageGallery = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
-    images: ResizableImage[];
+    images: ImageType[];
   }
 >((
   {
@@ -90,7 +90,7 @@ export default ImageGallery;
 
 const CarouselDisplay: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {
-    images: ResizableImage[];
+    images: ImageType[];
     setApi: ((api: CarouselApi) => void);
   }
 > = ({
@@ -108,9 +108,9 @@ const CarouselDisplay: React.FC<
       setApi={setApi}
     >
       <CarouselContent>
-        {images.map((item: ResizableImage) => (
+        {images.map((item: ImageType) => (
           <CarouselItem 
-            key={item.id}
+            key={item.key}
           >
             <div className="w-full">
               <AspectRatio
@@ -118,7 +118,7 @@ const CarouselDisplay: React.FC<
                 ratio={2 / 3}
               >
                 <Image 
-                  src={item.image} 
+                  src={item.url} 
                   alt="Product's image" 
                   fill 
                   className="rounded-md object-cover" 
@@ -150,7 +150,7 @@ const CarouselDisplay: React.FC<
 
 const Thumbnails: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {
-    images: ResizableImage[];
+    images: ImageType[];
     selectedIndex: number;
     onThumbSelected: (index: number) => void;
   }
@@ -169,9 +169,9 @@ const Thumbnails: React.FC<
         props.className
       )}
     >
-      {images.map((item: ResizableImage, index: number) => (
+      {images.map((item: ImageType, index: number) => (
         <div
-          key={item.id}
+          key={item.key}
           className={cn(
             "w-full cursor-pointer rounded-sm overflow-clip",
             "group outline outline-1 outline-neutral-300",
@@ -184,7 +184,7 @@ const Thumbnails: React.FC<
             ratio={2 / 3}
           >
             <Image
-              src={item.image}
+              src={item.url}
               alt="Product's image"
               fill
               className="rounded-sm object-cover group-hover:scale-110"

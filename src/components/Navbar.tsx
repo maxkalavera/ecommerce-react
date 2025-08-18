@@ -4,16 +4,9 @@ import React from "react";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "./ui/navigation-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NavigationItem } from '@/types/navigation';
+import settings from "@/settings";
 
-
-/******************************************************************************
- * Types
- */
-export interface NavbarItem { 
-  label: React.ReactNode, 
-  href: string
-  disabled?: boolean,
-};
 
 /******************************************************************************
  * Components
@@ -21,7 +14,7 @@ export interface NavbarItem {
 const Navbar = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
-    items: NavbarItem[],
+    items: NavigationItem[],
   }
 >((
   {
@@ -50,7 +43,7 @@ const Navbar = React.forwardRef<
       <NavigationMenuList
         className="gap-2"
       >
-        {items.map((item: NavbarItem, index: number) => (
+        {settings.content.navigation.map((item: NavigationItem, index: number) => (
           <NavigationMenuItem 
             key={index}
             className={cn(
@@ -59,20 +52,25 @@ const Navbar = React.forwardRef<
           >
             <Link 
               href={item.href} 
-              legacyBehavior 
               passHref
+              className={cn(
+                item.disabled && "pointer-events-none cursor-not-allowed",
+              )}
             >
               <NavigationMenuLink
                 className={cn(
                   navigationMenuTriggerStyle(),
                   isUnderPath(item.href, "font-bold"),
-                  item.disabled && cn(
-                    "text-neutral-300 dark:text-neutral-700",
-                    "pointer-events-none"
-                  )
                 )}
+                asChild={true}
               >
-                {item.label}
+                <span 
+                  className={cn(
+                    item.disabled && "text-neutral-500/50",
+                  )}
+                >
+                  {item.label}
+                </span>
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
@@ -83,37 +81,4 @@ const Navbar = React.forwardRef<
 });
 
 Navbar.displayName = "Navbar";
-
-
-/******************************************************************************
- * Wrappers
- */
-
-const NavbarWrapper = () => {
-  return (
-    <Navbar
-      items={[
-        {
-          label: "Women",
-          href: "/shop?category=YgMVlkiMSs"
-        },
-        {
-          label: "Men",
-          href: "/shop?category=rdvc3N3wO"
-        },
-        {
-          label: "New Arrivas",
-          href: "/#",
-          disabled: true,
-        },
-        {
-          label: "Sale",
-          href: "/#",
-          disabled: true,
-        },
-      ]}
-    />
-  )
-};
-
-export default NavbarWrapper;
+export default Navbar;

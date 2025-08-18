@@ -27,8 +27,8 @@ const Header = React.forwardRef<
         props.className
       )}
     >
-      <Link href="/" legacyBehavior passHref>
-        <a
+      <Link href="/" passHref>
+        <span
           className={cn(
             buttonVariants({ variant: "ghost", size: "lg" }),
             "px-4",
@@ -36,7 +36,7 @@ const Header = React.forwardRef<
           )}
         >
           Store
-        </a>
+        </span>
       </Link>
 
       <ForLargeScreens>

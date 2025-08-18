@@ -1,15 +1,13 @@
-import { Instance, ResizableImage } from "./types";
+import { Instance, ResizableImage } from "./commons";
 
 export interface Category extends Instance {
   name: string;
   display: ResizableImage | null;
-  hierarchy: {
-    parent: Category | null;
-    children: Category[];
-  }
+  parentKey: Category['key'] | null;
+  parent: Category | null;
 }
 
 export interface CategoryFilters {
-  rootCategory?: Category['key'],
-  searchTerm?: string,
+  childrenOf?: Category['key'],
+  //searchTerm?: string,
 }

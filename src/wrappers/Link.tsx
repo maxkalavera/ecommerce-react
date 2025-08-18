@@ -14,15 +14,15 @@ const Link: React.FC<
 }) => {
 
   return (
-    <NextLink href={href} legacyBehavior passHref>
-      <a
+    <NextLink href={href} passHref>
+      <span
         {...props}
         className={cn(
           props.className
         )}
       >
         {children}
-      </a>
+      </span>
     </NextLink>
   );
 };

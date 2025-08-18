@@ -1,4 +1,4 @@
-import { DialogComponent } from "@/types/types";
+import { DialogComponent } from "@/types/commons";
 import SearchDialog from "@/dialogs/SearchDialog";
 
 type DialogObject = {[key: string]: DialogComponent};

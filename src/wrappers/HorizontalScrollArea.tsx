@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import InfiniteScroll, { InfiniteScrollProps } from "@/components/ui/infinite-scroll";
+import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { Button } from "@/components/ui/button";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 
@@ -10,9 +10,7 @@ import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 const HorizontalScrollArea = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<React.ElementType> &
-  InfiniteScrollProps & {
-
-  }
+  Parameters<typeof InfiniteScroll> & {}
 >((
   {
     children,

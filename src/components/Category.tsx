@@ -33,7 +33,7 @@ const Category = React.forwardRef<
         "relative min-w-24 min-h-20",
         "rounded-md overflow-clip select-none cursor-pointer",
         hoverable && "hover:outline hover:outline-[1px] hover:outline-primary/35",
-        (!category.display?.image || error) && "outline outline-2 outline-neutral-200",
+        (!category.display?.url || error) && "outline outline-2 outline-neutral-200",
         props.className,
       )}
     >
@@ -46,9 +46,9 @@ const Category = React.forwardRef<
           className="select-none"
           ratio={4/3}
         >
-          {category.display?.image && !error && (
+          {category.display?.url && !error && (
             <Image 
-              src={category.display.image} 
+              src={category.display.url} 
               alt="Product's image" 
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -61,7 +61,7 @@ const Category = React.forwardRef<
           )}
         </AspectRatio>
 
-        {(!category.display?.image || error) && (
+        {(!category.display?.url || error) && (
           <div
             className={cn(
               "absolute top-0 left-0 w-full h-full px-8",

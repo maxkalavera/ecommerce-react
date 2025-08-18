@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,14 +8,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { FaCaretDown, FaFilter, FaSort } from "react-icons/fa6";
-//import CategoriesRow from "@/components/CategoriesRow";
-import Filters from "./filters/Filters";
+import Filters from "./products-filters/Filters";
 import settings from "@/settings";
 import { useCategoriesQuery } from "@/hooks/queries/categories";
 import { Category as CategoryType } from "@/types/categories";
 import HorizontalScrollArea from "@/wrappers/HorizontalScrollArea";
-import { ForLargeScreens, ForSmallScreens } from "@/layouts/screens";
 import Category from "@/components/Category";
+import Link from "@/wrappers/Link";
+
 
 /******************************************************************************
  * Constants
@@ -35,13 +34,10 @@ const sortingOptions = [
  */
 const ProductsFlowHeader = React.forwardRef<
   HTMLDivElement, 
-  React.ComponentPropsWithoutRef<React.ElementType> & {
-    extraContent?: React.ReactNode;
-  }
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
 >((
   {
     className,
-    extraContent=undefined,
     ...props
   }, 
   forwardedRef
@@ -49,23 +45,19 @@ const ProductsFlowHeader = React.forwardRef<
   const [activeTab, setActiveTab] = React.useState<string>("");
 
   return (
-    /***********************************************************************
-      * The header is builded extending the utilities of this Tabs component
-      * The tabs is used to split the list of categories in groups using
-      * tabs to select each group.
-      */
-    <Tabs 
+    <div
       {...props}
       ref={forwardedRef}
-      value={activeTab}
-      onValueChange={setActiveTab}
       className={cn(
-        "w-full h-fit relative",
+        "w-full h-fit",
         className,
       )}
     >
-      <TabsList 
-        className="w-full h-fit flex-row justify-start items-end gap-2 bg-transparent"
+      <div
+        className={cn(
+          "w-full h-fit",
+          "flex flex-row justify-start items-end gap-2"
+        )}
       >
         {/***********************************************************************
          * Tabs
@@ -73,15 +65,16 @@ const ProductsFlowHeader = React.forwardRef<
          * be abble to personalize the content of the tabs component
          */}
         <div
-          className="w-full flex flex-row justify-start items-start gap-2"
+          className="flex-grow flex flex-row justify-start items-start gap-2"
         >
-          {settings.categories.tabs.map(item => (
+          {settings.content.shop.productsHeaderOptions.map(item => (
             <Button
               key={item.key} 
+              className="select-none"
               variant={activeTab === item.key ? "default" : "outline" }
-              onClick={() => activeTab === item.key ? setActiveTab("") : setActiveTab(item.key)}
+              onClick={() => activeTab === item.key ? setActiveTab("") : setActiveTab(item.key || "")}
             >
-              {item.name} <FaCaretDown />
+              {item.label} <FaCaretDown />
             </Button>
           ))}
         </div>
@@ -92,57 +85,22 @@ const ProductsFlowHeader = React.forwardRef<
          * not related in any way with the tabs content.
          */}
         <div
-          className="w-full flex flex-row justify-end flex-wrap items-end gap-2"
+          className="flex-grow flex flex-row justify-end flex-wrap items-end gap-2"
         >
-          {/***********************************************************************
-           * Sort popover options
-           */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline"
-              >
-                Sort <FaSort />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <SortingSelect />
-            </PopoverContent>
-          </Popover>
-          {/***********************************************************************
-           * Filter popover options
-           */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline"
-              >
-                Filter <FaFilter />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-            >
-              <Filters />
-            </PopoverContent>
-          </Popover>
+          <SortingPopover />
+          <FilterPopover />
         </div>
-      </TabsList>
+      </div>
 
       {/***********************************************************************
-       * Filter buttons
-       * This buttons are not part of the Tabs component but an extra features
-       * not related in any way with the tabs content.
+       * When a category tab is clicked the related categries are shown here
        */}
-      {settings.categories.tabs.map(item => (
-        <TabsContent
-          key={item.key}
-          value={item.key}
-        >
-          <CategoriesFlow rootCategoryKey={item.key} />
-        </TabsContent>
-      ))}
-    </Tabs>
-  )
+      {activeTab && (
+        <CategoriesFlow rootCategoryKey={activeTab} />
+      )}
+
+    </div>
+  );
 });
 
 ProductsFlowHeader.displayName = "ProductsFlowHeader";
@@ -170,6 +128,7 @@ const SortingSelect: React.FC<
       {sortingOptions.map((item, index) => (
         <Button
           key={index} 
+          className="select-none"
           variant="link"
           size="default"
         >
@@ -188,7 +147,7 @@ const CategoriesFlow: React.FC<
   rootCategoryKey="",
   ...props
 }) => {
-  const categoriesQuery = useCategoriesQuery({ rootCategory: rootCategoryKey });
+  const categoriesQuery = useCategoriesQuery({ childrenOf: rootCategoryKey });
 
   return (
     <div
@@ -200,31 +159,81 @@ const CategoriesFlow: React.FC<
     >
       <HorizontalScrollArea
         className="w-full gap-4"
-        hasMore={props.hasMore} 
-        isLoading={props.isLoading} 
-        next={props.next} 
+        hasMore={undefined}
+        isLoading={undefined}
+        next={undefined}
       >
-        { (categoriesQuery.data.items || []).map((category: CategoryType) => (
-          <React.Fragment key={category.id}>
-            <ForSmallScreens>
-              <Category 
-                key={category.id} 
+        { (categoriesQuery.payload.items || []).map((category: CategoryType) => (
+          <div
+            key={category.key}
+            className="w-[150px] sm:w-[200px]"
+          >
+            <Link 
+              href={`/shop?category=${category.key}`}
+            >
+              <Category
+                key={category.key} 
+                className="w-[150px] sm:w-[200px]"
                 category={category}
                 hoverable={true}
-                size="sm"
               />
-            </ForSmallScreens>
-            <ForLargeScreens>
-              <Category 
-                key={category.id} 
-                category={category}
-                hoverable={true}
-                size="md"
-              />
-            </ForLargeScreens>
-          </React.Fragment>
+            </Link>
+          </div>
         ))}
       </HorizontalScrollArea>
     </div>
+  )
+};
+
+const SortingPopover: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+> = ({
+  ...props
+}) => {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button 
+          variant="outline"
+          className={cn(
+            "select-none", 
+            props.className
+          )}
+        >
+          Sort <FaSort />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <SortingSelect />
+      </PopoverContent>
+    </Popover>
+  )
+};
+
+const FilterPopover: React.FC<
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
+> = ({
+  ...props
+}) => {
+  return (
+    <Popover
+      {...props}
+    >
+      <PopoverTrigger asChild>
+        <Button 
+          variant="outline"
+          className={cn(
+            "select-none", 
+            props.className
+          )}
+        >
+          Filter <FaFilter />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+      >
+        <Filters />
+      </PopoverContent>
+    </Popover>
   )
 };

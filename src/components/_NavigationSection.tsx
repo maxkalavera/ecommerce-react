@@ -11,7 +11,7 @@ const style = {
 
 const NavigationSection = React.forwardRef<
   HTMLDivElement, 
-  React.ComponentPropsWithoutRef<React.ElementType> & { a: number }
+  React.ComponentPropsWithoutRef<React.ElementType> & {}
 >((
   {
     ...props
@@ -23,7 +23,6 @@ const NavigationSection = React.forwardRef<
       {...props}
       ref={forwardedRef}
       className={cn(
-        //"w-fill h-fill",
         "flex flex-col justify-center items-center",
         props.className
       )}

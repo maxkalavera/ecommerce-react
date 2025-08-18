@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaCartShopping, FaHeart, FaRegHeart } from "react-icons/fa6";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import PlaceholderImage from "@/components/PlaceholderImage";
 
 
 const Product = React.forwardRef<
@@ -38,6 +39,7 @@ const Product = React.forwardRef<
   const addCart = () => {
 
   }
+  const coverImage = (product.images as any[]).find(item => item.isCover) || null;
 
   return (
     <div
@@ -103,34 +105,26 @@ const Product = React.forwardRef<
             className="select-none"
             ratio={2/3}
           >
-            {product.display?.image && !error && (
-              <Image 
-                src={product.display?.image} 
-                alt="Product's image" 
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className={cn(
-                  "object-cover",
-                  "transition-transform duration-200 group-hover/product:scale-110"
-                )}
-                onError={() => setError(true)}
-              />
-            )}
+            <>
+              {coverImage !== null ? (
+                <Image
+                  src={coverImage.url}
+                  alt="Product's image" 
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className={cn(
+                    "object-cover",
+                    "transition-transform duration-200 group-hover/product:scale-110"
+                  )}
+                  onError={() => setError(true)}
+                />
+              ) :  (
+                <PlaceholderImage className="w-full h-full rounded-sm" />
+              )}
+            </>
           </AspectRatio>
 
-          {(!product.display?.image || error) && (
-            <div
-              className={cn(
-                "absolute top-0 left-0 w-full h-full px-8 z-0",
-                "flex flex-col justify-center items-center",
-                "border-[1px] border-neutral-200 dark:border-neutral-800"
-              )}
-            >
-              <h3 className="font-serif text-xl text-neutral-950/30 text-wrap text-center">
-                No image
-              </h3>
-            </div>
-          )}
+
         </div>
 
         <div

@@ -1,10 +1,10 @@
 "use client"
+import { useAtomValue } from "jotai";
 import document from "@/layouts/document";
 import MainLayout from "@/layouts/main";
 import { cn } from "@/lib/utils";
-import Item from "./_components/Item";
-import Summary from "./_components/Summary";
-import { useAtomValue } from "jotai";
+import CartItem from "@/components/CartItem";
+import CartSummary from "@/components/CartSummary";
 import { cartProductsAtom } from "@/atoms/products";
 
 
@@ -29,7 +29,7 @@ export default function Cart() {
             )}
           >
             {data.items.map((item, index) => ( 
-              <Item 
+              <CartItem 
                 key={index}
                 product={item}
                 className="w-fit"
@@ -42,7 +42,7 @@ export default function Cart() {
               "flex flex-col justify-start items-center gap-12"
             )}
           >
-            <Summary className="sticky top-4" />
+            <CartSummary className="sticky top-4" />
           </div>
         </document.SectionFrame>
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export interface InfiniteScrollProps {
+interface InfiniteScrollProps {
   isLoading: boolean;
   hasMore: boolean;
   next: () => unknown;
@@ -21,7 +21,7 @@ export default function InfiniteScroll({
   reverse,
   children,
 }: InfiniteScrollProps) {
-  const observer = React.useRef<IntersectionObserver>();
+  const observer = React.useRef<IntersectionObserver>(null);
   // This callback ref will be called when it is dispatched to an element or detached from an element,
   // or when the callback function changes.
   const observerRef = React.useCallback(
@@ -42,7 +42,7 @@ export default function InfiniteScroll({
       if (!element) return;
 
       // Create a new IntersectionObserver instance because hasMore or next may be changed.
-      observer.current = new IntersectionObserver(
+      (observer.current as IntersectionObserver) = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting && hasMore) {
             next();
@@ -50,7 +50,7 @@ export default function InfiniteScroll({
         },
         { threshold: safeThreshold, root, rootMargin },
       );
-      observer.current.observe(element);
+      if (observer.current) observer.current.observe(element);
     },
     [hasMore, isLoading, next, threshold, root, rootMargin],
   );
@@ -61,7 +61,6 @@ export default function InfiniteScroll({
     <>
       {flattenChildren.map((child, index) => {
         if (!React.isValidElement(child)) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           process.env.NODE_ENV === 'development' &&
             console.warn('You should use a valid element with InfiniteScroll');
           return child;
@@ -69,7 +68,7 @@ export default function InfiniteScroll({
 
         const isObserveTarget = reverse ? index === 0 : index === flattenChildren.length - 1;
         const ref = isObserveTarget ? observerRef : null;
-        // @ts-expect-error ignore ref type
+        // @ts-ignore ignore ref type
         return React.cloneElement(child, { ref });
       })}
     </>

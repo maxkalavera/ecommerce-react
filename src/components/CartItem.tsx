@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const Item = React.forwardRef<
+const CartItem = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & { 
     product: ProductType
@@ -118,6 +118,6 @@ const Item = React.forwardRef<
   )
 });
 
-Item.displayName = "Item";
+CartItem.displayName = "CartItem";
 
-export default Item;
+export default CartItem;

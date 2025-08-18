@@ -1,44 +1,50 @@
-import { fetchCategory } from "@/hooks/queries/categories";
+"use client"
+import { useSearchParams } from 'next/navigation';
+//import { fetchCategory } from "@/hooks/queries/categories";
 import Document from "@/layouts/document";
 import MainLayout from "@/layouts/main";
-import { fetchSSRQuery } from "@/lib/queries";
+//import { fetchSSRQuery } from "@/lib/queries";
 import { ShopURLParams } from "@/types/shop";
 import { shopURLSchema } from "./parsers";
 import BreadcrumbNavigation, { BreadcrumbItems } from "@/components/BreadcrumbNavigation";
 import ScrollTopButton from "@/wrappers/ScrollTopButton";
-import ProductsFlow from "./_components/ProductsFlow";
-import ProductsFlowHeader from "./_components/ProductsFlowHeader";
-import { toPartialUpperCase, itemizeCategories } from "@/lib/utils";
+import ProductsFlow from "@/components/ProductsFlow";
+import ProductsFlowHeader from "@/components/ProductsFlowHeader";
+import { toPartialUpperCase } from "@/lib/utils";
+import { useCategoryQuery } from "@/hooks/queries/categories";
+
 
 /******************************************************************************
  * Types
  */
+/*
 interface Props {
   searchParams: Promise<ShopURLParams>
 }
+*/
 
 /******************************************************************************
  * Component
  */
-export default async function Shop(
-  { 
-    searchParams
-  }: Props
-) {
-  const shopURLParams = await searchParams;
-  const categoryData = await fetchSSRQuery({
-    queryKey: ["category", shopURLParams.category || ""],
-    queryFn: fetchCategory
-  });
-  const shopProps = await shopURLSchema.safeParseAsync(shopURLParams);
-  
-  const breadcrumbs: BreadcrumbItems = categoryData.isSuccess ? 
-    itemizeCategories((categoryData.data?.instance)) : 
-    [];
-  const title = (
-    (shopProps.success ? shopProps.data.search : undefined) || 
-    (categoryData.isSuccess ? categoryData.data?.instance.name : undefined)
-  );
+export default function Shop() {
+  let title = '';
+  let breadcrumbs: BreadcrumbItems = [];
+  const searchParams = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries());
+
+  const category = searchParams.get('category') || '';
+  const categoryQuery = useCategoryQuery(category);
+  if (category) {
+    if (categoryQuery.status === 'success') {
+      title = categoryQuery.payload.data.name;
+      breadcrumbs = [
+        ...(categoryQuery.payload.data.breadcrumbs || [])
+      ];
+    }
+  } else if (typeof params.search === 'string' && params.search) {
+    title = params.search;
+  }
+
   return (
     <MainLayout>
       {/***********************************************************************
@@ -52,7 +58,9 @@ export default async function Shop(
             {toPartialUpperCase(title)}
           </Document.SectionTitle>
         )}
-        <BreadcrumbNavigation items={breadcrumbs} />
+        { breadcrumbs.length > 0 && (
+          <BreadcrumbNavigation items={breadcrumbs} />
+        )}
       </Document.Section>
       {/*********************************************************************** 
        * Content section: Shows a grid or list of products and filters and 
@@ -66,7 +74,9 @@ export default async function Shop(
           <ProductsFlowHeader />
         </Document.Section>
         <Document.Section>
-          <ProductsFlow />
+          <ProductsFlow 
+            category={searchParams.get('category')}
+          />
         </Document.Section>
       </ScrollTopButton>
     </MainLayout>

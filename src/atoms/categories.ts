@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import categoriesData from "@/assets/mock/categories.json";
-import { Category } from '@/types/types';
+import { Category } from '@/types/commons';
 
 
 export const tabsAtom = atom<Category[]>([
