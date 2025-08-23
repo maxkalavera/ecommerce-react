@@ -103,7 +103,8 @@ function NumberInput ({
   return (
     <span
       className={cn(
-        "flex h-9 w-fit rounded-md border border-input bg-transparent px-2 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm group gap-1 items-center cursor-text",
+        "flex h-9 w-fit px-2 py-1", 
+        "rounded-md border border-input bg-transparent  text-base",
         className
       )}
       onClick={() => { inputRef.current?.focus(); }}
@@ -113,7 +114,12 @@ function NumberInput ({
         ref={inputRef}
         type="number"
         className={cn(
-          "min-w-4 w-full focus:outline-none"
+          "min-w-4 w-full focus:outline-none",
+          "font-inherit text-inherit tracking-inherit leading-inherit",
+          "border-none bg-transparent outline-none",
+          "p-0 m-0",
+          "appearance-none size-auto",
+          "[margin:0] [padding:0]"
         )}
         value={value}
         onChange={onInternalChange}

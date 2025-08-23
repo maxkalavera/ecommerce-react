@@ -98,62 +98,6 @@ const settings: Settings = {
       },
     ],
   },
-  /*
-  categories: {
-    tabs: [
-      {
-        "key": "ODljOGNlZDEtNzU5Ny00ZjVlLTgzMWUtM2E4MDlhM2NjMmVl",
-        "name": "Women",
-      },
-      {
-        "key": "MDc2ZjdlYzctNzEyZi00OTIzLTk3YzgtYmIxM2E5ZWUzZTk5",
-        "name": "Men",
-      }
-    ],
-    navigation: [
-      {
-        label: "Women",
-        href: "/shop?category=ODljOGNlZDEtNzU5Ny00ZjVlLTgzMWUtM2E4MDlhM2NjMmVl"
-      },
-      {
-        label: "Men",
-        href: "/shop?category=MDc2ZjdlYzctNzEyZi00OTIzLTk3YzgtYmIxM2E5ZWUzZTk5"
-      },
-      {
-        label: "New Arrivals",
-        href: "/#",
-        disabled: true,
-      },
-      {
-        label: "Sale",
-        href: "/#",
-        disabled: true,
-      },
-    ],
-  },
-  shopSortByOptions: [
-    {
-      label: "Relevance",
-      key: "relevance"
-    },
-    {
-      label: "Trending",
-      key: "treanding"
-    },
-    {
-      label: "Latest arrival",
-      key: "latest-arrival"
-    },
-    {
-      label: "Price: Low to high",
-      key: "price-descending"
-    },
-    {
-      label: "Price: High to low",
-      key: "price-ascending"
-    },
-  ]
-  */
 };
 
 export default settings;

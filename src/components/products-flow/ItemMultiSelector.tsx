@@ -19,57 +19,51 @@ const ItemMultiSelector = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
     items: Item[],
-    size?: "md" | "sm",
+    selected?: ItemValue[],
     onSelectChange?: (selected: ItemValue[]) => void,
   }
 >((
   {
     items,
-    size="md",
+    selected,
     onSelectChange=() => null,
     ...props
   }, 
   forwardedRef
 ) => {
-  const [selected, setSelected] = React.useState<Set<ItemValue>>(new Set());
-
-  const select = React.useCallback((value: ItemValue) => {
-    setSelected(prev => {
-      const res = prev.has(value) ? 
-        new Set(prev).difference(new Set([value])) : 
-        new Set(prev).add(value)
-      onSelectChange(Array.from(res));
-      return res;
-    });
-  }, []);
-
-  React.useEffect(() => {
-
-  }, [selected]);
-
+  
+  const selectedSet = new Set(selected);
   return (
     <div
       {...props}
       ref={forwardedRef}
       className={cn(
-        "w-fit h-fit",
-        "flex flex-row justify-start items-center gap-4 flex-wrap",
-        size === "sm" && "gap-2",
+        "w-full h-fit",
+        "flex flex-row justify-start items-center gap-2 flex-wrap",
+        "select-none"
       )}
     >
       {items.map((item: Item) => (
         <div
           key={item['value']}
           className={cn(
-            "w-fit h-9 px-3 py-2",
-            "rounded-sm border-solid border-[1px] border-neutral-300 dark:border-neutral-700",
-            "font-sans text-sm cursor-pointer",
-            selected.has(item['value']) && 
-              "outline outline-3 outline-neutral-500",
-            size === "md" && "h-9 px-3 py-2 text-sm",
-            size === "sm" && "h-6 px-2 py-1 text-xs",
+            "w-9 h-9 px-2 py-2",
+            "flex flex-row justify-center items-center",
+            "rounded-sm border-solid border-[1px] border-neutral-300",
+            "font-sans text-xs font-semibold text-neutral-700",
+            "cursor-pointer",
+            selectedSet.has(item['value']) && cn(
+                "border-2 border-neutral-700"
+            )
+
           )}
-          onClick={() => select(item.value)}
+          onClick={() => {
+            if (!selectedSet.has(item['value'])) {
+              onSelectChange([...selected, item['value']]);
+            } else {
+              onSelectChange(selected.filter((v: ItemValue) => v !== item['value']));
+            }
+          }}
         >
           {item.label}
         </div>

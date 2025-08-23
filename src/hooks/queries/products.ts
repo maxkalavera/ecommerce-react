@@ -4,18 +4,32 @@ import { useGetQuery, usePaginatedQuery } from '@/lib/queries';
 
 
 export function useProductsQuery (
-  filters: ProductFilters,
+  params: Partial<{
+    category: string,
+    sort: string;
+    color: string;
+    size: string;
+    maxPrice: number;
+  }> = {}
 ) {
   return usePaginatedQuery<ProductType>(
     'useProductsQuery',
     [
-      filters.category,
+      params.category,
+      params.sort,
+      params.color,
+      params.size,
+      params.maxPrice,
     ],
-    async ([cursor, category], { resolveURL }) => {
+    async ([cursor, category, sort, color, size, maxPrice], { resolveURL }) => {
       const response = await axios.get(resolveURL('/products'), {
         params: {
           cursor,
-          category: category,
+          category,
+          sort,
+          color,
+          size,
+          maxPrice,
         },
         headers: {
           'accept': 'application/json',

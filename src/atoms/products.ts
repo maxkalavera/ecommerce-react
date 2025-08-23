@@ -1,26 +1,22 @@
 import { atom } from 'jotai';
-import productsData from "@/assets/mock/products.json";
+import { ProductsFLowFilters, ProductsFLowSort } from '@/types/products';
 
-export const productsAtom = atom({
-  items: productsData,
-  loading: false,
-  hasMore: false,
-});
+/**
+ * Constants
+ */
 
-export const featuredProductsAtom = atom({
-  items: productsData,
-  loading: false,
-  hasMore: false,
-});
+export const initialProductsFlowFilters: ProductsFLowFilters = {
+  color: [],
+  size: [],
+  priceMax: undefined,
+};
 
-export const favoriteProductsAtom = atom({
-  items: productsData,
-  loading: false,
-  hasMore: false,
-});
+/**
+ * Atoms
+ */
 
-export const cartProductsAtom = atom({
-  items: productsData,
-  loading: false,
-  hasMore: false,
+export const productsFlowFiltersAtom = atom<ProductsFLowFilters>(initialProductsFlowFilters);
+
+export const productsFlowSortAtom = atom<ProductsFLowSort>({
+  sort: undefined,
 });

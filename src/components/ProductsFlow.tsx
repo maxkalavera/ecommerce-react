@@ -1,12 +1,14 @@
 "use client"
 import { cn } from "@/lib/utils";
 import React from "react";
+import { useAtomValue } from "jotai";
 import { FaCircleExclamation } from 'react-icons/fa6';
 import Product from "@/components/Product";
 import InfiniteScroll from '@/components/ui/infinite-scroll';
 import { useProductsQuery } from "@/hooks/queries/products";
 import Link from "@/wrappers/Link";
 import { Category } from "@/types/categories";
+import { productsFlowFiltersAtom, productsFlowSortAtom } from "@/atoms/products";
 
 
 const ProductsFlow = React.forwardRef<
@@ -18,8 +20,14 @@ const ProductsFlow = React.forwardRef<
   props, 
   forwardedRef
 ) => {
+  const filters = useAtomValue(productsFlowFiltersAtom);
+  const sort = useAtomValue(productsFlowSortAtom);
   const productsQuery = useProductsQuery({
     category: props.category,
+    sort: sort.sortBy,
+    color: filters.color.join('|'),
+    size: filters.size.join('|'),
+    maxPrice: filters.maxPrice,
   });
 
   if (productsQuery.status === "success" && productsQuery.payload.items.length === 0) {
@@ -55,10 +63,9 @@ const ProductsFlow = React.forwardRef<
           props.className,
         )}
       >
-        {productsQuery.status === "success" && productsQuery.payload.items.map((product) => (
+        {productsQuery.payload.items.map((product) => (
           <React.Fragment key={product.key}>
             <Link
-              key={product.key}
               href={`/p/${product.key}`}
             >
               <Product 

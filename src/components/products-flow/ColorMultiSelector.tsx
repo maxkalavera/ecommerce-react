@@ -20,28 +20,20 @@ const ColorMultiSelector = React.forwardRef<
   HTMLDivElement, 
   React.ComponentPropsWithoutRef<React.ElementType> & {
     items: Item[],
+    selected?: ItemValue[],
     onSelectChange?: (selected: ItemValue[]) => void,
   }
 >((
   {
     items,
+    selected=[],
     onSelectChange=() => null,
     ...props
   }, 
   forwardedRef
 ) => {
-  const [selected, setSelected] = React.useState<Set<ItemValue>>(new Set());
-
-  const select = React.useCallback((value: ItemValue) => {
-    setSelected(prev => {
-      const res = prev.has(value) ? 
-        new Set(prev).difference(new Set([value])) : 
-        new Set(prev).add(value)
-      onSelectChange(Array.from(res));
-      return res;
-    });
-  }, []);
-
+  
+  const selectedSet = new Set(selected);
   return (
     <div
       {...props}
@@ -55,14 +47,22 @@ const ColorMultiSelector = React.forwardRef<
         <span
           key={item['value']}
           className={cn(
-            "w-5 h-5",
-            "rounded-full cursor-pointer",
-            selected.has(item['value']) && "outline outline-3 outline-neutral-500",
+            "w-7 h-7",
+            "rounded-sm",
+            "outline outline-1 outline-neutral-900/25",
+            "cursor-pointer",
+            selectedSet.has(item['value']) && "outline outline-3 outline-neutral-500",
           )}
           style={{
             backgroundColor: item['color'],
           }}
-          onClick={() => select(item['value'])}
+          onClick={() => {
+            if (!selectedSet.has(item['value'])) {
+              onSelectChange([...selected, item['value']]);
+            } else {
+              onSelectChange(selected.filter((v: ItemValue) => v !== item['value']));
+            }
+          }}
         />
       ))}
     </div>

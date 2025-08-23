@@ -2,32 +2,12 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { FaCaretDown, FaFilter, FaSort } from "react-icons/fa6";
-import Filters from "./products-filters/Filters";
+import { FaCaretDown } from "react-icons/fa6";
 import settings from "@/settings";
-import { useCategoriesQuery } from "@/hooks/queries/categories";
-import { Category as CategoryType } from "@/types/categories";
-import HorizontalScrollArea from "@/wrappers/HorizontalScrollArea";
-import Category from "@/components/Category";
-import Link from "@/wrappers/Link";
+import CategoriesFlow from "@/components/products-flow/CategoriesFlow";
+import FilterPopover from "@/components/products-flow/FilterPopover";
+import SortingPopover from "@/components/products-flow/SortingPopover";
 
-
-/******************************************************************************
- * Constants
- */
-
-const sortingOptions = [
-  "Releveance",
-  "Trending",
-  "Latest arrival",
-  "Price: Low to high",
-  "Price: High to low",
-];
 
 /******************************************************************************
  * Main component
@@ -110,81 +90,7 @@ export default ProductsFlowHeader;
 /******************************************************************************
  * Secondary components
  */
-
-const SortingSelect: React.FC<
-  React.ComponentPropsWithoutRef<React.ElementType> & {}
-> = ({
-  ...props
-}) => {
-  return (
-    <div
-      {...props}
-      className={cn(
-        "w-full h-fit",
-        "flex flex-col justify-start items-center gap-0",
-        props.className
-      )}
-    >
-      {sortingOptions.map((item, index) => (
-        <Button
-          key={index} 
-          className="select-none"
-          variant="link"
-          size="default"
-        >
-          {item}
-        </Button>
-      ))}
-    </div>
-  )
-};
-
-const CategoriesFlow: React.FC<
-  React.ComponentPropsWithoutRef<React.ElementType> & {
-    rootCategoryKey?: string;
-  }
-> = ({
-  rootCategoryKey="",
-  ...props
-}) => {
-  const categoriesQuery = useCategoriesQuery({ childrenOf: rootCategoryKey });
-
-  return (
-    <div
-      {...props}
-      className={cn(
-       "flex flex-row justify-start items-start",
-        props.className
-      )}
-    >
-      <HorizontalScrollArea
-        className="w-full gap-4"
-        hasMore={undefined}
-        isLoading={undefined}
-        next={undefined}
-      >
-        { (categoriesQuery.payload.items || []).map((category: CategoryType) => (
-          <div
-            key={category.key}
-            className="w-[150px] sm:w-[200px]"
-          >
-            <Link 
-              href={`/shop?category=${category.key}`}
-            >
-              <Category
-                key={category.key} 
-                className="w-[150px] sm:w-[200px]"
-                category={category}
-                hoverable={true}
-              />
-            </Link>
-          </div>
-        ))}
-      </HorizontalScrollArea>
-    </div>
-  )
-};
-
+/*
 const SortingPopover: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {}
 > = ({
@@ -204,7 +110,7 @@ const SortingPopover: React.FC<
         </Button>
       </PopoverTrigger>
       <PopoverContent>
-        <SortingSelect />
+        <SortingMenu />
       </PopoverContent>
     </Popover>
   )
@@ -232,8 +138,9 @@ const FilterPopover: React.FC<
       </PopoverTrigger>
       <PopoverContent
       >
-        <Filters />
+        <FiltersMenu />
       </PopoverContent>
     </Popover>
   )
 };
+*/

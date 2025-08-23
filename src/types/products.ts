@@ -45,3 +45,13 @@ export interface ProductFilters {
   searchTerm?: string;
   featured?: boolean;
 }
+
+export interface ProductsFLowFilters {
+  color: string[];
+  size: string[];
+  maxPrice?: number;
+}
+
+export interface ProductsFLowSort {
+  sortBy?: 'relevance' | 'trending' | 'latest-arrival' | 'price-low-high' | 'price-high-low';
+}
