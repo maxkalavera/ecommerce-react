@@ -39,8 +39,8 @@ const Product = React.forwardRef<
   const addCart = () => {
 
   }
+  
   const coverImage = (product.images as any[]).find(item => item.isCover) || null;
-
   return (
     <div
       className={cn(

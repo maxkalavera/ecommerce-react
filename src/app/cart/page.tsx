@@ -1,15 +1,24 @@
 "use client"
+import React from 'react';
 import { useAtomValue } from "jotai";
 import document from "@/layouts/document";
 import MainLayout from "@/layouts/main";
 import { cn } from "@/lib/utils";
 import CartItem from "@/components/CartItem";
 import CartSummary from "@/components/CartSummary";
-import { cartProductsAtom } from "@/atoms/products";
+import { useCartItemsQuery } from "@/hooks/queries/carts";
+import InfiniteScroll from "@/components/ui/infinite-scroll";
+import { useQueriesNotifyer } from "@/atoms/queries";
 
 
 export default function Cart() {
-  const data = useAtomValue(cartProductsAtom);
+  const cartItemsQuery = useCartItemsQuery();
+  const { queries } = useQueriesNotifyer();
+
+  React.useEffect(() => {
+    cartItemsQuery.reset();
+  }, [queries['useDeleteCartItemMutation']]);
+
 
   return (
     <MainLayout>
@@ -28,14 +37,28 @@ export default function Cart() {
               "flex flex-col justify-start items-start gap-8"
             )}
           >
-            {data.items.map((item, index) => ( 
+            {(cartItemsQuery.payload?.items ?? []).map((item) => ( 
               <CartItem 
-                key={index}
-                product={item}
+                key={item.key}
+                cartItem={item}
                 className="w-fit"
               />
             ))}
-            
+            <div
+              className={cn(
+                "w-full",
+                "flex flex-row items-center justify-center",
+              )}
+            >
+              <InfiniteScroll 
+                hasMore={cartItemsQuery.payload?.hasMore ?? false} 
+                isLoading={cartItemsQuery.status === "loading"} 
+                next={cartItemsQuery.loadMore} 
+                threshold={1.0}
+              >
+                {(cartItemsQuery.payload?.hasMore ?? false) && <h1>Loading...</h1>}
+              </InfiniteScroll>
+            </div>
           </div>
           <div
             className={cn(

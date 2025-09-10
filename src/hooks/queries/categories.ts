@@ -22,12 +22,7 @@ export function useCategoriesQuery (
         },
       });
       return response;
-    },
-    {
-      items: [],
-      cursor: null,
-      hasMore: false,
-    }, 
+    }
   );
 }
 
@@ -48,8 +43,5 @@ export const useCategoryQuery = (
       });
       return response;
     },
-    {
-      data: null,
-    }, 
   );
 };

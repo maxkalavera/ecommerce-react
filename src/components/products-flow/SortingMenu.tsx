@@ -18,10 +18,12 @@ const SortingMenu: React.FC<
       label: "Releveance",
       value: "relevance",
     },
+    /*
     {
       label: "Trending",
       value: "trending",
     },
+    */
     {
       label: "Latest arrival",
       value: "latest-arrival",

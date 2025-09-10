@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 import { FaCartPlus, FaHeart } from "react-icons/fa6";
 import MarkdownIt from 'markdown-it';
 import { useProductQuery } from '@/hooks/queries/products';
+import { useAddCartItemMutation } from '@/hooks/queries/carts';
+import { useQueriesNotifyer } from "@/atoms/queries";
 
 
 /******************************************************************************
@@ -31,24 +33,37 @@ import { useProductQuery } from '@/hooks/queries/products';
 
 export default function ProductInfo() {
   const params = useParams();
-
-  const handleAddToCart = React.useCallback((productKey: string, quantity: number) => {
-  }, []);
-
   if (typeof params.key !== 'string') {
     return notFound();
   }
   const productQuery = useProductQuery(params.key);
-  console.log("productQuery", productQuery);
-  if (productQuery.status === 'loading') {
+  const addCartItemMutation = useAddCartItemMutation();
+  const notifyQueries = useQueriesNotifyer();
+
+  React.useEffect(() => {
+    addCartItemMutation.onSuccess(() => {
+      productQuery.fetch([params.key as string]);
+      notifyQueries.refetch('useGetCartItemsCount');
+    });
+    addCartItemMutation.onFailure(() => {
+      productQuery.fetch([params.key as string]);
+      notifyQueries.refetch('useGetCartItemsCount');  
+    });
+  }, []);
+
+  const handleAddCart = React.useCallback((productKey: string, quantity: number) => {
+    addCartItemMutation.fetch([productKey, quantity]);
+  }, []);
+
+  if (productQuery.payload === null) {
     return (
-      <></>
+      <>loading...</>
     )
-  } else if ((['error', 'timeout', 'canceled'] as typeof productQuery.status[]).includes(productQuery.status)) {
+  } else if ((['error'] as typeof productQuery.status[]).includes(productQuery.status)) {
     return notFound();
   }
 
-  const product = productQuery.payload!.data;
+  const product = productQuery.payload.data;
   return (
     <MainLayout>
       <Document.Section>
@@ -66,7 +81,8 @@ export default function ProductInfo() {
           <InfoWidget
             className="w-full"
             product={product}
-            handleAddToCart={handleAddToCart}
+            handleAddCart={handleAddCart}
+            addCartLoading={addCartItemMutation.status === 'loading'}
           />
         </div>
 
@@ -83,11 +99,13 @@ export default function ProductInfo() {
 const InfoWidget: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {
     product: ProductType;
-    handleAddToCart: (productKey: string, quantity: number) => void;
+    handleAddCart: (productKey: string, quantity: number) => void;
+    addCartLoading: boolean;
   }
 > = ({
   product,
-  handleAddToCart,
+  handleAddCart,
+  addCartLoading,
   ...props
 }) => {
   const initials = {
@@ -170,7 +188,8 @@ const InfoWidget: React.FC<
       
       <InfoPanel>
         <InfoPanelTitle>{"Color"}</InfoPanelTitle>
-        <ColorSelector 
+        <ColorSelector
+          className="w-full"
           items={inventory.map(item => ({ 
             value: item.color, 
             label: item.color,
@@ -200,7 +219,8 @@ const InfoWidget: React.FC<
           className="w-full" 
           availability={availability}
           productKey={selectedProductKey}
-          handleAddToCart={handleAddToCart}
+          handleAddCart={handleAddCart}
+          addCartLoading={addCartLoading}
         />
       </InfoPanel>
 
@@ -268,22 +288,24 @@ const Options: React.FC<
   React.ComponentPropsWithoutRef<React.ElementType> & {
     availability: number;
     productKey: string | null;
-    handleAddToCart: (productKey: string, quantity: number) => void;
+    handleAddCart: (productKey: string, quantity: number) => void;
+    addCartLoading: boolean,
   }
 > = ({
   availability,
   productKey,
-  handleAddToCart,
+  handleAddCart,
+  addCartLoading,
   ...props
 }) => {
 
   const [quantity, setQuantity] = React.useState<number>(1);
 
-  const _handleAddToCart = React.useCallback(() => {
+  const _handleAddCart = React.useCallback(() => {
     if (productKey) {
-      handleAddToCart(productKey, quantity);
+      handleAddCart(productKey, quantity);
     }
-  }, [productKey, quantity, handleAddToCart]);
+  }, [productKey, quantity, handleAddCart]);
 
   return (
     <div
@@ -323,8 +345,8 @@ const Options: React.FC<
 
         <Button
           className="w-full"
-          disabled={!productKey}
-          onClick={_handleAddToCart}
+          disabled={addCartLoading}
+          onClick={_handleAddCart}
         >
           <FaCartPlus />
           Add Cart
@@ -356,26 +378,6 @@ const ProductDescription: React.FC<
   const markdown = React.useMemo(() => {
     return new MarkdownIt()
   }, []);
-
-  /*
-  const content = `
-Elevate your wardrobe with this Elegant Turtleneck Top , a timeless and versatile piece designed to add sophistication to any outfit. Whether you're dressing up for a chic evening look or keeping it casual for a relaxed day, this top effortlessly combines style and comfort.
-
-Specifications
-- Color : Pure White
-- Sizes Available : XS, S, M, L, XL  
-(Refer to our size chart for the perfect fit)
-- Fabric Composition :
-	- 70% Cotton, 25% Polyester, 5% Elastane
-	- Soft, breathable, and stretchable fabric for all-day comfort.
-- Care Instructions :
-	- Machine wash cold with like colors.
-	- Do not bleach.
-	- Tumble dry low or hang to dry.
-	- Iron on low heat if needed.  
-`
-*/
-
 
   return (
     <div

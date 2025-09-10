@@ -1,5 +1,5 @@
-import { Category } from "./categories";
-import { Instance, Image } from "./commons";
+import { Category } from "@/types/categories";
+import { Instance, Image } from "@/types/commons";
 
 export interface ProductLabel {
   content: string;

@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import lodash from 'lodash';
 import axios, { type AxiosResponse,  } from 'axios';
 import { resolve } from 'url';
 import settings from '@/settings';
@@ -29,43 +30,45 @@ export type PayloadMany<
 export type ResponsePayloadStatus = 'idle' | 'loading' | 'success' | 'error' | 'canceled' | 'timeout';
 
 export type ResponsePayload<
-  Payload extends PayloadSingle<any> | PayloadMany<any> | null = PayloadSingle<any> | PayloadMany<any> | null,
+  Payload extends PayloadSingle<any> | PayloadMany<any> = PayloadSingle<any> | PayloadMany<any>,
 > = (
-  // DEPRECATED
   {
     status: 'idle'
-    payload: Payload;
+    payload: Payload | null;
     error: null;
-    version: number;
-  } |
-  {
+  } | {
     status: 'loading',
-    payload: Payload,
+    payload: Payload | null,
     error: null,
-    version: number;
   } | {
     status: 'success',
-    payload: Exclude<Payload, null>,
+    payload: Payload,
     error: null,
-    version: number;
   } | {
     status: 'error',
-    payload: Payload,
+    payload: Payload | null,
     error: APIErrorPayload,
-    version: number;
   } | {
     // TODO: Add support for canceled and timeout statuses
     status: 'canceled',
-    payload: Payload,
+    payload: Payload | null,
     error: null,
-    version: number;
   } | {
     status: 'timeout',
-    payload: Payload,
+    payload: Payload | null,
     error: null,
-    version: number;
   }
 );
+
+export type ResponseObject<
+  Payload extends PayloadSingle<any> | PayloadMany<any>,
+  Parameters extends RequestParameters,
+> = ResponsePayload<Payload> & {
+  reset: () => void;
+  fetch: (parameters: Parameters) => void;
+  onSuccess: (callback: () => void) => void;
+  onFailure: (callback: () => void) => void;
+};
 
 export type RequestParameters = (string | number |  bigint | boolean | undefined | null)[];
 
@@ -81,59 +84,152 @@ export type RequestCallback<
     options: RequestCallbackOptions
   ) => Promise<AxiosResponse<any, any>>
 
+export type RequestOptions<
+  Payload extends PayloadSingle<any> | PayloadMany<any>,
+> = {
+  initialParameters: RequestParameters;
+  initialStatus: ResponsePayloadStatus,
+  initialPayload: Payload | null,
+  sendRequestMode: 'onMount' | 'onUpdate',
+};
+
 export function useRequest<
-  Payload extends PayloadSingle<any> | PayloadMany<any> | null,
+  Payload extends PayloadSingle<any> | PayloadMany<any>,
   Parameters extends RequestParameters = RequestParameters,
 > (
   label: string,
-  parameters: Parameters,
+  _parameters: Parameters,
   request: RequestCallback<Payload, Parameters>,
-  defaultPayload: Payload,
-): ResponsePayload<Payload> 
+  _options: Partial<RequestOptions<Payload>> = {},
+
+): ResponseObject<Payload, Parameters>
 {
+  const initialParametersRef = React.useRef(_parameters);
+  const options: RequestOptions<Payload> = lodash.defaults(_options, {
+    initialStatus: 'idle',
+    initialPayload: null,
+    initialParameters: initialParametersRef.current,
+    sendRequestMode: 'onMount',
+  } as RequestOptions<Payload>);
+  const [parameters, setParameters] = React.useState<[number, ...Parameters]>([0, ..._parameters]);
   const [responsePayload, setResponsePayload] = React.useState<ResponsePayload<Payload>>({
-    status: 'loading',
-    payload: defaultPayload,
+    status: options.initialStatus as any,
+    payload: options.initialPayload,
     error: null,
-    version: 0
   });
 
   React.useEffect(() => {
-    (async () => {
+    if (lodash.isEqual(_parameters, parameters.slice(1))) {
+      return;
+    }
+    setParameters([parameters[0] + 1, ..._parameters]);
+  }, [..._parameters]);
+
+  React.useEffect(() => {
+    const asyncCall = async () => {
       setResponsePayload((prev) => ({
+        ...prev,
         status: 'loading',
-        payload: defaultPayload,
         error: null,
-        version: prev.version,
       }));
 
-      const response: AxiosResponse<any, any> = await request(parameters, {
-        resolveURL: resolveURL,
-      });
-
-      if (response.status >= 200 || response.status < 300) {
-        setResponsePayload((prev) => ({
-          status: 'success',
-          payload: response.data,
-          error: null,
-          version: prev.version + 1,
-        }));
-      } else {
-        setResponsePayload((prev) => ({
-          status: 'error',
-          payload: defaultPayload,
-          error: response.data,
-          version: prev.version + 1,
-        }));
+      try {
+        const response: AxiosResponse<any, any> = await request(
+          parameters.slice(1) as Parameters, 
+          { resolveURL: resolveURL }
+        );
+        if (response.status >= 200 || response.status < 300) {
+          setResponsePayload((prev) => ({
+            ...prev,
+            status: 'success',
+            payload: response.data,
+            error: null,
+          }));
+        }
+      } catch(error) {
+        if (axios.isAxiosError(error)) {
+          setResponsePayload((prev) => ({
+            ...prev,
+            status: 'error',
+            error: error.response?.data as APIErrorPayload,
+            payload: prev.payload as any,
+          }));
+        } else {
+          setResponsePayload((prev) => ({
+            ...prev,
+            status: 'error',
+            error: {
+              message: 'An unexpected error occurred',
+              details: {},
+              code: 500,
+              timestamp: new Date(),
+            },
+          }));
+        }
       }
-    })();
+    };
+
+    if (options.sendRequestMode === 'onUpdate' && parameters[0] === 0) {
+      return; // Skip the effect on first render
+    }
+
+    asyncCall();
   }, parameters);
 
-  return responsePayload;
+  React.useEffect(() => {
+    const { status } = responsePayload;
+    if (status === 'success') {
+      for (const callback of onSuccessCallbacksRef.current) {
+        callback();        
+      }
+    } else if (status === 'error') {
+      for (const callback of onFailureCallbacksRef.current) {
+        callback();        
+      }
+    }
+  }, [responsePayload.status]);
+
+  /* Methods */
+  /***********/
+
+  const fetch = React.useCallback((fetchParameters: Parameters) => {
+    setParameters((prev) => [prev[0] + 1, ...fetchParameters]);
+  }, [setParameters]);
+
+  const reset = React.useCallback(() => {
+    setResponsePayload({
+      status: options.initialStatus as any,
+      payload: options.initialPayload,
+      error: null,
+    });
+    setParameters([0, ...initialParametersRef.current]);
+  }, []);
+
+  const onSuccessCallbacksRef = React.useRef<Set<(() => void)>>(new Set());
+  const onSuccess = React.useCallback((callback: () => void) => {
+    onSuccessCallbacksRef.current.add(callback);
+  }, [onSuccessCallbacksRef]);
+
+  const onFailureCallbacksRef = React.useRef<Set<(() => void)>>(new Set());
+  const onFailure = React.useCallback((callback: () => void) => {
+    onFailureCallbacksRef.current.add(callback);
+  }, [onFailureCallbacksRef]);
+
+  return {
+    ...responsePayload,
+    reset,
+    fetch,
+    onSuccess,
+    onFailure,
+  };
 }
 
 /******************************************************************************
  * Request variations
+ *****************************************************************************/
+
+/*
+ * Get request
  *****************************************************************************/
 
 export function useGetQuery<
@@ -143,34 +239,62 @@ export function useGetQuery<
   label: string,
   parameters: Parameters,
   request: RequestCallback<PayloadSingle<Instance> | null, Parameters>,
-  defaultPayload: PayloadSingle<Instance> | null = null,
-): ResponsePayload<PayloadSingle<Instance> | null>
+  initialPayload: PayloadSingle<Instance> | null = null,
+  initialStatus: ResponsePayloadStatus = 'loading',
+): ResponseObject<PayloadSingle<Instance>, Parameters>
 {
-  return useRequest<PayloadSingle<Instance> | null, Parameters>(
+  return useRequest<PayloadSingle<Instance>, Parameters>(
     label,
     parameters,
     request,
-    defaultPayload,
+    { 
+      initialStatus,
+      initialPayload,
+    }
   );
 }
+
+/*
+ * Mutate (Add, remove, update) request
+ *****************************************************************************/
 
 export function useMutate<
   Instance extends Record<string, any>,
   Parameters extends RequestParameters = RequestParameters,
 > (
   label: string,
-  parameters: Parameters,
   request: RequestCallback<PayloadSingle<Instance> | null, Parameters>,
-  defaultPayload: PayloadSingle<Instance> | null = null,
-): ResponsePayload<PayloadSingle<Instance> | null> 
+  initialParameters: Parameters,
+): ResponseObject<PayloadSingle<Instance>, Parameters> & {}
 {
-  return useRequest<PayloadSingle<Instance> | null, Parameters>(
+  const [parameters, setParameters] = React.useState<Parameters>(initialParameters);
+
+  /*
+  const execute = React.useCallback((parameters: Parameters) => {
+    setParameters(parameters);
+  }, []);
+  */
+
+  const requestObject = useRequest<PayloadSingle<Instance>, Parameters>(
     label,
     parameters,
     request,
-    defaultPayload,
+    {
+      initialStatus: 'idle',
+      initialPayload: null,
+      sendRequestMode: 'onUpdate',
+    }
   );
+
+  return {
+    ...requestObject,
+    //execute,
+  }
 }
+
+/*
+ * Paginated (list) request
+ *****************************************************************************/
 
 export type PayloadPaginatedMany<
   Instance extends Record<string, any>,
@@ -193,7 +317,7 @@ export function usePaginatedQuery<
   label: string,
   parameters: Parameters,
   request: RequestCallback<PayloadMany<Instance>, [CursorType, ...Parameters]>,
-): ResponsePayload<PayloadPaginatedMany<Instance>> & {
+): ResponseObject<PayloadPaginatedMany<Instance>, [CursorType, ...Parameters]> & {
   loadMore: () => void;
 }
 {
@@ -207,29 +331,35 @@ export function usePaginatedQuery<
       hasMore: false,
     },
     error: null,
-    version: 0
   });
   const sourcePayload = useRequest<PayloadMany<Instance>, [CursorType, ...Parameters]>(
     label,
     [cursor, ...parameters],
     request,
     {
-      items: [],
-      cursor: null,
-      hasMore: false,
-    },
+      initialStatus: 'loading',
+      initialPayload: {
+        items: [],
+        cursor: null,
+        hasMore: false,
+      },
+    }
   );
 
   const loadMore = React.useCallback(() => {
-    if (responsePayload.payload.cursor === null || responsePayload.payload.hasMore === false) {
+    if (
+      sourcePayload.payload === null
+      || responsePayload.payload?.cursor === null 
+      || responsePayload.payload?.hasMore === false
+    ) {
       return;
     }
 
     setCursor(sourcePayload.payload.cursor);
   }, [
-    responsePayload.payload.cursor,
-    responsePayload.payload.hasMore,
-    sourcePayload.payload.cursor,
+    responsePayload.payload?.cursor,
+    responsePayload.payload?.hasMore,
+    sourcePayload.payload?.cursor,
   ]);
 
   React.useEffect(() => {
@@ -250,13 +380,12 @@ export function usePaginatedQuery<
   React.useEffect(() => {
     if (
       sourcePayload.status === 'success' 
-      // Check if the cursor is not already in the pages
-      && responsePayload.payload.pages.find((page) => page.cursor === cursor) === undefined
+      // Check if the cursor is not already in pages
+      && (responsePayload.payload?.pages ?? []).find((page) => page.cursor === cursor) === undefined
     ) {
       setResponsePayload((prev) => ({
         status: sourcePayload.status,
         error: sourcePayload.error,
-        version: sourcePayload.version,
         payload: {
           ...prev.payload,
           items: [...prev.payload!.items, ...sourcePayload.payload.items],
@@ -273,14 +402,29 @@ export function usePaginatedQuery<
         ...prev,
         status: sourcePayload.status,
         error: sourcePayload.error,
-        version: sourcePayload.version,
       } as ResponsePayload<PayloadPaginatedMany<Instance>>));
     }
-  }, [sourcePayload.version, ...parameters]);
+  }, [sourcePayload.status, ...parameters]);
+
+  const reset = React.useCallback(() => {
+    setResponsePayload({
+      status: 'loading',
+      payload: {
+        items: [],
+        pages: [],
+        cursor: null,
+        hasMore: false,
+      },
+      error: null,
+    });
+    sourcePayload.reset();
+  }, [sourcePayload.reset]);
 
   return {
+    ...sourcePayload,
     ...responsePayload,
     loadMore,
+    reset
   };
 }
 

@@ -24,7 +24,7 @@ const ProductsFlow = React.forwardRef<
   const sort = useAtomValue(productsFlowSortAtom);
   const productsQuery = useProductsQuery({
     category: props.category,
-    sort: sort.sortBy,
+    sortBy: sort.sortBy,
     color: filters.color.join('|'),
     size: filters.size.join('|'),
     maxPrice: filters.maxPrice,
@@ -63,7 +63,7 @@ const ProductsFlow = React.forwardRef<
           props.className,
         )}
       >
-        {productsQuery.payload.items.map((product) => (
+        {(productsQuery.payload?.items ?? []).map((product) => (
           <React.Fragment key={product.key}>
             <Link
               href={`/p/${product.key}`}
@@ -85,12 +85,12 @@ const ProductsFlow = React.forwardRef<
         )}
       >
         <InfiniteScroll 
-          hasMore={productsQuery.payload.hasMore} 
+          hasMore={productsQuery.payload?.hasMore ?? false} 
           isLoading={productsQuery.status === "loading"} 
           next={productsQuery.loadMore} 
           threshold={1.0}
         >
-          {productsQuery.payload.hasMore && <h1>Loading...</h1>}
+          {(productsQuery.payload?.hasMore ?? false) && <h1>Loading...</h1>}
         </InfiniteScroll>
       </div>
 

@@ -19,7 +19,10 @@ const ButtonLink: React.FC<
       <span
         {...props}
         className={cn(
-          buttonVariants({ variant: "ghost", size: "default" }),
+          buttonVariants({ 
+            variant: "ghost", 
+            size: "default",
+          }),
           props.className
         )}
       >

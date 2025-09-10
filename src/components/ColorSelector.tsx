@@ -27,6 +27,7 @@ const ColorSelector: React.FC<
       {...props}
       className={cn(
         "flex flex-row justify-start items-start gap-sm",
+        "flex-wrap",
         props.className
       )}
     >

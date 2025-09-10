@@ -4,7 +4,9 @@ import Navbar from "@/components/Navbar";
 import IconsToolbar from "@/components/IconsToolbar";
 import { ForLargeScreens } from "@/layouts/screens";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { ForSmallScreens } from "@/layouts/screens";
+import Sidebar from "@/components/Sidebar";
 
 
 const Header = React.forwardRef<
@@ -43,7 +45,15 @@ const Header = React.forwardRef<
         <Navbar />
       </ForLargeScreens>
 
-      <IconsToolbar />
+      <div
+        className="flex flex-row justify-start items-center gap-0"
+      >
+        <IconsToolbar />
+
+        <ForSmallScreens>
+          <Sidebar />
+        </ForSmallScreens>
+      </div>
     </div>
   )
 });

@@ -8,7 +8,7 @@ import { ProductsFLowFilters, ProductsFLowSort } from '@/types/products';
 export const initialProductsFlowFilters: ProductsFLowFilters = {
   color: [],
   size: [],
-  priceMax: undefined,
+  maxPrice: undefined,
 };
 
 /**
@@ -18,5 +18,5 @@ export const initialProductsFlowFilters: ProductsFLowFilters = {
 export const productsFlowFiltersAtom = atom<ProductsFLowFilters>(initialProductsFlowFilters);
 
 export const productsFlowSortAtom = atom<ProductsFLowSort>({
-  sort: undefined,
+  sortBy: undefined,
 });
